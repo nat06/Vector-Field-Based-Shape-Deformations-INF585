@@ -52,9 +52,10 @@ grid_3D<vec3> initialize_grid(int Nx, int Ny, int Nz)
 		for (int ky = 0; ky < Ny; ++ky) {
 			for (int kz = 0; kz < Nz; ++kz) {
 
-				float const x = kx / (Nx - 1.0f);
-				float const y = ky / (Ny - 1.0f);
-				float const z = kz / (Nz - 1.0f);
+				float const x = (2*kx / (Nx - 1.0f))-1.0f;
+				float const y = (2 * ky / (Ny - 1.0f)) - 1.0f;
+				float const z = (2 * kz / (Nz - 1.0f)) - 1.0f;
+				//TO DO (idea) : grid adapted to mesh or mesh normalized to fit and have space in the grid
 
 				grid(kx, ky, kz) = { x,y,z };//what is this ???
 
@@ -188,49 +189,54 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 				//TO DO: 
 				//WHERE TO FIND e, f, r and their first order partials ??? 
 				// 
+				if (r_x > sphere_tool.r0) {//should this be enforced ?? 
+					velocity(kx, ky, kz) = vec3(0, 0, 0);
+				}
+				else {
+					vec3 u(1, 0, 0);
+					vec3 w(0, 1, 0);
+
+					//case 1: constant vector field (translation in the region)
+					float e = dot(u, (p0 - sphere_tool.c));//not sure
+					float f = dot(w, (p0 - sphere_tool.c));
+					vec3 nabla_e = u;
+					vec3 nabla_f = w;
+
+					//std::cout << "e = " << e << std::endl;
+					//std::cout << "f = " << f << std::endl;
+
+					float tmp = (r_x - sphere_tool.ri) / (sphere_tool.r0 - sphere_tool.ri);
+					float B3_4 = bernstein(3, 4, tmp);//to optimize: this is useless to recompute these all the time
+					float B4_4 = bernstein(4, 4, tmp);
+					float b = (B3_4 + B4_4); //not sure about this...
+
+					//std::cout << "b = " << b << std::endl;
+
+					float db_dr = 2 * r_x / (sphere_tool.r0 - sphere_tool.ri);
+
+					//std::cout << "db_dr = " << db_dr << std::endl;
+
+					//https://www.wolframalpha.com/input?i2d=true&i=Partial%5BSqrt%5BPower%5B%5C%2840%29x-1%5C%2841%29%2C2%5D%2BPower%5B%5C%2840%29y-1%5C%2841%29%2C2%5D%2BPower%5B%5C%2840%29z-1%5C%2841%29%2C2%5D%5D%2Cx%5D
+					float nx = (p0.x - sphere_tool.c.x) / r_x;
+					float ny = (p0.y - sphere_tool.c.y) / r_x;
+					float nz = (p0.z - sphere_tool.c.z) / r_x;
+					vec3 nabla_r = vec3(nx, ny, nz); // not sure about this
+					vec3 nabla_b = db_dr * nabla_r;
+
+					/*std::cout << "nabla_r = " << nabla_r << std::endl;
+					std::cout << "nabla_b = " << nabla_b << std::endl;*/
+
+					vec3 nabla_1 = (1 - b) * nabla_e - e * nabla_b;
+					vec3 nabla_2 = (1 - b) * nabla_f - f * nabla_b;
+
+					/*std::cout << "nabla_1 = " << nabla_1 << std::endl;
+					std::cout << "nabla_2 = " << nabla_2 << std::endl;*/
+
+
+					velocity(kx, ky, kz) = cross(nabla_1, nabla_2);
+				}
 				
-				vec3 u(0, 0, 1);
-				vec3 w(0, 1, 0);
-
-				//case 1: constant vector field (translation in the region)
-				float e = dot(u, (p0 - sphere_tool.c));//not sure
-				float f = dot(w, (p0 - sphere_tool.c));
-				vec3 nabla_e = u;
-				vec3 nabla_f = w;
-
-				//std::cout << "e = " << e << std::endl;
-				//std::cout << "f = " << f << std::endl;
-
-				float tmp = (r_x - sphere_tool.ri) / (sphere_tool.r0 - sphere_tool.ri);
-				float B3_4 = bernstein(3, 4, tmp);//to optimize: this is useless to recompute these all the time
-				float B4_4 = bernstein(4, 4, tmp);
-				float b = (B3_4 + B4_4); //not sure about this...
-
-				//std::cout << "b = " << b << std::endl;
-
-				float db_dr = 2 * r_x / (sphere_tool.r0 - sphere_tool.ri);
-				
-				//std::cout << "db_dr = " << db_dr << std::endl;
-				
-				//https://www.wolframalpha.com/input?i2d=true&i=Partial%5BSqrt%5BPower%5B%5C%2840%29x-1%5C%2841%29%2C2%5D%2BPower%5B%5C%2840%29y-1%5C%2841%29%2C2%5D%2BPower%5B%5C%2840%29z-1%5C%2841%29%2C2%5D%5D%2Cx%5D
-				float nx = (p0.x - sphere_tool.c.x) / r_x;
-				float ny = (p0.y - sphere_tool.c.y) / r_x;
-				float nz = (p0.z - sphere_tool.c.z) / r_x;
-
-				vec3 nabla_r = vec3(nx, ny, nz); // not sure about this
-				vec3 nabla_b = db_dr * nabla_r;
-
-				/*std::cout << "nabla_r = " << nabla_r << std::endl;
-				std::cout << "nabla_b = " << nabla_b << std::endl;*/
-
-				vec3 nabla_1 = (1 - b) * nabla_f - e * nabla_b;
-				vec3 nabla_2 = (1 - b) * nabla_f - f * nabla_b;
-
-				/*std::cout << "nabla_1 = " << nabla_1 << std::endl;
-				std::cout << "nabla_2 = " << nabla_2 << std::endl;*/
-
-
-				velocity(kx, ky, kz) = cross(nabla_1, nabla_2);
+				//to do: change names of nabla_1, nabla_2 to nabla_e, f
 			}
 		}
 	}

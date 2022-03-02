@@ -52,7 +52,7 @@ void scene_structure::initialize()
 	//PROJECT
 
 	// Initialization of the grid
-	int const Nx = 10, Ny = 10, Nz = 10;
+	int const Nx = 20, Ny = 20, Nz = 20;
 
 	grid = initialize_grid(Nx, Ny, Nz);
 	update_grid_segments(grid_segments, grid);
@@ -66,10 +66,10 @@ void scene_structure::initialize()
 	//initialize the tool
 	//-> might want to create a functio  for this
 	
-	sphere_tool.c = { 0.5,0.8,0.9 };//TO DO: use mouse position (to do later)
-	sphere_tool.ri = 0.03f;
+	sphere_tool.c = { 0.5,0.5,0.5 };//TO DO: use mouse position (to do later)
+	sphere_tool.ri = 0.1f;
 	sphere_tool.ci = {1,0.5,0};//?
-	sphere_tool.r0 = 0.07f;
+	sphere_tool.r0 = 0.5f;
 	sphere_tool.c0 = { 0,1,0 };//?
 	
 	inner_sphere_visual.initialize(mesh_primitive_sphere(), "Sphere");
@@ -111,12 +111,15 @@ void scene_structure::display()
 	//PROJECT
 
 	//update_velocity_field(grid, sphere_tool); //not sure this goes there...
-	update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, 0.1); // what the fuck is this error
+	float scale = 0.000001;
+	scale = 5;
+	update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, scale); // what the fuck is this error
 
 	
 	display_grid(); //3D grid
-	display_velocity(); //vector field
+	//display_velocity(); //vector field
 	display_tool(); //sphere tool (to be displayed last)
+	display_velocity(); //vector field
 
 	//###############################################
 	

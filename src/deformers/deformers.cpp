@@ -56,3 +56,47 @@ void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformat
 
 
 }
+
+
+
+//void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformation, vec2 const& translate_screen, vec3 const& picked_position, vec3 const& picked_normal, rotation_transform const& camera_orientation, deformer_parameters_structure const& deformer_parameters) {
+//
+//	//perform 1st order explicit euler (no runge kutta)
+//	p_shape = p_shape_original + (1 - dist / r) * translation;
+//
+//	for (size_t k = 0; k < N; ++k)
+//	{
+//		vec3& p_shape = shape.position[k];                             // position to deform
+//		vec3 const& p_shape_original = position_before_deformation[k]; // reference position before deformation
+//		vec3 const& p_clicked = picked_position;                       // 3D position of picked position
+//		vec3 const& n_clicked = picked_normal;                         // normal of the surface (before deformation) at the picked position
+//
+//		//	to do: find in which cube of the grid the point is located
+//		// to do later: use an intepolation of different cubes for the velocity
+//
+//		//apply path line integration of v starting from p
+//		int kx, ky, kz;
+//
+//		p_shape = p_shape_original + h*velocity(kx, ky, kz);
+//		//now update the velocity
+//		
+//		//get some inspiration from td 08_cloth -> numerial_integration()
+//
+//
+//	}
+//
+//	//update velocity
+//}
+//
+////idea:
+//void numerical_integration(grid_2<vec3>& position, grid_2D<vec3>& velocity, grid_2D<vec3> const& force, float mass, float dt)
+//{
+//	size_t const N = position.size();
+//
+//	for (size_t k = 0; k < N; ++k)
+//	{
+//		velocity[k] = velocity[k] + dt * force[k] / mass;
+//		position[k] = position[k] + dt * velocity[k];
+//	}
+//
+//}

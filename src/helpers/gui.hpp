@@ -18,7 +18,7 @@ struct gui_parameters {
 
 	//#
 	//PROJECT
-	bool display_grid_edge = true;
+	bool display_grid_edge = false;
 	bool display_velocity = true;
 	//#
 
