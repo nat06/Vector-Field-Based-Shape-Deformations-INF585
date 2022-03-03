@@ -62,7 +62,7 @@ void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformat
 //void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformation, vec2 const& translate_screen, vec3 const& picked_position, vec3 const& picked_normal, rotation_transform const& camera_orientation, deformer_parameters_structure const& deformer_parameters) {
 //
 //	//perform 1st order explicit euler (no runge kutta)
-//	p_shape = p_shape_original + (1 - dist / r) * translation;
+//	//p_shape = p_shape_original + (1 - dist / r) * translation;
 //
 //	for (size_t k = 0; k < N; ++k)
 //	{

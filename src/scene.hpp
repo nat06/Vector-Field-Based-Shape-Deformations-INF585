@@ -64,9 +64,6 @@ struct scene_structure {
 	cgp::grid_3D<cgp::vec3> velocity, velocity_previous;
 	cgp::buffer<cgp::vec3> velocity_grid_data;
 
-	cgp::vec3 u, w; //orthogonal vectors used for velocity computation
-	//probably dont need to define them
-
 	void initialize_velocity(int Nx, int Ny, int Nz);
 
 	void display_grid(); // Display the 3D grid
