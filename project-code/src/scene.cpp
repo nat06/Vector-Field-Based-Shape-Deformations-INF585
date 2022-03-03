@@ -55,6 +55,14 @@ void scene_structure::initialize()
 	int const Nx = 20, Ny = 20, Nz = 20;
 
 	grid = initialize_grid(Nx, Ny, Nz);
+
+    // ######### some tests... #########
+//    std::cout << grid << std::endl;
+    std::cout << grid(0,0,0) << std::endl;
+    std::cout << grid(0,0,1) << std::endl;
+    std::cout << grid(0,0,2) << std::endl;
+    // #################################
+
 	update_grid_segments(grid_segments, grid);
 	grid_segments_visual.initialize(grid_segments, "grid");
 
@@ -64,7 +72,7 @@ void scene_structure::initialize()
 	velocity_visual.color = vec3(1, 0, 0);
 
 	//initialize the tool
-	//-> might want to create a functio  for this
+	//-> might want to create a function  for this
 	
 	sphere_tool.c = { 0.5,0.5,0.5 };//TO DO: use mouse position (to do later)
 	sphere_tool.ri = 0.1f;
@@ -75,12 +83,21 @@ void scene_structure::initialize()
 	inner_sphere_visual.initialize(mesh_primitive_sphere(), "Sphere");
 	outer_sphere_visual.initialize(mesh_primitive_sphere(), "Sphere");
 
+    mini_testing_sphere.initialize(mesh_primitive_sphere(), "Sphere");
+
 	update_velocity_field(velocity, grid, sphere_tool); //not sure this goes there...
 
+	
 	//################################################################
 
 }
 
+vec3 pointToGridCell(const vec3& p){
+// function to convert from a point in space to the associated 3D grid cell it belongs to.
+// i.e. { x,y,z } -> { kx, ky, kz }
+// https://math.stackexchange.com/questions/3135977/which-cell-in-a-grid-a-point-belongs-to#comment6460585_3136016
+
+}
 
 void scene_structure::display()
 {
@@ -203,7 +220,7 @@ void scene_structure::initialize_velocity(int Nx, int Ny, int Nz){//not sure abo
 
 void scene_structure::display_grid()
 {
-	if (gui.display_grid_edge)
+    if (gui.display_grid_edge)
 		draw(grid_segments_visual, environment);
 }
 

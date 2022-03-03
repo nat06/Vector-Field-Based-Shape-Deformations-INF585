@@ -77,7 +77,9 @@ struct scene_structure {
 	sphere_tool_structure sphere_tool;
 	cgp::mesh_drawable inner_sphere_visual;
 	cgp::mesh_drawable outer_sphere_visual;
-	
+
+    cgp::mesh_drawable mini_testing_sphere;
+
 	//#####################################################
 	//#####################################################
 

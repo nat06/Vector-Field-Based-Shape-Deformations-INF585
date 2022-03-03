@@ -2,6 +2,7 @@
 #include "initialization.hpp"
 
 using namespace cgp;
+using namespace std;
 
 mesh initialize_plane()
 {
@@ -52,10 +53,10 @@ grid_3D<vec3> initialize_grid(int Nx, int Ny, int Nz)
 		for (int ky = 0; ky < Ny; ++ky) {
 			for (int kz = 0; kz < Nz; ++kz) {
 
-				float const x = (2*kx / (Nx - 1.0f))-1.0f;
-				float const y = (2 * ky / (Ny - 1.0f)) - 1.0f;
-				float const z = (2 * kz / (Nz - 1.0f)) - 1.0f;
-				//TO DO (idea) : grid adapted to mesh or mesh normalized to fit and have space in the grid
+                float const x = (2*kx / (Nx - 1.0f)) - 1.0f;
+                float const y = (2 * ky / (Ny - 1.0f)) - 1.0f;
+                float const z = (2 * kz / (Nz - 1.0f)) - 1.0f;
+                //TO DO (idea) : grid adapted to mesh or mesh normalized to fit and have space in the grid
 
 				grid(kx, ky, kz) = { x,y,z };//what is this ???
 
@@ -63,6 +64,7 @@ grid_3D<vec3> initialize_grid(int Nx, int Ny, int Nz)
 		}
 	}
 	return grid;
+    //cout << grid;
 }
 
 
