@@ -72,9 +72,16 @@ void scene_structure::initialize()
     std::cout << "grid(0,11,0) : " << grid(0,11,0) << std::endl;
     std::cout << "grid(0,12,0) : " << grid(0,12,0) << std::endl;
     std::cout << "grid(0,13,0) : " << grid(0,13,0) << std::endl;
-    vec3 temp = pointToGridCell({-0.6f,-0.6f,1.0f}, Nx);
-    std::cout << "grid(7,0,0) : " << grid(1,0,0) << std::endl;
-    std::cout << temp << std::endl;
+    std::cout << "grid(0,14,0) : " << grid(0,14,0) << std::endl;
+    std::cout << "grid(0,15,0) : " << grid(0,15,0) << std::endl;
+    std::cout << "grid(0,16,0) : " << grid(0,16,0) << std::endl;
+    std::cout << "grid(0,17,0) : " << grid(0,17,0) << std::endl;
+    std::cout << "grid(0,18,0) : " << grid(0,18,0) << std::endl;
+    std::cout << "grid(0,19,0) : " << grid(0,19,0) << std::endl;
+
+    vec3 temp = pointToGridCell({-1,0.00005,0.1579}, Nx);
+    std::cout << "pointToGridCell({-1,0.00005,0.1579} --> " << temp << std::endl;
+    std::cout << "grid(temp.x, temp.y, temp.z) --> " << grid(temp.x, temp.y, temp.z)  << std::endl;
     // #################################
 
 	update_grid_segments(grid_segments, grid);
@@ -112,6 +119,8 @@ vec3 pointToGridCell(const vec3& p, int N){
 // i.e. { x,y,z } -> { kx, ky, kz }
 // ! function returns the *lower bound* of the cell (i.e. the smallest of the 2 points that define the lower edge of a given cell along its axis)
 // https://math.stackexchange.com/questions/3135977/which-cell-in-a-grid-a-point-belongs-to#comment6460585_3136016
+
+// NOTE: current function is adapted for a grid contained in [-1;1] in each direction
     float gridCellSize = 2.0f / (N-1);
     int sign_x; int sign_y; int sign_z; int index_x; int index_y; int index_z;
     if (p.x >= 0){sign_x = 1.;} else{sign_x = -1.;}; if (p.y >= 0){sign_y = 1.;} else{sign_y = -1.;}; if (p.z >= 0){sign_z = 1.;} else{sign_z = -1.;}
@@ -128,6 +137,7 @@ vec3 pointToGridCell(const vec3& p, int N){
         else{
             index_x = int(px_shifted / gridCellSize) + N / 2 - 2;
         }
+        if (index_x == (-1)){index_x++;}; if (index_x == (N-1)){index_x--;}
     }
     // y
     if (std::abs(p.y) < (gridCellSize/2.0)){
@@ -140,6 +150,7 @@ vec3 pointToGridCell(const vec3& p, int N){
         else{
             index_y = int(py_shifted / gridCellSize) + N / 2 - 2;
         }
+        if (index_y == (-1)){index_y++;}; if (index_y == (N-1)){index_y--;}
     }
     // z
     if (std::abs(p.z) < (gridCellSize/2.0)){
@@ -152,8 +163,9 @@ vec3 pointToGridCell(const vec3& p, int N){
         else{
             index_z = int(pz_shifted / gridCellSize) + N / 2 - 2;
         }
+        if (index_z == (-1)){index_z++;}; if (index_z == (N-1)){index_z--;}
     }
-    return {index_x, index_y, index_z};
+    return {int(index_x), int(index_y), int(index_z)};
 }
 
 //################################################################
@@ -304,7 +316,7 @@ void scene_structure::display_tool()
 
     mini_testing_sphere.shading.color = { 1,0,0 };
     mini_testing_sphere.shading.alpha = 0.6;
-    mini_testing_sphere.transform.translation = { -1,-1,-1 };
+    mini_testing_sphere.transform.translation = { -0.75,1,0.045 }; // position of center of sphere
     mini_testing_sphere.transform.scaling = 0.025f;
 
 	glEnable(GL_BLEND); // Color Blending
