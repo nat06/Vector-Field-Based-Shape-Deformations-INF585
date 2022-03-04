@@ -5,9 +5,11 @@
 #include "helpers/gui.hpp"
 #include "helpers/initialization.hpp"
 #include "helpers/picking_visual.hpp"
-
 #include "deformers/deformers.hpp"
 
+using namespace cgp;
+
+vec3 pointToGridCell(const vec3& p, int N);
 
 // Helping structure that contains the deforming shape elements
 struct deforming_shape_structure

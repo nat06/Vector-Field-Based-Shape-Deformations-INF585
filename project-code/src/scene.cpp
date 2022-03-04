@@ -58,9 +58,23 @@ void scene_structure::initialize()
 
     // ######### some tests... #########
 //    std::cout << grid << std::endl;
-    std::cout << grid(0,0,0) << std::endl;
-    std::cout << grid(0,0,1) << std::endl;
-    std::cout << grid(0,0,2) << std::endl;
+    std::cout << "grid(0,0,0) : " << grid(0,0,0) << std::endl;
+    std::cout << "grid(0,1,0) : " << grid(0,1,0) << std::endl;
+    std::cout << "grid(0,2,0) : " << grid(0,2,0) << std::endl;
+    std::cout << "grid(0,3,0) : " << grid(0,3,0) << std::endl;
+    std::cout << "grid(0,4,0) : " << grid(0,4,0) << std::endl;
+    std::cout << "grid(0,5,0) : " << grid(0,5,0) << std::endl;
+    std::cout << "grid(0,6,0) : " << grid(0,6,0) << std::endl;
+    std::cout << "grid(0,7,0) : " << grid(0,7,0) << std::endl;
+    std::cout << "grid(0,8,0) : " << grid(0,8,0) << std::endl;
+    std::cout << "grid(0,9,0) : " << grid(0,9,0) << std::endl;
+    std::cout << "grid(0,10,0) : " << grid(0,10,0) << std::endl;
+    std::cout << "grid(0,11,0) : " << grid(0,11,0) << std::endl;
+    std::cout << "grid(0,12,0) : " << grid(0,12,0) << std::endl;
+    std::cout << "grid(0,13,0) : " << grid(0,13,0) << std::endl;
+    vec3 temp = pointToGridCell({-0.6f,-0.6f,1.0f}, Nx);
+    std::cout << "grid(7,0,0) : " << grid(1,0,0) << std::endl;
+    std::cout << temp << std::endl;
     // #################################
 
 	update_grid_segments(grid_segments, grid);
@@ -69,7 +83,7 @@ void scene_structure::initialize()
 	initialize_velocity(Nx, Ny, Nz); // useless ?
 	velocity_grid_data.resize(3 * Nx * Ny * Nz);
 	velocity_visual.initialize(velocity_grid_data, "Velocity");
-	velocity_visual.color = vec3(1, 0, 0);
+    velocity_visual.color = vec3(1, 0, 0);
 
 	//initialize the tool
 	//-> might want to create a function  for this
@@ -92,12 +106,60 @@ void scene_structure::initialize()
 
 }
 
-vec3 pointToGridCell(const vec3& p){
+//################# PROJECT ########################
+vec3 pointToGridCell(const vec3& p, int N){
 // function to convert from a point in space to the associated 3D grid cell it belongs to.
 // i.e. { x,y,z } -> { kx, ky, kz }
+// ! function returns the *lower bound* of the cell (i.e. the smallest of the 2 points that define the lower edge of a given cell along its axis)
 // https://math.stackexchange.com/questions/3135977/which-cell-in-a-grid-a-point-belongs-to#comment6460585_3136016
-
+    std::cout << "printingX: " << p.x << std::endl;
+    float gridCellSize = 2.0f / (N-1);
+    std::cout << "printingX: " << std::endl << "gridCellSize: " << gridCellSize << std::endl;
+    int sign_x; int sign_y; int sign_z; int index_x; int index_y; int index_z;
+    if (p.x >= 0){sign_x = 1.;} else{sign_x = -1.;}
+    if (p.y >= 0){sign_y = 1.;} else{sign_y = -1.;}
+    if (p.z >= 0){sign_z = 1.;} else{sign_z = -1.;}
+    float px_shifted = p.x - sign_x*gridCellSize/2.0; float py_shifted = p.y - sign_y*gridCellSize/2.0; float pz_shifted = p.z - sign_z*gridCellSize/2.0;
+    // x
+    if (std::abs(p.x) < (gridCellSize/2.0)){
+        index_x = N / 2 - 1;
+    }
+    else{ // use shifted values
+        if (sign_x == 1.){
+            index_x = int(px_shifted / gridCellSize) + N / 2;
+        }
+        else{
+            index_x = int(px_shifted / gridCellSize) + N / 2 - 2;
+        }
+    }
+    // y
+    if (std::abs(p.y) < (gridCellSize/2.0)){
+        index_y = N / 2 - 1;
+    }
+    else{ // use shifted values
+        if (sign_y == 1.){
+            index_y = int(py_shifted / gridCellSize) + N / 2;
+        }
+        else{
+            index_y = int(py_shifted / gridCellSize) + N / 2 - 2;
+        }
+    }
+    // z
+    if (std::abs(p.z) < (gridCellSize/2.0)){
+        index_z = N / 2 - 1;
+    }
+    else{ // use shifted values
+        if (sign_z == 1.){
+            index_z = int(pz_shifted / gridCellSize) + N / 2;
+        }
+        else{
+            index_z = int(pz_shifted / gridCellSize) + N / 2 - 2;
+        }
+    }
+    return {index_x, index_y, index_z};
 }
+
+//################################################################
 
 void scene_structure::display()
 {
@@ -243,13 +305,20 @@ void scene_structure::display_tool()
 	outer_sphere_visual.transform.translation = sphere_tool.c;
 	outer_sphere_visual.transform.scaling = sphere_tool.r0;
 
+    mini_testing_sphere.shading.color = { 1,0,0 };
+    mini_testing_sphere.shading.alpha = 0.6;
+    mini_testing_sphere.transform.translation = { -1,-1,-1 };
+    mini_testing_sphere.transform.scaling = 0.025f;
+
 	glEnable(GL_BLEND); // Color Blending
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthMask(false); // do not write on depth buffer
 	//... Sort transparent objects by depth ...
 		//... Draw all transparent objects from furthest to closest ...
 		draw(inner_sphere_visual, environment);
-		draw(outer_sphere_visual, environment);
+        draw(outer_sphere_visual, environment);
+
+        draw(mini_testing_sphere, environment);
 
 		glDisable(GL_BLEND);
 	// do not forget to re-activate depth buffer write
