@@ -108,18 +108,15 @@ void scene_structure::initialize()
 
 //################# PROJECT ########################
 vec3 pointToGridCell(const vec3& p, int N){
-// function to convert from a point in space to the associated 3D grid cell it belongs to.
+// function that converts from a point in space to the associated 3D grid cell it belongs to.
 // i.e. { x,y,z } -> { kx, ky, kz }
 // ! function returns the *lower bound* of the cell (i.e. the smallest of the 2 points that define the lower edge of a given cell along its axis)
 // https://math.stackexchange.com/questions/3135977/which-cell-in-a-grid-a-point-belongs-to#comment6460585_3136016
-    std::cout << "printingX: " << p.x << std::endl;
     float gridCellSize = 2.0f / (N-1);
-    std::cout << "printingX: " << std::endl << "gridCellSize: " << gridCellSize << std::endl;
     int sign_x; int sign_y; int sign_z; int index_x; int index_y; int index_z;
-    if (p.x >= 0){sign_x = 1.;} else{sign_x = -1.;}
-    if (p.y >= 0){sign_y = 1.;} else{sign_y = -1.;}
-    if (p.z >= 0){sign_z = 1.;} else{sign_z = -1.;}
+    if (p.x >= 0){sign_x = 1.;} else{sign_x = -1.;}; if (p.y >= 0){sign_y = 1.;} else{sign_y = -1.;}; if (p.z >= 0){sign_z = 1.;} else{sign_z = -1.;}
     float px_shifted = p.x - sign_x*gridCellSize/2.0; float py_shifted = p.y - sign_y*gridCellSize/2.0; float pz_shifted = p.z - sign_z*gridCellSize/2.0;
+
     // x
     if (std::abs(p.x) < (gridCellSize/2.0)){
         index_x = N / 2 - 1;
