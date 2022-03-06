@@ -77,6 +77,9 @@ struct scene_structure {
 	sphere_tool_structure sphere_tool;
 	cgp::mesh_drawable inner_sphere_visual;
 	cgp::mesh_drawable outer_sphere_visual;
+
+
+
 	
 	//#####################################################
 	//#####################################################
@@ -85,6 +88,11 @@ struct scene_structure {
 	void mouse_move(cgp::inputs_interaction_parameters const& inputs);
 	void mouse_scroll(float scroll_offset);
 	void mouse_left_released();
+
+	//###
+	void mouse_click(cgp::inputs_interaction_parameters const& inputs);
+	//###
+
 };
 
 

@@ -148,7 +148,7 @@ void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& ve
 }
 
 
-void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure& sphere_tool)
+void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool)
 {
 
 	int const Nx = int(velocity.dimension.x);

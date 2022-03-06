@@ -10,6 +10,17 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 	// Current position of the mouse
 	vec2 const& p = inputs.mouse.position.current;
 
+	//##############################
+	//TO DO IN THE FUNCTION : MOVE THE TOOL ALONG WITH THE MOUSE
+	picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
+	sphere_tool.c = picking.position;
+	//TO DO: 
+	// JUST MOVE IT IN THE CAMERA PLANE !
+	// MOVE IT WHEN SHIFTED BUTTON
+	// DONT MOVE WHEN IT GOES OUTSIDE THE GRID !
+	// dont apply the transformation when the mouse is moe but only shift + click
+	//##############################
+
 	// The picking and deformation is only applied when pressing the shift key
 	if (inputs.keyboard.shift)
 	{
@@ -22,20 +33,40 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 		if (inputs.mouse.click.left && picking.active) {
 
 			// Current translation in 2D window coordinates
-			vec2 const translation_screen = p - picking.screen_clicked;
+			//vec2 const translation_screen = p - picking.screen_clicked;
 
-			// Apply the deformation on the surface
-			apply_deformation(deforming_shape.shape, deforming_shape.position_saved, translation_screen, picking.position, picking.normal, environment.camera.orientation(), gui.deformer_parameters);
+			//// Apply the deformation on the surface
+			//apply_deformation(deforming_shape.shape, deforming_shape.position_saved, translation_screen, picking.position, picking.normal, environment.camera.orientation(), gui.deformer_parameters);
 
-			// Update the visual model
-			deforming_shape.visual.update_position(deforming_shape.shape.position);
-			deforming_shape.require_normal_update = true;
+			//// Update the visual model
+			//deforming_shape.visual.update_position(deforming_shape.shape.position);
+			//deforming_shape.require_normal_update = true;
+
 		}
 
 	}
+
 	else
 		picking.active = false; // Unselect picking when shift is released
 }
+
+//##############################################################
+void scene_structure::mouse_click(cgp::inputs_interaction_parameters const& inputs) {
+
+	//TO DO: REMOVE THE PICKING POSITION FROM THE FUNCTIONS (USELESS NOW)
+
+	if (inputs.keyboard.shift)//the deformation is only applied when shift + click
+	{
+		vec2 const& p = inputs.mouse.position.current;
+		picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
+		
+		integrate(deforming_shape.shape, deforming_shape.position_saved, picking.position, gui.deformer_parameters, velocity, grid, sphere_tool);
+
+		deforming_shape.visual.update_position(deforming_shape.shape.position);
+	}
+
+}
+//##############################################################
 
 
 
@@ -71,6 +102,9 @@ void scene_structure::initialize()
 	sphere_tool.ci = {1,0.5,0};//?
 	sphere_tool.r0 = 0.5f;
 	sphere_tool.c0 = { 0,1,0 };//?
+
+	gui.gui_ri = sphere_tool.ri;
+	gui.gui_r0 = sphere_tool.r0;
 	
 	inner_sphere_visual.initialize(mesh_primitive_sphere(), "Sphere");
 	outer_sphere_visual.initialize(mesh_primitive_sphere(), "Sphere");
@@ -110,10 +144,18 @@ void scene_structure::display()
 	//###############################################
 	//PROJECT
 
+	//update the tool -> might want to create a function for this
+	if (gui.gui_r0 < gui.gui_ri) {
+		gui.gui_r0 = gui.gui_ri;
+	}
+	sphere_tool.ri = gui.gui_ri;
+	sphere_tool.r0 = gui.gui_r0;
+
 	//update_velocity_field(grid, sphere_tool); //not sure this goes there...
 	float scale = 0.000001;
 	scale = 5;
-	update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, scale); // what the fuck is this error
+	update_velocity_field(velocity, grid, sphere_tool);
+	update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, scale); 
 
 	
 	display_grid(); //3D grid
@@ -237,6 +279,8 @@ void scene_structure::display_tool()
 		glDisable(GL_BLEND);
 	// do not forget to re-activate depth buffer write
 	glDepthMask(true);
+
+	//TO DO: DISPLAY THE CONSTANT VELOCITY ARROW
 	
 }
 

@@ -3,6 +3,11 @@
 
 #include "cgp/cgp.hpp"
 
+//#######################project
+#include "../helpers/initialization.hpp"  // good practice ??
+//#######################
+
+
 
 enum deformer_type_enum {
 	deform_translate,
@@ -23,4 +28,19 @@ struct deformer_parameters_structure {
 
 
 
+
 void apply_deformation(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_before_deformation, cgp::vec2 const& translate_screen, cgp::vec3 const& picked_position, cgp::vec3 const& picked_normal, cgp::rotation_transform const& camera_orientation, deformer_parameters_structure const& deformer_parameters);
+
+
+//###########################
+//PROJECT
+
+
+
+
+
+void integrate(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_before_deformation, cgp::vec3 const& picked_position, deformer_parameters_structure const& deformer_parameters, cgp::grid_3D<cgp::vec3>& velocity, cgp::grid_3D<cgp::vec3> const& grid, sphere_tool_structure const& sphere_tool);
+//cgp::vec3 get_cell(cgp::vec3 point);
+cgp::vec3 get_cell(const cgp::vec3& p, int N);
+cgp::vec3 get_interpolated_velocity(cgp::vec3 point, cgp::grid_3D<cgp::vec3>& velocity);
+//###########################
