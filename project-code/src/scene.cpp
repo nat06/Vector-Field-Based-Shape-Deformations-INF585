@@ -176,7 +176,7 @@ vec3 pointToGridCell(const vec3& p, int N){
 vec3 get_interpolated_velocity(const vec3 &p, const grid_3D<vec3> &v, int N){
 	vec3 cell = pointToGridCell(p, N); // get cell point belongs to 
 	vec3 v_p = v(cell.x, cell.y, cell.z); // cell vector field value of the cell
-	float vnew_x = v_p.x; float vnew_y = v_p.y; float vnew_z = v_p.z; vec3 v_p_new = v_p;
+	vec3 v_p_new = v_p;
 	float gridCellSize = 2.0f / (N - 1);
 
 	std::cout << "p : " << p << std::endl;

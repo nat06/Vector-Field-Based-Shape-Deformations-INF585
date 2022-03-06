@@ -50,21 +50,21 @@ int main(int, char* argv[])
 	//     Animation Loop
 	// ************************ //
 	std::cout<<"Start animation loop ..."<<std::endl;
-    // while (!glfwWindowShouldClose(window))
-    // {
-    //     // Reset the screen for a new frame
-    //     helper_common.frame_begin(scene.environment.background_color, window, inputs.window, inputs.mouse.on_gui);
-    //     scene.environment.projection.update_aspect_ratio(inputs.window.aspect_ratio());
+     while (!glfwWindowShouldClose(window))
+     {
+         // Reset the screen for a new frame
+         helper_common.frame_begin(scene.environment.background_color, window, inputs.window, inputs.mouse.on_gui);
+         scene.environment.projection.update_aspect_ratio(inputs.window.aspect_ratio());
 		
-    //     // Display the ImGUI interface (button, sliders, etc)
-    //     scene.display_gui();
+         // Display the ImGUI interface (button, sliders, etc)
+         scene.display_gui();
 
-    //     // Call the display of the scene
-    //     scene.display();
+         // Call the display of the scene
+         scene.display();
 		
-    //     // End of ImGui display and handle GLFW events
-    //     helper_common.frame_end(window);
-    // }
+         // End of ImGui display and handle GLFW events
+         helper_common.frame_end(window);
+     }
 	
 	// Cleanup
 	cgp::imgui_cleanup();
