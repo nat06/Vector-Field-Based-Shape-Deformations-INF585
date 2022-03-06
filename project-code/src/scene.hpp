@@ -10,9 +10,10 @@
 using namespace cgp;
 
 vec3 pointToGridCell(const vec3& p, int N);
+vec3 get_interpolated_velocity(const vec3 &p, const grid_3D<vec3> &v, int N);
 
-// Helping structure that contains the deforming shape elements
-struct deforming_shape_structure
+	// Helping structure that contains the deforming shape elements
+	struct deforming_shape_structure
 {
 	cgp::mesh shape;                       // Mesh structure of the deformed shape
 	cgp::buffer<cgp::vec3> position_saved; // Extra storage of the shape position before the current deformation

@@ -79,10 +79,12 @@ void scene_structure::initialize()
     std::cout << "grid(0,18,0) : " << grid(0,18,0) << std::endl;
     std::cout << "grid(0,19,0) : " << grid(0,19,0) << std::endl;
 
-    vec3 temp = pointToGridCell({-1,0.00005,0.1579}, Nx);
-    std::cout << "pointToGridCell({-1,0.00005,0.1579} --> " << temp << std::endl;
+	vec3 pointTest = {0.5, 0.5, 0.5};
+	vec3 temp = pointToGridCell(pointTest, Nx);
+	std::cout << "pointToGridCell({" << pointTest << "} = " << temp << std::endl;
     std::cout << "grid(temp.x, temp.y, temp.z) --> " << grid(temp.x, temp.y, temp.z)  << std::endl;
-    // #################################
+
+	// #################################
 
 	update_grid_segments(grid_segments, grid);
 	grid_segments_visual.initialize(grid_segments, "grid");
@@ -108,6 +110,9 @@ void scene_structure::initialize()
 
 	update_velocity_field(velocity, grid, sphere_tool); //not sure this goes there...
 
+	// ########## PROJECT ############
+    vec3 temp2 = get_interpolated_velocity(pointTest, velocity, Nx);
+	// ###############################
 	
 	//################################################################
 
@@ -166,6 +171,32 @@ vec3 pointToGridCell(const vec3& p, int N){
         if (index_z == (-1)){index_z++;}; if (index_z == (N-1)){index_z--;}
     }
     return {int(index_x), int(index_y), int(index_z)};
+}
+vec3 get_interpolated_velocity(const vec3 &p, const grid_3D<vec3> &v, int N){
+	vec3 cell = pointToGridCell(p, N); // get cell point belongs to 
+	vec3 v_p = v(cell.x, cell.y, cell.z); // cell vector field value of the cell
+	float vnew_x = v_p.x; float vnew_y = v_p.y; float vnew_z = v_p.z;
+
+	std::cout << "p : " << p << std::endl;
+	std::cout << "cell : " << cell << std::endl;
+	std::cout << "v(p.x, p.y, p.z) : " << v_p << std::endl;
+
+	int x_index1; int x_index2; int y_index1; int y_index2; int z_index1; int z_index2;
+	for(int i = 0; i < 3; i++){	 // iterate through cell
+		if ( (cell(i) != 0) && (cell(i) != 19) ){ // if not on at the boundary of the grid
+			if (i == 0){ x_index1 = cell.x - 1; x_index2 = cell.x + 1; } else{ x_index1 = cell.x; x_index2 = cell.x; };
+			if (i == 1){ y_index1 = cell.y - 1; y_index2 = cell.y + 1; } else{ y_index1 = cell.y; y_index2 = cell.y; };
+			if (i == 2){ z_index1 = cell.z - 1; z_index2 = cell.z + 1; } else{ z_index1 = cell.z; z_index2 = cell.z; };
+			float next_cell1_vx = v(x_index1, y_index1, z_index1).x;
+			float next_cell2_vx = v(x_index2, y_index2, z_index2).x;
+			float next_cell1_vy = v(x_index1, y_index1, z_index1).y;
+			float next_cell2_vy = v(x_index2, y_index2, z_index2).y;
+			float next_cell1_vz = v(x_index1, y_index1, z_index1).z;
+			float next_cell2_vz = v(x_index2, y_index2, z_index2).z;
+		}
+	}
+
+	return {vnew_x, vnew_y, vnew_z};
 }
 
 //################################################################
