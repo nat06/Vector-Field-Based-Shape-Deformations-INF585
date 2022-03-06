@@ -172,36 +172,42 @@ vec3 pointToGridCell(const vec3& p, int N){
     }
     return {int(index_x), int(index_y), int(index_z)};
 }
+
 vec3 get_interpolated_velocity(const vec3 &p, const grid_3D<vec3> &v, int N){
 	vec3 cell = pointToGridCell(p, N); // get cell point belongs to 
 	vec3 v_p = v(cell.x, cell.y, cell.z); // cell vector field value of the cell
-	float vnew_x = v_p.x; float vnew_y = v_p.y; float vnew_z = v_p.z;
+	float vnew_x = v_p.x; float vnew_y = v_p.y; float vnew_z = v_p.z; vec3 v_p_new = v_p;
+	float gridCellSize = 2.0f / (N - 1);
 
 	std::cout << "p : " << p << std::endl;
 	std::cout << "cell : " << cell << std::endl;
 	std::cout << "v(p.x, p.y, p.z) : " << v_p << std::endl;
 
-	int x_index1; int x_index2; int y_index1; int y_index2; int z_index1; int z_index2;
+	int x_index1; int x_index2; int y_index1; int y_index2; int z_index1; int z_index2; vec3 next_cell1_v; vec3 next_cell2_v;
+	vec3 centroid_cell1; vec3 centroid_cell2; float dist1; float dist2;
+
 	for(int i = 0; i < 3; i++){	 // iterate through cell
-		if ( (cell(i) != 0) && (cell(i) != 19) ){ // if not on at the boundary of the grid
+		if ( (cell(i) != 0) && (cell(i) != 19) ){ // if not on the boundary of the grid
 			if (i == 0){ x_index1 = cell.x - 1; x_index2 = cell.x + 1; } else{ x_index1 = cell.x; x_index2 = cell.x; };
 			if (i == 1){ y_index1 = cell.y - 1; y_index2 = cell.y + 1; } else{ y_index1 = cell.y; y_index2 = cell.y; };
 			if (i == 2){ z_index1 = cell.z - 1; z_index2 = cell.z + 1; } else{ z_index1 = cell.z; z_index2 = cell.z; };
-			float next_cell1_vx = v(x_index1, y_index1, z_index1).x;
-			float next_cell2_vx = v(x_index2, y_index2, z_index2).x;
-			float next_cell1_vy = v(x_index1, y_index1, z_index1).y;
-			float next_cell2_vy = v(x_index2, y_index2, z_index2).y;
-			float next_cell1_vz = v(x_index1, y_index1, z_index1).z;
-			float next_cell2_vz = v(x_index2, y_index2, z_index2).z;
+			next_cell1_v = v(x_index1, y_index1, z_index1); next_cell2_v = v(x_index2, y_index2, z_index2); // get adjacent cells' vector fields
+			centroid_cell1 = { -1.0+x_index1*gridCellSize+0.5*gridCellSize, -1.0+y_index1*gridCellSize+0.5*gridCellSize, -1.0+z_index1*gridCellSize+0.5*gridCellSize };
+			centroid_cell2 = { -1.0+x_index2*gridCellSize+0.5*gridCellSize, -1.0+y_index2*gridCellSize+0.5*gridCellSize, -1.0+z_index2*gridCellSize+0.5*gridCellSize };
+			dist1 = distance_3D(p, centroid_cell1); dist2 = distance_3D(p, centroid_cell2);
+			v_p_new += (dist1*next_cell1_v+dist2*next_cell2_v)/(dist1+dist2);
 		}
 	}
-
-	return {vnew_x, vnew_y, vnew_z};
+	return v_p_new;
 }
 
-//################################################################
+float distance_3D(const vec3 &p1, const vec3 &p2){
+	return sqrt( pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2) );
+}
 
-void scene_structure::display()
+	//################################################################
+
+	void scene_structure::display()
 {
 	// Basics common elements
 	// ***************************************** //
