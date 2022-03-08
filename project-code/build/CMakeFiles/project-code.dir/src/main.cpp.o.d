@@ -392,6 +392,7 @@ CMakeFiles/project-code.dir/src/main.cpp.o: \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code/src/scene.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code/src/helpers/gui.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code/src/helpers/../deformers/deformers.hpp \
+  /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code/src/helpers/../deformers/../helpers/initialization.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code/src/helpers/initialization.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code/src/helpers/picking_visual.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code/src/deformers/deformers.hpp

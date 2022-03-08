@@ -2,7 +2,6 @@
 #include "initialization.hpp"
 
 using namespace cgp;
-using namespace std;
 
 mesh initialize_plane()
 {
@@ -53,10 +52,10 @@ grid_3D<vec3> initialize_grid(int Nx, int Ny, int Nz)
 		for (int ky = 0; ky < Ny; ++ky) {
 			for (int kz = 0; kz < Nz; ++kz) {
 
-                float const x = (2*kx / (Nx - 1.0f)) - 1.0f;
-                float const y = (2 * ky / (Ny - 1.0f)) - 1.0f;
-                float const z = (2 * kz / (Nz - 1.0f)) - 1.0f;
-                //TO DO (idea) : grid adapted to mesh or mesh normalized to fit and have space in the grid
+				float const x = (2*kx / (Nx - 1.0f))-1.0f;
+				float const y = (2 * ky / (Ny - 1.0f)) - 1.0f;
+				float const z = (2 * kz / (Nz - 1.0f)) - 1.0f;
+				//TO DO (idea) : grid adapted to mesh or mesh normalized to fit and have space in the grid
 
 				grid(kx, ky, kz) = { x,y,z };//what is this ???
 
@@ -64,7 +63,6 @@ grid_3D<vec3> initialize_grid(int Nx, int Ny, int Nz)
 		}
 	}
 	return grid;
-    //cout << grid;
 }
 
 
@@ -79,7 +77,7 @@ void update_grid_segments(buffer<vec3>& segments_grid, grid_3D<vec3> const& grid
 		segments_grid.resize(N_edge);
 
 	int offset = 0;
-	for (int kx = 0; kx < Nx - 1; ++kx) {
+	for (int kx = 0; kx < Nx-1; ++kx) {
 		for (int ky = 0; ky < Ny; ++ky) {
 			for (int kz = 0; kz < Nz; ++kz) {
 				vec3 const p0 = grid(kx, ky, kz);
@@ -91,7 +89,7 @@ void update_grid_segments(buffer<vec3>& segments_grid, grid_3D<vec3> const& grid
 	}
 
 	for (int kx = 0; kx < Nx; ++kx) {
-		for (int ky = 0; ky < Ny - 1; ++ky) {
+		for (int ky = 0; ky < Ny-1; ++ky) {
 			for (int kz = 0; kz < Nz; ++kz) {
 				vec3 const p0 = grid(kx, ky, kz);
 				vec3 const p1 = grid(kx, ky + 1, kz);
@@ -150,7 +148,7 @@ void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& ve
 }
 
 
-void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure& sphere_tool)
+void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool)
 {
 
 	int const Nx = int(velocity.dimension.x);

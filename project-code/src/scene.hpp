@@ -5,16 +5,12 @@
 #include "helpers/gui.hpp"
 #include "helpers/initialization.hpp"
 #include "helpers/picking_visual.hpp"
+
 #include "deformers/deformers.hpp"
 
-using namespace cgp;
 
-vec3 pointToGridCell(const vec3& p, int N);
-vec3 get_interpolated_velocity(const vec3 &p, const grid_3D<vec3> &v, int N);
-float distance_3D(const vec3 &p1, const vec3 &p2);
-
-	// Helping structure that contains the deforming shape elements
-	struct deforming_shape_structure
+// Helping structure that contains the deforming shape elements
+struct deforming_shape_structure
 {
 	cgp::mesh shape;                       // Mesh structure of the deformed shape
 	cgp::buffer<cgp::vec3> position_saved; // Extra storage of the shape position before the current deformation
@@ -82,8 +78,9 @@ struct scene_structure {
 	cgp::mesh_drawable inner_sphere_visual;
 	cgp::mesh_drawable outer_sphere_visual;
 
-    cgp::mesh_drawable mini_testing_sphere;
 
+
+	
 	//#####################################################
 	//#####################################################
 
@@ -91,6 +88,11 @@ struct scene_structure {
 	void mouse_move(cgp::inputs_interaction_parameters const& inputs);
 	void mouse_scroll(float scroll_offset);
 	void mouse_left_released();
+
+	//###
+	void mouse_click(cgp::inputs_interaction_parameters const& inputs);
+	//###
+
 };
 
 

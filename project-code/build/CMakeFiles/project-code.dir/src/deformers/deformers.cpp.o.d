@@ -389,4 +389,5 @@ CMakeFiles/project-code.dir/src/deformers/deformers.cpp.o: \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/interaction/picking/picking_plane/../picking_structure/picking_structure.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/helper_common_scene.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/helper/helper.hpp \
-  /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/scene_environment_basic/scene_environment_basic.hpp
+  /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/scene_environment_basic/scene_environment_basic.hpp \
+  /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code/src/deformers/../helpers/initialization.hpp

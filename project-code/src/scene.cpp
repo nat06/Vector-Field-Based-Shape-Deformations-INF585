@@ -10,6 +10,24 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 	// Current position of the mouse
 	vec2 const& p = inputs.mouse.position.current;
 
+	//##############################
+	//move the tool on the shape surface
+	picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
+
+	//TO DO: -> adapt 2.0 to grid size
+	// write this better !!!!
+	//stay in its place when outside the grid
+	if (picking.position.x + sphere_tool.r0 >= 1.0f) picking.position.x = 1.0- sphere_tool.r0;
+	if (picking.position.x - sphere_tool.r0 <= -1.0f) picking.position.x = -1.0 + sphere_tool.r0;
+	if (picking.position.y + sphere_tool.r0 >= 1.0f) picking.position.y = 1.0 - sphere_tool.r0;
+	if (picking.position.y - sphere_tool.r0 <= -1.0f) picking.position.y = -1.0 + sphere_tool.r0;
+	if (picking.position.z + sphere_tool.r0 >= 1.0f) picking.position.z = 1.0 - sphere_tool.r0;
+	if (picking.position.z - sphere_tool.r0 <= -1.0f) picking.position.z = -1.0 + sphere_tool.r0;
+
+	sphere_tool.c = picking.position;
+	
+	//##############################
+
 	// The picking and deformation is only applied when pressing the shift key
 	if (inputs.keyboard.shift)
 	{
@@ -22,20 +40,40 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 		if (inputs.mouse.click.left && picking.active) {
 
 			// Current translation in 2D window coordinates
-			vec2 const translation_screen = p - picking.screen_clicked;
+			//vec2 const translation_screen = p - picking.screen_clicked;
 
-			// Apply the deformation on the surface
-			apply_deformation(deforming_shape.shape, deforming_shape.position_saved, translation_screen, picking.position, picking.normal, environment.camera.orientation(), gui.deformer_parameters);
+			//// Apply the deformation on the surface
+			//apply_deformation(deforming_shape.shape, deforming_shape.position_saved, translation_screen, picking.position, picking.normal, environment.camera.orientation(), gui.deformer_parameters);
 
-			// Update the visual model
-			deforming_shape.visual.update_position(deforming_shape.shape.position);
-			deforming_shape.require_normal_update = true;
+			//// Update the visual model
+			//deforming_shape.visual.update_position(deforming_shape.shape.position);
+			//deforming_shape.require_normal_update = true;
+
 		}
 
 	}
+
 	else
 		picking.active = false; // Unselect picking when shift is released
 }
+
+//##############################################################
+void scene_structure::mouse_click(cgp::inputs_interaction_parameters const& inputs) {
+
+	//TO DO: REMOVE THE PICKING POSITION FROM THE FUNCTIONS (USELESS NOW)
+
+	if (inputs.keyboard.shift)//the deformation is only applied when shift + click
+	{
+		vec2 const& p = inputs.mouse.position.current;
+		picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
+		
+		integrate(deforming_shape.shape, deforming_shape.position_saved, picking.position, gui.deformer_parameters, velocity, grid, sphere_tool);
+
+		deforming_shape.visual.update_position(deforming_shape.shape.position);
+	}
+
+}
+//##############################################################
 
 
 
@@ -55,159 +93,37 @@ void scene_structure::initialize()
 	int const Nx = 20, Ny = 20, Nz = 20;
 
 	grid = initialize_grid(Nx, Ny, Nz);
-
-    // ######### some tests... #########
-//    std::cout << grid << std::endl;
-    std::cout << "grid(0,0,0) : " << grid(0,0,0) << std::endl;
-    std::cout << "grid(0,1,0) : " << grid(0,1,0) << std::endl;
-    std::cout << "grid(0,2,0) : " << grid(0,2,0) << std::endl;
-    std::cout << "grid(0,3,0) : " << grid(0,3,0) << std::endl;
-    std::cout << "grid(0,4,0) : " << grid(0,4,0) << std::endl;
-    std::cout << "grid(0,5,0) : " << grid(0,5,0) << std::endl;
-    std::cout << "grid(0,6,0) : " << grid(0,6,0) << std::endl;
-    std::cout << "grid(0,7,0) : " << grid(0,7,0) << std::endl;
-    std::cout << "grid(0,8,0) : " << grid(0,8,0) << std::endl;
-    std::cout << "grid(0,9,0) : " << grid(0,9,0) << std::endl;
-    std::cout << "grid(0,10,0) : " << grid(0,10,0) << std::endl;
-    std::cout << "grid(0,11,0) : " << grid(0,11,0) << std::endl;
-    std::cout << "grid(0,12,0) : " << grid(0,12,0) << std::endl;
-    std::cout << "grid(0,13,0) : " << grid(0,13,0) << std::endl;
-    std::cout << "grid(0,14,0) : " << grid(0,14,0) << std::endl;
-    std::cout << "grid(0,15,0) : " << grid(0,15,0) << std::endl;
-    std::cout << "grid(0,16,0) : " << grid(0,16,0) << std::endl;
-    std::cout << "grid(0,17,0) : " << grid(0,17,0) << std::endl;
-    std::cout << "grid(0,18,0) : " << grid(0,18,0) << std::endl;
-    std::cout << "grid(0,19,0) : " << grid(0,19,0) << std::endl;
-
-	vec3 pointTest = {0.5, 0.5, 0.5};
-	vec3 temp = pointToGridCell(pointTest, Nx);
-	std::cout << "pointToGridCell({" << pointTest << "} = " << temp << std::endl;
-    std::cout << "grid(temp.x, temp.y, temp.z) --> " << grid(temp.x, temp.y, temp.z)  << std::endl;
-
-	// #################################
-
 	update_grid_segments(grid_segments, grid);
 	grid_segments_visual.initialize(grid_segments, "grid");
 
 	initialize_velocity(Nx, Ny, Nz); // useless ?
 	velocity_grid_data.resize(3 * Nx * Ny * Nz);
 	velocity_visual.initialize(velocity_grid_data, "Velocity");
-    velocity_visual.color = vec3(1, 0, 0);
+	velocity_visual.color = vec3(1, 0, 0);
 
 	//initialize the tool
-	//-> might want to create a function  for this
+	//-> might want to create a functio  for this
 	
 	sphere_tool.c = { 0.5,0.5,0.5 };//TO DO: use mouse position (to do later)
 	sphere_tool.ri = 0.1f;
 	sphere_tool.ci = {1,0.5,0};//?
 	sphere_tool.r0 = 0.5f;
 	sphere_tool.c0 = { 0,1,0 };//?
+
+	gui.gui_ri = sphere_tool.ri;
+	gui.gui_r0 = sphere_tool.r0;
 	
 	inner_sphere_visual.initialize(mesh_primitive_sphere(), "Sphere");
 	outer_sphere_visual.initialize(mesh_primitive_sphere(), "Sphere");
 
-    mini_testing_sphere.initialize(mesh_primitive_sphere(), "Sphere");
-
 	update_velocity_field(velocity, grid, sphere_tool); //not sure this goes there...
 
-	// ########## PROJECT ############
-    vec3 temp2 = get_interpolated_velocity(pointTest, velocity, Nx);
-	// ###############################
-	
 	//################################################################
 
 }
 
-//################# PROJECT ########################
-vec3 pointToGridCell(const vec3& p, int N){
-// function that converts from a point in space to the associated 3D grid cell it belongs to.
-// i.e. { x,y,z } -> { kx, ky, kz }
-// ! function returns the *lower bound* of the cell (i.e. the smallest of the 2 points that define the lower edge of a given cell along its axis)
-// https://math.stackexchange.com/questions/3135977/which-cell-in-a-grid-a-point-belongs-to#comment6460585_3136016
 
-// NOTE: current function is adapted for a grid contained in [-1;1] in each direction
-    float gridCellSize = 2.0f / (N-1);
-    int sign_x; int sign_y; int sign_z; int index_x; int index_y; int index_z;
-    if (p.x >= 0){sign_x = 1.;} else{sign_x = -1.;}; if (p.y >= 0){sign_y = 1.;} else{sign_y = -1.;}; if (p.z >= 0){sign_z = 1.;} else{sign_z = -1.;}
-    float px_shifted = p.x - sign_x*gridCellSize/2.0; float py_shifted = p.y - sign_y*gridCellSize/2.0; float pz_shifted = p.z - sign_z*gridCellSize/2.0;
-
-    // x
-    if (std::abs(p.x) < (gridCellSize/2.0)){
-        index_x = N / 2 - 1;
-    }
-    else{ // use shifted values
-        if (sign_x == 1.){
-            index_x = int(px_shifted / gridCellSize) + N / 2;
-        }
-        else{
-            index_x = int(px_shifted / gridCellSize) + N / 2 - 2;
-        }
-        if (index_x == (-1)){index_x++;}; if (index_x == (N-1)){index_x--;}
-    }
-    // y
-    if (std::abs(p.y) < (gridCellSize/2.0)){
-        index_y = N / 2 - 1;
-    }
-    else{ // use shifted values
-        if (sign_y == 1.){
-            index_y = int(py_shifted / gridCellSize) + N / 2;
-        }
-        else{
-            index_y = int(py_shifted / gridCellSize) + N / 2 - 2;
-        }
-        if (index_y == (-1)){index_y++;}; if (index_y == (N-1)){index_y--;}
-    }
-    // z
-    if (std::abs(p.z) < (gridCellSize/2.0)){
-        index_z = N / 2 - 1;
-    }
-    else{ // use shifted values
-        if (sign_z == 1.){
-            index_z = int(pz_shifted / gridCellSize) + N / 2;
-        }
-        else{
-            index_z = int(pz_shifted / gridCellSize) + N / 2 - 2;
-        }
-        if (index_z == (-1)){index_z++;}; if (index_z == (N-1)){index_z--;}
-    }
-    return {int(index_x), int(index_y), int(index_z)};
-}
-
-vec3 get_interpolated_velocity(const vec3 &p, const grid_3D<vec3> &v, int N){
-	vec3 cell = pointToGridCell(p, N); // get cell point belongs to 
-	vec3 v_p = v(cell.x, cell.y, cell.z); // cell vector field value of the cell
-	vec3 v_p_new = v_p;
-	float gridCellSize = 2.0f / (N - 1);
-
-	std::cout << "p : " << p << std::endl;
-	std::cout << "cell : " << cell << std::endl;
-	std::cout << "v(p.x, p.y, p.z) : " << v_p << std::endl;
-
-	int x_index1; int x_index2; int y_index1; int y_index2; int z_index1; int z_index2; vec3 next_cell1_v; vec3 next_cell2_v;
-	vec3 centroid_cell1; vec3 centroid_cell2; float dist1; float dist2;
-
-	for(int i = 0; i < 3; i++){	 // iterate through cell
-		if ( (cell(i) != 0) && (cell(i) != 19) ){ // if not on the boundary of the grid
-			if (i == 0){ x_index1 = cell.x - 1; x_index2 = cell.x + 1; } else{ x_index1 = cell.x; x_index2 = cell.x; };
-			if (i == 1){ y_index1 = cell.y - 1; y_index2 = cell.y + 1; } else{ y_index1 = cell.y; y_index2 = cell.y; };
-			if (i == 2){ z_index1 = cell.z - 1; z_index2 = cell.z + 1; } else{ z_index1 = cell.z; z_index2 = cell.z; };
-			next_cell1_v = v(x_index1, y_index1, z_index1); next_cell2_v = v(x_index2, y_index2, z_index2); // get adjacent cells' vector fields
-			centroid_cell1 = { -1.0+x_index1*gridCellSize+0.5*gridCellSize, -1.0+y_index1*gridCellSize+0.5*gridCellSize, -1.0+z_index1*gridCellSize+0.5*gridCellSize };
-			centroid_cell2 = { -1.0+x_index2*gridCellSize+0.5*gridCellSize, -1.0+y_index2*gridCellSize+0.5*gridCellSize, -1.0+z_index2*gridCellSize+0.5*gridCellSize };
-			dist1 = distance_3D(p, centroid_cell1); dist2 = distance_3D(p, centroid_cell2);
-			v_p_new += (dist1*next_cell1_v+dist2*next_cell2_v)/(dist1+dist2);
-		}
-	}
-	return v_p_new;
-}
-
-float distance_3D(const vec3 &p1, const vec3 &p2){
-	return sqrt( pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2) );
-}
-
-	//################################################################
-
-	void scene_structure::display()
+void scene_structure::display()
 {
 	// Basics common elements
 	// ***************************************** //
@@ -235,10 +151,18 @@ float distance_3D(const vec3 &p1, const vec3 &p2){
 	//###############################################
 	//PROJECT
 
+	//update the tool -> might want to create a function for this
+	if (gui.gui_r0 < gui.gui_ri) {
+		gui.gui_r0 = gui.gui_ri;
+	}
+	sphere_tool.ri = gui.gui_ri;
+	sphere_tool.r0 = gui.gui_r0;
+
 	//update_velocity_field(grid, sphere_tool); //not sure this goes there...
 	float scale = 0.000001;
 	scale = 5;
-	update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, scale); // what the fuck is this error
+	update_velocity_field(velocity, grid, sphere_tool);
+	update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, scale); 
 
 	
 	display_grid(); //3D grid
@@ -328,7 +252,7 @@ void scene_structure::initialize_velocity(int Nx, int Ny, int Nz){//not sure abo
 
 void scene_structure::display_grid()
 {
-    if (gui.display_grid_edge)
+	if (gui.display_grid_edge)
 		draw(grid_segments_visual, environment);
 }
 
@@ -351,24 +275,19 @@ void scene_structure::display_tool()
 	outer_sphere_visual.transform.translation = sphere_tool.c;
 	outer_sphere_visual.transform.scaling = sphere_tool.r0;
 
-    mini_testing_sphere.shading.color = { 1,0,0 };
-    mini_testing_sphere.shading.alpha = 0.6;
-    mini_testing_sphere.transform.translation = { -0.75,1,0.045 }; // position of center of sphere
-    mini_testing_sphere.transform.scaling = 0.025f;
-
 	glEnable(GL_BLEND); // Color Blending
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthMask(false); // do not write on depth buffer
 	//... Sort transparent objects by depth ...
 		//... Draw all transparent objects from furthest to closest ...
 		draw(inner_sphere_visual, environment);
-        draw(outer_sphere_visual, environment);
-
-        draw(mini_testing_sphere, environment);
+		draw(outer_sphere_visual, environment);
 
 		glDisable(GL_BLEND);
 	// do not forget to re-activate depth buffer write
 	glDepthMask(true);
+
+	//TO DO: DISPLAY THE CONSTANT VELOCITY ARROW
 	
 }
 
