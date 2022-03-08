@@ -129,12 +129,12 @@ void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& ve
 	float const lambda = 0.01f * scale;
 
 	float offset = 0;
-	for (int kx = 0; kx < Nx-1; ++kx) {
-		for (int ky = 0; ky < Ny-1; ++ky) {
-			for (int kz = 0; kz < Nz-1; ++kz) {
+	for (int kx = 0; kx < Nx; ++kx) {
+		for (int ky = 0; ky < Ny; ++ky) {
+			for (int kz = 0; kz < Nz; ++kz) {
 				//vec3 const p0 = { -1 + kx * dL, -1 + ky * dL, 1e-4f };
 				float c = 1.0 / (2.0 * Nx);
-				vec3 const p0 = grid(kx, ky, kz) + vec3(c, c, c);
+				vec3 const p0 = grid(kx, ky, kz); //+ vec3(c, c, c);
 				//size_t const offset = velocity.index_to_offset(kx, ky);
 				//size_t const offset = velocity.index_to_offset(kx, ky, kz);
 				velocity_grid_data[2*offset + 0] = p0;
@@ -160,9 +160,9 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 
 	//see appendix of the paper for the formulas
 
-	for (int kx = 0; kx < Nx - 1; ++kx) {
-		for (int ky = 0; ky < Ny - 1; ++ky) {
-			for (int kz = 0; kz < Nz - 1; ++kz) {
+	for (int kx = 0; kx < Nx; ++kx) {
+		for (int ky = 0; ky < Ny; ++ky) {
+			for (int kz = 0; kz < Nz; ++kz) {
 
 				float c = 1.0 / (2.0 * Nx);//to do: put ny and nz
 				vec3 const p0 = grid(kx, ky, kz) + vec3(c, c, c);
@@ -256,7 +256,5 @@ int C(int n, int k)
 	return nCr;
 }
 
-
-//############################################################################
-//############################################################################
-
+	//############################################################################
+	//############################################################################

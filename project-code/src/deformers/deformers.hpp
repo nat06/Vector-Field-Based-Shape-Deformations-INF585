@@ -44,5 +44,6 @@ void integrate(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_before_d
 cgp::vec3 get_cell(const cgp::vec3& p, int N);
 //cgp::vec3 get_interpolated_velocity(cgp::vec3 point, cgp::grid_3D<cgp::vec3>& velocity);
 cgp::vec3 get_interpolated_velocity(cgp::vec3 const& p, cgp::grid_3D<cgp::vec3> const& v, int N);
+cgp::vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &grid, cgp::grid_3D<cgp::vec3> const &v, int N);
 float distance_3D(const cgp::vec3& p1, const cgp::vec3& p2);
 //###########################

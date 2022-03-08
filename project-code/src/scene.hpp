@@ -8,10 +8,10 @@
 
 #include "deformers/deformers.hpp"
 
+bool areVec3vectorsSame(const cgp::vec3 &v1, const cgp::vec3 &v2);
 
 // Helping structure that contains the deforming shape elements
-struct deforming_shape_structure
-{
+struct deforming_shape_structure{
 	cgp::mesh shape;                       // Mesh structure of the deformed shape
 	cgp::buffer<cgp::vec3> position_saved; // Extra storage of the shape position before the current deformation
 	cgp::mesh_drawable visual;             // Visual representation of the deformed shape

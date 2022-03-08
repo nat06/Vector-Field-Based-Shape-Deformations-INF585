@@ -1,6 +1,5 @@
 #include "deformers.hpp"
-
-
+#include "scene.hpp"
 
 using namespace cgp;
 
@@ -78,7 +77,7 @@ void integrate(mesh& shape, buffer<vec3> const& position_before_deformation, vec
 	//fins some inspiration from 08_cloth main.cpp -> understand the code and adapt it !
 
 	size_t const N = shape.position.size();
-
+	vec3 ref = {-100, -100, -100}; // to check if point is in [-1, 1] grid 
 	//intergation steps
 	size_t const N_substeps = 10;
 	for (size_t k_substep = 0; k_substep < N_substeps; ++k_substep) {
@@ -89,41 +88,45 @@ void integrate(mesh& shape, buffer<vec3> const& position_before_deformation, vec
 			vec3 const& p_shape_original = position_before_deformation[k]; // reference position before deformation
 
 			//get the grid_cell corresponding to the point
-			/*vec3 cell = get_cell(p_shape, velocity.dimension[0]);
-			int kx, ky, kz;
-			kx = cell[0];
-			ky = cell[1];
-			kz = cell[2];*/
+			vec3 cell = get_cell(p_shape, velocity.dimension[0]);
+			if (!areVec3vectorsSame(cell, ref)){ // if point is in grid
 
-			//apply path line integration of v starting from p_shape
-			//p_shape = p_shape + dt * velocity(kx, ky, kz);
+				// int kx, ky, kz;
+				// kx = cell[0];
+				// ky = cell[1];
+				// kz = cell[2];
 
-			//WHAT DO WE DO WITH DT HERE ????
-			//float const dt = 0.005f * timer.scale;
+				//apply path line integration of v starting from p_shape
+				//p_shape = p_shape + dt * velocity(kx, ky, kz);
 
-			float const dt = 0.005f;
+				//WHAT DO WE DO WITH DT HERE ????
+				//float const dt = 0.005f * timer.scale;
 
-			//size_t const N_substeps = 10;
-			//for (size_t k_substep = 0; k_substep < N_substeps; ++k_substep) {
-			p_shape = p_shape + dt * get_interpolated_velocity(p_shape, velocity, velocity.dimension[0]);
-			//p_shape = p_shape + dt * velocity(kx, ky, kz);
+				float const dt = 0.005f;
 
-			//now update the velocity
-			//update_velocity_field(velocity, grid, sphere_tool); //-> do it somewere else !!!
-			//std::cout << "update velocity field !" << std::endl;
-			//???????????????????
+				// size_t const N_substeps = 10;
+				// for (size_t k_substep = 0; k_substep < N_substeps; ++k_substep) {
+				// p_shape = p_shape + dt * get_interpolated_velocity(p_shape, velocity, velocity.dimension[0]);
+				// p_shape = p_shape + dt * velocity(kx, ky, kz);
+				p_shape = p_shape + dt * trilinear_interpolation(p_shape, grid, velocity, velocity.dimension[0]);
 
-			//update the velocity !!! here ??
+				// now update the velocity
+				// update_velocity_field(velocity, grid, sphere_tool); //-> do it somewere else !!!
+				// std::cout << "update velocity field !" << std::endl;
+				// ???????????????????
 
-			/*bool simulation_diverged = detect_simulation_divergence(cloth.forces, cloth.position);
-			if (simulation_diverged == true)
-			{
-				std::cerr << " **** Simulation has diverged **** " << std::endl;
-				std::cerr << " > Stop simulation iterations" << std::endl;
-				user.gui.run = false;
-				break;
-			}*/
-			//}
+				//update the velocity !!! here ??
+
+				/*bool simulation_diverged = detect_simulation_divergence(cloth.forces, cloth.position);
+				if (simulation_diverged == true)
+				{
+					std::cerr << " **** Simulation has diverged **** " << std::endl;
+					std::cerr << " > Stop simulation iterations" << std::endl;
+					user.gui.run = false;
+					break;
+				}*/
+				//}
+			}
 		}
 		//now update the velocity
 		update_velocity_field(velocity, grid, sphere_tool);// -> do it somewere else !!!
@@ -174,8 +177,8 @@ float distance_3D(const vec3& p1, const vec3& p2) {
 	return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
 }
 
-
 vec3 get_cell(const vec3& p, int N) {
+	// returns lower left corner indices of the cell point p belongs to
 	// function that converts from a point in space to the associated 3D grid cell it belongs to.
 	// i.e. { x,y,z } -> { kx, ky, kz }
 	// ! function returns the *lower bound* of the cell (i.e. the smallest of the 2 points that define the lower edge of a given cell along its axis)
@@ -189,6 +192,13 @@ vec3 get_cell(const vec3& p, int N) {
 	else { sign_y = -1.; }; if (p.z >= 0) { sign_z = 1.; }
 	else { sign_z = -1.; }
 	float px_shifted = p.x - sign_x * gridCellSize / 2.0; float py_shifted = p.y - sign_y * gridCellSize / 2.0; float pz_shifted = p.z - sign_z * gridCellSize / 2.0;
+
+	// handle case where point is out of grid)
+	for (int i=0; i<3; i++){
+		if ( (p(i) < -1.0) || (p(i) > 1.0) ){
+			return {-100,-100,-100};
+		}
+	}
 
 	// x
 	if (std::abs(p.x) < (gridCellSize / 2.0)) {
@@ -229,6 +239,39 @@ vec3 get_cell(const vec3& p, int N) {
 		}
 		if (index_z == (-1)) { index_z++; }; if (index_z == (N - 1)) { index_z--; }
 	}
+
 	return { int(index_x), int(index_y), int(index_z) };
 }
 
+vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &grid, cgp::grid_3D<cgp::vec3> const &v, int N)
+{
+	// https://spie.org/samples/PM159.pdf, https://www.wikiwand.com/en/Trilinear_interpolation 
+	vec3 cell = get_cell(p, N); // get lower left index of cell the point belongs to 
+	float gridCellSize = 2.0f / (N - 1);
+	vec3 c0; vec3 c1; vec3 c2; vec3 c3; vec3 c4; vec3 c5; vec3 c6; vec3 c7;
+
+	// compute necessary adjacent cells & velocity values
+	float x0 = grid(cell.x, cell.y, cell.z).x; float x1 = grid(cell.x + 1, cell.y, cell.z).x;
+    float y0 = grid(cell.x, cell.y, cell.z).y; float y1 = grid(cell.x, cell.y+1, cell.z).y;
+	float z0 = grid(cell.x, cell.y, cell.z).z; float z1 = grid(cell.x, cell.y, cell.z + 1).z;
+
+	float deltaX = (p.x - x0)/(x1-x0); float deltaY = (p.y - y0)/(y1-y0); float deltaZ = (p.z - z0)/(z1-z0);
+	
+	c0 = v(cell.x, cell.y, cell.z);
+	c1 = v(cell.x + 1, cell.y, cell.z) - v(cell.x, cell.y, cell.z);
+	c2 = v(cell.x, cell.y+1, cell.z) - v(cell.x, cell.y, cell.z);
+	c3 = v(cell.x, cell.y, cell.z+1) - v(cell.x, cell.y, cell.z);
+	c4 = v(cell.x+1, cell.y+1, cell.z) - v(cell.x, cell.y+1, cell.z) - v(cell.x+1, cell.y, cell.z) + v(cell.x, cell.y, cell.z);
+	c5 = v(cell.x, cell.y+1, cell.z+1) - v(cell.x, cell.y, cell.z+1) - v(cell.x, cell.y+1, cell.z) + v(cell.x, cell.y, cell.z);
+	c6 = v(cell.x+1, cell.y, cell.z+1) - v(cell.x, cell.y, cell.z+1) - v(cell.x+1, cell.y, cell.z) + v(cell.x, cell.y, cell.z);
+	c7 = v(cell.x + 1, cell.y + 1, cell.z + 1) - v(cell.x, cell.y + 1, cell.z + 1) - v(cell.x + 1, cell.y, cell.z + 1) - v(cell.x + 1, cell.y + 1, cell.z) +
+		 v(cell.x + 1, cell.y, cell.z) + v(cell.x, cell.y, cell.z + 1) + v(cell.x, cell.y+1, cell.z) - v(cell.x, cell.y, cell.z);
+
+	vec3 v_new = c0 + c1*deltaX + c2*deltaY + c3*deltaZ + c4*deltaX*deltaY + c5*deltaY*deltaZ + c6*deltaZ*deltaX + c7*deltaX*deltaY*deltaZ;
+//	std::cout << "v_new : " << v_new << std::endl;
+	return v_new;
+
+// ! watch out for rightmost corner.
+}
+
+// lissage Laplacian

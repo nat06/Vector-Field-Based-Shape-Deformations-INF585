@@ -20466,7 +20466,13 @@ CMakeFiles/project-code.dir/src/deformers/deformers.cpp.o: ../src/deformers/defo
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/interaction/picking/picking_structure/picking_structure.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/helper_common_scene.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/helper/helper.hpp \
-  /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/scene_environment_basic/scene_environment_basic.hpp
+  /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/scene_environment_basic/scene_environment_basic.hpp \
+  ../src/helpers/initialization.hpp \
+  ../src/scene.hpp \
+  ../src/helpers/gui.hpp \
+  ../src/deformers/deformers.hpp \
+  ../src/helpers/initialization.hpp \
+  ../src/helpers/picking_visual.hpp
 
 CMakeFiles/project-code.dir/src/helpers/gui.cpp.o: ../src/helpers/gui.cpp \
   ../src/helpers/gui.hpp \
@@ -20859,7 +20865,8 @@ CMakeFiles/project-code.dir/src/helpers/gui.cpp.o: ../src/helpers/gui.cpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/helper_common_scene.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/helper/helper.hpp \
   /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/helper_common_scene/scene_environment_basic/scene_environment_basic.hpp \
-  ../src/deformers/deformers.hpp
+  ../src/deformers/deformers.hpp \
+  ../src/helpers/initialization.hpp
 
 CMakeFiles/project-code.dir/src/helpers/initialization.cpp.o: ../src/helpers/initialization.cpp \
   ../src/helpers/initialization.hpp \
@@ -22039,6 +22046,7 @@ CMakeFiles/project-code.dir/src/main.cpp.o: ../src/main.cpp \
   ../src/helpers/gui.hpp \
   ../src/deformers/deformers.hpp \
   ../src/helpers/initialization.hpp \
+  ../src/helpers/initialization.hpp \
   ../src/helpers/picking_visual.hpp \
   ../src/deformers/deformers.hpp
 
@@ -22436,21 +22444,22 @@ CMakeFiles/project-code.dir/src/scene.cpp.o: ../src/scene.cpp \
   ../src/helpers/gui.hpp \
   ../src/deformers/deformers.hpp \
   ../src/helpers/initialization.hpp \
+  ../src/helpers/initialization.hpp \
   ../src/helpers/picking_visual.hpp \
   ../src/deformers/deformers.hpp
 
 
-../src/scene.hpp:
-
 ../src/main.cpp:
-
-../src/helpers/picking_visual.hpp:
 
 ../src/helpers/picking_visual.cpp:
 
-../src/helpers/initialization.hpp:
-
 ../src/helpers/gui.cpp:
+
+../src/helpers/picking_visual.hpp:
+
+../src/scene.hpp:
+
+../src/helpers/initialization.hpp:
 
 /Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/library/cgp/cgp.hpp:
 

@@ -93,6 +93,46 @@ void scene_structure::initialize()
 	int const Nx = 20, Ny = 20, Nz = 20;
 
 	grid = initialize_grid(Nx, Ny, Nz);
+	
+	////////
+	/*
+	std::cout << "grid(0,0,0) : " << grid(0, 0, 0) << std::endl;
+	std::cout << "grid(0,1,0) : " << grid(0, 1, 0) << std::endl;
+	std::cout << "grid(0,2,0) : " << grid(0, 2, 0) << std::endl;
+	std::cout << "grid(0,3,0) : " << grid(0, 3, 0) << std::endl;
+	std::cout << "grid(0,4,0) : " << grid(0, 4, 0) << std::endl;
+	std::cout << "grid(0,5,0) : " << grid(0, 5, 0) << std::endl;
+	std::cout << "grid(0,6,0) : " << grid(0, 6, 0) << std::endl;
+	std::cout << "grid(0,7,0) : " << grid(0, 7, 0) << std::endl;
+	std::cout << "grid(0,8,0) : " << grid(0, 8, 0) << std::endl;
+	std::cout << "grid(0,9,0) : " << grid(0, 9, 0) << std::endl;
+	std::cout << "grid(0,10,0) : " << grid(0, 10, 0) << std::endl;
+	std::cout << "grid(0,11,0) : " << grid(0, 11, 0) << std::endl;
+	std::cout << "grid(0,12,0) : " << grid(0, 12, 0) << std::endl;
+	std::cout << "grid(0,13,0) : " << grid(0, 13, 0) << std::endl;
+	std::cout << "grid(0,14,0) : " << grid(0, 14, 0) << std::endl;
+	std::cout << "grid(0,15,0) : " << grid(0, 15, 0) << std::endl;
+	std::cout << "grid(0,16,0) : " << grid(0, 16, 0) << std::endl;
+	std::cout << "grid(0,17,0) : " << grid(0, 17, 0) << std::endl;
+	std::cout << "grid(0,18,0) : " << grid(0, 18, 0) << std::endl;
+	std::cout << "grid(0,19,0) : " << grid(0, 19, 0) << std::endl;
+
+	vec3 pointTest = {0.5, 0.5, 0.5};
+	vec3 temp = get_cell(pointTest, Nx);
+	std::cout << "pointToGridCell({" << pointTest << "} = " << temp << std::endl;
+	std::cout << "grid(temp.x, temp.y, temp.z) --> " << grid(temp.x, temp.y, temp.z) << std::endl;
+	*/
+	vec3 pointTest = {-2, 0.5, 0.5};
+	vec3 temp = get_cell(pointTest, Nx);
+	std::cout << "get_cell({" << pointTest << "} = " << temp << std::endl;
+	vec3 ref = {-100, -110, -100};
+	std::cout << temp.size() << std::endl;
+	if (!areVec3vectorsSame(temp, ref)){
+		std::cout << "samesies!" << std::endl;
+	} // works.
+	std::cout << "grid(0, 17, 0).y : " << grid(0, 17, 0).y << std::endl;
+	////////
+
 	update_grid_segments(grid_segments, grid);
 	grid_segments_visual.initialize(grid_segments, "grid");
 
@@ -102,7 +142,7 @@ void scene_structure::initialize()
 	velocity_visual.color = vec3(1, 0, 0);
 
 	//initialize the tool
-	//-> might want to create a functio  for this
+	//-> might want to create a function for this
 	
 	sphere_tool.c = { 0.5,0.5,0.5 };//TO DO: use mouse position (to do later)
 	sphere_tool.ri = 0.1f;
@@ -166,7 +206,7 @@ void scene_structure::display()
 
 	
 	display_grid(); //3D grid
-	//display_velocity(); //vector field
+	display_velocity(); //vector field
 	display_tool(); //sphere tool (to be displayed last)
 	display_velocity(); //vector field
 
@@ -291,7 +331,13 @@ void scene_structure::display_tool()
 	
 }
 
-
+bool areVec3vectorsSame(const cgp::vec3 &v1, const cgp::vec3 &v2){
+	if (v1.size() != v2.size()){return false;}
+	for (int i=0; i<v1.size(); i++){
+		if (v1(i) != v2(i)){return false;}
+	}
+	return true;
+}
 
 
 //#####################################################################################
