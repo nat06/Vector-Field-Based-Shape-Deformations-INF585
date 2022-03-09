@@ -9,16 +9,9 @@ bool gui_parameters::display()
 	//#PROJECT
 	ImGui::Checkbox("Grid", &display_grid_edge);
 	ImGui::Checkbox("Velocity", &display_velocity);
-	ImGui::Checkbox("Velocity", &display_constant_velocity);
+	// Select falloff distance using slider
 	ImGui::SliderFloat("ri", &gui_ri, 0.07f, 0.2f);
 	ImGui::SliderFloat("r0", &gui_r0, 0.01f, 0.5f);
-
-
-	ImGui::Text("direction of constant velocity (inner sphere):"); // Select the type of deformation to apply
-	int* ptr_velocity_type = (int*)& velocity_direction_type; 
-	ImGui::RadioButton("view_space", ptr_velocity_type, direction_view); ImGui::SameLine();
-	ImGui::RadioButton("normal", ptr_velocity_type, direction_normal); ImGui::SameLine();
-	ImGui::RadioButton("mouse movement", ptr_velocity_type, direction_mouse_movement);
 	//#
 
 	
