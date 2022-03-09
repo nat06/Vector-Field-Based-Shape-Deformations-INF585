@@ -20,8 +20,12 @@ struct gui_parameters {
 	//PROJECT
 	bool display_grid_edge = false;
 	bool display_velocity = true;
+	bool display_constant_velocity = true;
 	float gui_ri;
 	float gui_r0;
+
+	constant_velocity_direction velocity_direction_type;
+
 	//#
 
 	surface_type_enum surface_type = surface_plane;    // Type of surface to be created
