@@ -23,9 +23,10 @@ TO DO LIST:
 - change the name of the timer => timer_update_velocity
 - add arrow for the velocity (en cours)
 - laplacian smoothing?
+- be able to make a bigger grid and generalize code for this
 
 //-----------------------------------
-DONE
+DONE:
 //-----------------------------------
 
 - ** enforce the fact that the mesh cannot go out of the grid**
