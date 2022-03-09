@@ -22,6 +22,7 @@ TO DO LIST:
 - replace Nx, Ny, Nz, by only N
 - change the name of the timer => timer_update_velocity
 - add arrow for the velocity (en cours)
+- laplacian smoothing?
 
 //-----------------------------------
 DONE

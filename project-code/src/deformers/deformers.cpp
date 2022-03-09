@@ -270,7 +270,6 @@ vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &
 	vec3 v_new = c0 + c1*deltaX + c2*deltaY + c3*deltaZ + c4*deltaX*deltaY + c5*deltaY*deltaZ + c6*deltaZ*deltaX + c7*deltaX*deltaY*deltaZ;
 //	std::cout << "v_new : " << v_new << std::endl;
 	return v_new;
-
 // ! watch out for rightmost corner.
 }
 
