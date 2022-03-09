@@ -21,6 +21,7 @@ TO DO LIST:
 - add a bounding box for the grid (add it on the gui too)
 - replace Nx, Ny, Nz, by only N
 - change the name of the timer => timer_update_velocity
+- add arrow for the velocity (en cours)
 
 //-----------------------------------
 DONE
