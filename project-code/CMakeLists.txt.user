@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 6.0.2, 2022-03-09T10:17:27. -->
+<!-- Written by QtCreator 6.0.2, 2022-03-09T23:51:55. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -173,7 +173,6 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory">/Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/nathanpollet/Documents/GitHub/Vector-Field-Based-Shape-Deformations-INF585-/project-code/build</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

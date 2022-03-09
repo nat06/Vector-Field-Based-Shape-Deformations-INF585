@@ -165,7 +165,7 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 			for (int kz = 0; kz < Nz; ++kz) {
 
 				float c = 1.0 / (2.0 * Nx);//to do: put ny and nz
-				vec3 const p0 = grid(kx, ky, kz) + vec3(c, c, c);
+				vec3 const p0 = grid(kx, ky, kz) //+ vec3(c, c, c);
 				float r_x = norm(sphere_tool.c - p0 );
 				
 				//TO DO: update this
