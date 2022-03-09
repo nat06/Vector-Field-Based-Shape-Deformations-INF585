@@ -22,5 +22,9 @@ TO DO LIST:
 - replace Nx, Ny, Nz, by only N
 - change the name of the timer => timer_update_velocity
 
-**- enforce the fact that the mesh cannot go out of the grid**
-**- trilinear interpolation**
+//-----------------------------------
+DONE
+//-----------------------------------
+
+- ** enforce the fact that the mesh cannot go out of the grid**
+- ** trilinear interpolation**
