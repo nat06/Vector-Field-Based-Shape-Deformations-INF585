@@ -1,6 +1,7 @@
 #include "deformers.hpp"
 #include "scene.hpp"
 
+
 using namespace cgp;
 
 void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformation, vec2 const& translate_screen, vec3 const& picked_position, vec3 const& picked_normal, rotation_transform const& camera_orientation, deformer_parameters_structure const& deformer_parameters)
@@ -71,15 +72,20 @@ void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformat
 //
 //}
 
-void integrate(mesh& shape, buffer<vec3> const& position_before_deformation, vec3 const& picked_position, deformer_parameters_structure const& deformer_parameters, grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool) {
+//void integrate(mesh& shape, buffer<vec3> const& position_before_deformation, vec3 const& picked_position, deformer_parameters_structure const& deformer_parameters, grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, vec3 const &previous_tool_pos, vec3 const &tr, vec3& constant_velocity_direction, vec3 const& picked_normal) {
+void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, vec3 const& picked_position, deformer_parameters_structure const& deformer_parameters, grid_3D<vec3>&velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, vec3 const& previous_tool_pos, vec3 const& tr, vec3 & constant_vel, vec3 const& picked_normal, enum constant_velocity_direction velocity_dir_type) {
+//void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, vec3 const& picked_position, deformer_parameters_structure const& deformer_parameters, grid_3D<vec3>&velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, vec3 const& previous_tool_pos, vec3 const& tr) {
 	//TO DO: find out where ad how this is called ???
 
 	//fins some inspiration from 08_cloth main.cpp -> understand the code and adapt it !
 
 	size_t const N = shape.position.size();
-	vec3 ref = {-100, -100, -100}; // to check if point is in [-1, 1] grid 
+	vec3 ref = { -100, -100, -100 }; // to check if point is in [-1, 1] grid
+
 	//intergation steps
 	size_t const N_substeps = 10;
+	
+
 	for (size_t k_substep = 0; k_substep < N_substeps; ++k_substep) {
 
 		for (size_t k = 0; k < N; ++k)
@@ -89,7 +95,7 @@ void integrate(mesh& shape, buffer<vec3> const& position_before_deformation, vec
 
 			//get the grid_cell corresponding to the point
 			vec3 cell = get_cell(p_shape, velocity.dimension[0]);
-			if (!areVec3vectorsSame(cell, ref)){ // if point is in grid
+			if (!areVec3vectorsSame(cell, ref)) { // if point is in grid
 
 				// int kx, ky, kz;
 				// kx = cell[0];
@@ -108,7 +114,10 @@ void integrate(mesh& shape, buffer<vec3> const& position_before_deformation, vec
 				// for (size_t k_substep = 0; k_substep < N_substeps; ++k_substep) {
 				// p_shape = p_shape + dt * get_interpolated_velocity(p_shape, velocity, velocity.dimension[0]);
 				// p_shape = p_shape + dt * velocity(kx, ky, kz);
-				p_shape = p_shape + dt * trilinear_interpolation(p_shape, grid, velocity, velocity.dimension[0]);
+				float a = 1;
+				if (velocity_dir_type == 2) a = 10;
+
+				p_shape = p_shape + a* dt * trilinear_interpolation(p_shape, grid, velocity, velocity.dimension[0]);
 
 				// now update the velocity
 				// update_velocity_field(velocity, grid, sphere_tool); //-> do it somewere else !!!
@@ -129,8 +138,9 @@ void integrate(mesh& shape, buffer<vec3> const& position_before_deformation, vec
 			}
 		}
 		//now update the velocity
-		update_velocity_field(velocity, grid, sphere_tool);// -> do it somewere else !!!
-		std::cout << "update velocity field" << std::endl;
+		update_velocity_field(velocity, grid, sphere_tool, previous_tool_pos, tr, constant_vel, picked_position, velocity_dir_type);
+		//update_velocity_field(velocity, grid, sphere_tool, previous_tool_pos, tr);
+		//std::cout << "update velocity field" << std::endl;
 		//get some inspiration from td 08_cloth -> numerial_integration()
 	}
 
@@ -177,6 +187,7 @@ float distance_3D(const vec3& p1, const vec3& p2) {
 	return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
 }
 
+
 vec3 get_cell(const vec3& p, int N) {
 	// returns lower left corner indices of the cell point p belongs to
 	// function that converts from a point in space to the associated 3D grid cell it belongs to.
@@ -194,9 +205,9 @@ vec3 get_cell(const vec3& p, int N) {
 	float px_shifted = p.x - sign_x * gridCellSize / 2.0; float py_shifted = p.y - sign_y * gridCellSize / 2.0; float pz_shifted = p.z - sign_z * gridCellSize / 2.0;
 
 	// handle case where point is out of grid)
-	for (int i=0; i<3; i++){
-		if ( (p(i) < -1.0) || (p(i) > 1.0) ){
-			return {-100,-100,-100};
+	for (int i = 0; i < 3; i++) {
+		if ((p(i) < -1.0) || (p(i) > 1.0)) {
+			return { -100,-100,-100 };
 		}
 	}
 
@@ -239,11 +250,12 @@ vec3 get_cell(const vec3& p, int N) {
 		}
 		if (index_z == (-1)) { index_z++; }; if (index_z == (N - 1)) { index_z--; }
 	}
-
 	return { int(index_x), int(index_y), int(index_z) };
 }
 
-vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &grid, cgp::grid_3D<cgp::vec3> const &v, int N)
+
+
+vec3 trilinear_interpolation(cgp::vec3 const& p, cgp::grid_3D<cgp::vec3> const& grid, cgp::grid_3D<cgp::vec3> const& v, int N)
 {
 	// https://spie.org/samples/PM159.pdf, https://www.wikiwand.com/en/Trilinear_interpolation 
 	vec3 cell = get_cell(p, N); // get lower left index of cell the point belongs to 
@@ -252,25 +264,25 @@ vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &
 
 	// compute necessary adjacent cells & velocity values
 	float x0 = grid(cell.x, cell.y, cell.z).x; float x1 = grid(cell.x + 1, cell.y, cell.z).x;
-    float y0 = grid(cell.x, cell.y, cell.z).y; float y1 = grid(cell.x, cell.y+1, cell.z).y;
+	float y0 = grid(cell.x, cell.y, cell.z).y; float y1 = grid(cell.x, cell.y + 1, cell.z).y;
 	float z0 = grid(cell.x, cell.y, cell.z).z; float z1 = grid(cell.x, cell.y, cell.z + 1).z;
 
-	float deltaX = (p.x - x0)/(x1-x0); float deltaY = (p.y - y0)/(y1-y0); float deltaZ = (p.z - z0)/(z1-z0);
-	
+	float deltaX = (p.x - x0) / (x1 - x0); float deltaY = (p.y - y0) / (y1 - y0); float deltaZ = (p.z - z0) / (z1 - z0);
+
 	c0 = v(cell.x, cell.y, cell.z);
 	c1 = v(cell.x + 1, cell.y, cell.z) - v(cell.x, cell.y, cell.z);
-	c2 = v(cell.x, cell.y+1, cell.z) - v(cell.x, cell.y, cell.z);
-	c3 = v(cell.x, cell.y, cell.z+1) - v(cell.x, cell.y, cell.z);
-	c4 = v(cell.x+1, cell.y+1, cell.z) - v(cell.x, cell.y+1, cell.z) - v(cell.x+1, cell.y, cell.z) + v(cell.x, cell.y, cell.z);
-	c5 = v(cell.x, cell.y+1, cell.z+1) - v(cell.x, cell.y, cell.z+1) - v(cell.x, cell.y+1, cell.z) + v(cell.x, cell.y, cell.z);
-	c6 = v(cell.x+1, cell.y, cell.z+1) - v(cell.x, cell.y, cell.z+1) - v(cell.x+1, cell.y, cell.z) + v(cell.x, cell.y, cell.z);
+	c2 = v(cell.x, cell.y + 1, cell.z) - v(cell.x, cell.y, cell.z);
+	c3 = v(cell.x, cell.y, cell.z + 1) - v(cell.x, cell.y, cell.z);
+	c4 = v(cell.x + 1, cell.y + 1, cell.z) - v(cell.x, cell.y + 1, cell.z) - v(cell.x + 1, cell.y, cell.z) + v(cell.x, cell.y, cell.z);
+	c5 = v(cell.x, cell.y + 1, cell.z + 1) - v(cell.x, cell.y, cell.z + 1) - v(cell.x, cell.y + 1, cell.z) + v(cell.x, cell.y, cell.z);
+	c6 = v(cell.x + 1, cell.y, cell.z + 1) - v(cell.x, cell.y, cell.z + 1) - v(cell.x + 1, cell.y, cell.z) + v(cell.x, cell.y, cell.z);
 	c7 = v(cell.x + 1, cell.y + 1, cell.z + 1) - v(cell.x, cell.y + 1, cell.z + 1) - v(cell.x + 1, cell.y, cell.z + 1) - v(cell.x + 1, cell.y + 1, cell.z) +
-		 v(cell.x + 1, cell.y, cell.z) + v(cell.x, cell.y, cell.z + 1) + v(cell.x, cell.y+1, cell.z) - v(cell.x, cell.y, cell.z);
+		v(cell.x + 1, cell.y, cell.z) + v(cell.x, cell.y, cell.z + 1) + v(cell.x, cell.y + 1, cell.z) - v(cell.x, cell.y, cell.z);
 
-	vec3 v_new = c0 + c1*deltaX + c2*deltaY + c3*deltaZ + c4*deltaX*deltaY + c5*deltaY*deltaZ + c6*deltaZ*deltaX + c7*deltaX*deltaY*deltaZ;
-//	std::cout << "v_new : " << v_new << std::endl;
+	vec3 v_new = c0 + c1 * deltaX + c2 * deltaY + c3 * deltaZ + c4 * deltaX * deltaY + c5 * deltaY * deltaZ + c6 * deltaZ * deltaX + c7 * deltaX * deltaY * deltaZ;
+	//	std::cout << "v_new : " << v_new << std::endl;
 	return v_new;
-// ! watch out for rightmost corner.
+
+	// ! watch out for rightmost corner.
 }
 
-// lissage Laplacian
