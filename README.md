@@ -12,10 +12,9 @@ TO DO LIST:
 - display bounding box of the grid
 - more choices of meshes on the gui
 - bending ?
-- check it is neccessary to change velocity at each integration step
+- check it is necessary to change velocity at each integration step
 - keep deformer direction (view space, normal) + add mouse movement (add it on the gui too)
 - add a visual bounding box for the grid (add it on the gui too)
-- replace Nx, Ny, Nz, by only N
 - change the name of the timer => timer_update_velocity
 - add arrow for the velocity (en cours)
 - laplacian smoothing?
@@ -30,3 +29,4 @@ DONE:
 - **use normal as vector field**
 - **put an arrow vor the velocity direction**
 - **remove tiny circle of the tool**
+- replace Nx, Ny, Nz, by only N

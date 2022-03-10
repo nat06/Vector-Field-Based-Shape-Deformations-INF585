@@ -64,7 +64,7 @@ struct scene_structure {
 	cgp::grid_3D<cgp::vec3> velocity, velocity_previous;
 	cgp::buffer<cgp::vec3> velocity_grid_data;
 
-	void initialize_velocity(int Nx, int Ny, int Nz);
+    void initialize_velocity(int N);
 
 	void display_grid(); // Display the 3D grid
 	void display_velocity(); // Display the velocity field

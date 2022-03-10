@@ -90,10 +90,11 @@ void scene_structure::initialize()
 	//PROJECT
 
 	// Initialization of the grid
-	int const Nx = 20, Ny = 20, Nz = 20;
+	// int const Nx = 20, Ny = 20, Nz = 20;
+	int const N = 20; // grid size (cubic grid)
 
-	grid = initialize_grid(Nx, Ny, Nz);
-	
+    grid = initialize_grid(N);
+
 	////////
 	/*
 	std::cout << "grid(0,0,0) : " << grid(0, 0, 0) << std::endl;
@@ -123,7 +124,7 @@ void scene_structure::initialize()
 	std::cout << "grid(temp.x, temp.y, temp.z) --> " << grid(temp.x, temp.y, temp.z) << std::endl;
 	*/
 	vec3 pointTest = {-2, 0.5, 0.5};
-	vec3 temp = get_cell(pointTest, Nx);
+	vec3 temp = get_cell(pointTest, N);
 	std::cout << "get_cell({" << pointTest << "} = " << temp << std::endl;
 	vec3 ref = {-100, -110, -100};
 	std::cout << temp.size() << std::endl;
@@ -136,8 +137,8 @@ void scene_structure::initialize()
 	update_grid_segments(grid_segments, grid);
 	grid_segments_visual.initialize(grid_segments, "grid");
 
-	initialize_velocity(Nx, Ny, Nz); // useless ?
-	velocity_grid_data.resize(3 * Nx * Ny * Nz);
+	initialize_velocity(N); // useless ?
+	velocity_grid_data.resize(3 * N * N * N);
 	velocity_visual.initialize(velocity_grid_data, "Velocity");
 	velocity_visual.color = vec3(1, 0, 0);
 
@@ -281,10 +282,10 @@ void deforming_shape_structure::update_normal()
 //#####################################################################################
 //PROJECT
 
-void scene_structure::initialize_velocity(int Nx, int Ny, int Nz){//not sure about this
+void scene_structure::initialize_velocity(int N){//not sure about this
 	//TO DO: MOVE THIS FUNCTION TO INITIALIZE ?
 
-	velocity.resize(Nx, Ny, Nz); 
+	velocity.resize(N, N, N); 
 	velocity.fill({ 1, 1, 1 }); 
 	velocity_previous = velocity;
 }

@@ -12,8 +12,7 @@ cgp::mesh initialize_mesh();
 
 //############################################################
 //PROJECT
-
-cgp::grid_3D<cgp::vec3> initialize_grid(int Nx, int Ny, int Nz);
+cgp::grid_3D<cgp::vec3> initialize_grid(int N);
 void update_grid_segments(cgp::buffer<cgp::vec3>& segments_grid, cgp::grid_3D<cgp::vec3> const& grid);
 
 
