@@ -2,6 +2,7 @@
 
 
 #include "cgp/cgp.hpp"
+using namespace cgp;
 
 //#######################project
 #include "../helpers/initialization.hpp"  // good practice ??
@@ -39,12 +40,13 @@ void apply_deformation(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_
 
 
 
-void integrate(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_before_deformation, cgp::vec3 const& picked_position, deformer_parameters_structure const& deformer_parameters, cgp::grid_3D<cgp::vec3>& velocity, cgp::grid_3D<cgp::vec3> const& grid, sphere_tool_structure const& sphere_tool);
-//cgp::vec3 get_cell(cgp::vec3 point);
-cgp::vec3 get_cell(const cgp::vec3& p, int N);
+// void integrate(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_before_deformation, cgp::vec3 const& picked_position, deformer_parameters_structure const& deformer_parameters, cgp::grid_3D<cgp::vec3>& velocity, cgp::grid_3D<cgp::vec3> const& grid, sphere_tool_structure const& sphere_tool);
+void integrate(mesh &shape, buffer<vec3> const &position_before_deformation, vec3 const &picked_position, deformer_parameters_structure const &deformer_parameters, grid_3D<vec3> &velocity, grid_3D<vec3> const &grid, sphere_tool_structure const &sphere_tool, buffer<buffer<int> > one_ring);
+	// cgp::vec3 get_cell(cgp::vec3 point);
+cgp::vec3 get_cell(const cgp::vec3 &p, int N);
 //cgp::vec3 get_interpolated_velocity(cgp::vec3 point, cgp::grid_3D<cgp::vec3>& velocity);
 cgp::vec3 get_interpolated_velocity(cgp::vec3 const& p, cgp::grid_3D<cgp::vec3> const& v, int N);
 cgp::vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &grid, cgp::grid_3D<cgp::vec3> const &v, int N);
 float distance_3D(const cgp::vec3& p1, const cgp::vec3& p2);
-cgp::mesh laplacian_smoothing(cgp::mesh &shape, cgp::grid_3D<cgp::vec3> const &grid);
+cgp::mesh laplacian_smoothing(cgp::mesh &shape, buffer<buffer<int>> one_ring);
 //###########################

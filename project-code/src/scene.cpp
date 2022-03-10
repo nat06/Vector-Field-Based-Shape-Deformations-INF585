@@ -67,7 +67,7 @@ void scene_structure::mouse_click(cgp::inputs_interaction_parameters const& inpu
 		vec2 const& p = inputs.mouse.position.current;
 		picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
 		
-		integrate(deforming_shape.shape, deforming_shape.position_saved, picking.position, gui.deformer_parameters, velocity, grid, sphere_tool);
+        integrate(deforming_shape.shape, deforming_shape.position_saved, picking.position, gui.deformer_parameters, velocity, grid, sphere_tool, deforming_shape.one_ring);
 
 		deforming_shape.visual.update_position(deforming_shape.shape.position);
 	}
@@ -127,7 +127,7 @@ void scene_structure::initialize()
 	vec3 temp = get_cell(pointTest, N);
 	std::cout << "get_cell({" << pointTest << "} = " << temp << std::endl;
 	std::cout << "--------" << std::endl;
-    laplacian_smoothing(deforming_shape.shape, grid);
+    // laplacian_smoothing(deforming_shape.shape);
 	////////
 
 	update_grid_segments(grid_segments, grid);
@@ -258,6 +258,8 @@ void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 		shape = initialize_mesh();
 		break;
 	}
+
+    one_ring = connectivity_one_ring(shape.connectivity); // to do: extract & store so it doesn't get recomputed each time
 
 	// Clear previous surface before seting the values of the new one
 	visual.clear();

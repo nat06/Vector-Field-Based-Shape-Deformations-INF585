@@ -15,6 +15,7 @@ struct deforming_shape_structure{
 	cgp::mesh shape;                       // Mesh structure of the deformed shape
 	cgp::buffer<cgp::vec3> position_saved; // Extra storage of the shape position before the current deformation
 	cgp::mesh_drawable visual;             // Visual representation of the deformed shape
+	cgp::buffer<buffer<int>> one_ring; 	   // represents one_ring neighborhoods
 
 	bool require_normal_update;            // indicator if the normals need to be updated
 

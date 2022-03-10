@@ -31,7 +31,7 @@ mesh initialize_mesh()
 {    
     std::string const filename = "assets/face.obj";
     mesh shape = mesh_load_file_obj(filename);
-    for(auto& p : shape.position) 
+	for(auto& p : shape.position) 
         p *= 0.5f;
     return shape;
 }

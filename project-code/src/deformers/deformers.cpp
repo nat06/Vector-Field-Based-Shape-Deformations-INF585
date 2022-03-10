@@ -57,8 +57,6 @@ void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformat
 
 }
 
-
-
 //idea:
 //void numerical_integration(grid_2<vec3>& position, grid_2D<vec3>& velocity, grid_2D<vec3> const& force, float mass, float dt)
 //{
@@ -72,11 +70,11 @@ void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformat
 //
 //}
 
-void integrate(mesh& shape, buffer<vec3> const& position_before_deformation, vec3 const& picked_position, deformer_parameters_structure const& deformer_parameters, grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool) {
+void integrate(mesh &shape, buffer<vec3> const &position_before_deformation, vec3 const &picked_position, deformer_parameters_structure const &deformer_parameters, grid_3D<vec3> &velocity, grid_3D<vec3> const &grid, sphere_tool_structure const &sphere_tool, buffer<buffer<int>> one_ring)
+{
 	//TO DO: find out where ad how this is called ???
 
 	//fins some inspiration from 08_cloth main.cpp -> understand the code and adapt it !
-
 	size_t const N = shape.position.size();
 	vec3 ref = {-100, -100, -100}; // to check if point is in [-1, 1] grid 
 	//intergation steps
@@ -132,9 +130,9 @@ void integrate(mesh& shape, buffer<vec3> const& position_before_deformation, vec
 		//now update the velocity
 		update_velocity_field(velocity, grid, sphere_tool);// -> do it somewere else !!!
 		std::cout << "update velocity field" << std::endl;
+        shape = laplacian_smoothing(shape, one_ring);
 		//get some inspiration from td 08_cloth -> numerial_integration()
 	}
-
 }
 
 //vec3 get_cell(vec3 point) {
@@ -275,44 +273,27 @@ vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &
 }
 
 // lissage Laplacian
-cgp::mesh laplacian_smoothing(cgp::mesh &shape, cgp::grid_3D<cgp::vec3> const &grid)
-{
-	// complex implementation (might not work) : http://rodolphe-vaillant.fr/entry/70/laplacian-smoothing-c-code-to-smooth-a-mesh
-	// using the Explicit scheme (unstable for t > 1)
-	// simple implementation based on: https://www.sciencedirect.com/topics/computer-science/laplacian-smoothing, tested here below:
+cgp::mesh laplacian_smoothing(cgp::mesh &shape, buffer<buffer<int>> one_ring){
+	// complex implementation: http://rodolphe-vaillant.fr/entry/70/laplacian-smoothing-c-code-to-smooth-a-mesh, gave unstable results using the Explicit scheme
+	// simpler implementation based on: https://www.sciencedirect.com/topics/computer-science/laplacian-smoothing, implemented here
+	// input: shape (mesh) of size 10 000 (10 000 vertices)
 
-	// input: shape (mesh) of size 10 000 (10 000 points)
-	// cgp::mesh newShape = shape;
-	
-	cgp::mesh newShape = shape;
+	cgp::mesh newShape = shape; float alpha = 0.05;
+    // buffer<buffer<int>> one_ring = connectivity_one_ring(shape.connectivity); // to do: extract & store so it doesn't get recomputed each time
 
-	vec3 buffer_vertices; float alpha = 0.05;
-	std::cout << "shape.position(1) : " << std::endl << shape.position(1) << std::endl;
-	std::cout << "shape.position.size() : " << std::endl << shape.position.size() << std::endl;
-	vec3 test = shape.position(1);
-	std::cout << "test : " << test << std::endl;
-	std::cout << "shape.connectivity(0) : " << std::endl << shape.connectivity(0) << std::endl;
-	std::cout << "shape.connectivity(1) : " << std::endl << shape.connectivity(1) << std::endl;
-	std::cout << "shape.connectivity(2) : " << std::endl << shape.connectivity(2) << std::endl;
-	std::cout << "shape.connectivity(3) : " << std::endl << shape.connectivity(3) << std::endl;
-	std::cout << "shape.connectivity(4) : " << std::endl << shape.connectivity(4) << std::endl;
-	std::cout << "shape.connectivity(5) : " << std::endl << shape.connectivity(5) << std::endl;
-	std::cout << "shape.connectivity(6) : " << std::endl << shape.connectivity(6) << std::endl;
-	std::cout << "shape.connectivity(6)[0] : " << std::endl << shape.connectivity(6)[0] << std::endl;
-	std::cout << "shape.connectivity(6)[1] : " << std::endl << shape.connectivity(6)[1] << std::endl;
-	std::cout << "shape.connectivity(6)[2] : " << std::endl << shape.connectivity(6)[2] << std::endl;
-	std::cout << "length : " << shape.connectivity(0).size() << std::endl; // all 3 as triangular mesh
-	int num_iter = 10;
+	int num_iter = 20;
 	for (int iter = 0; iter < num_iter; iter++){
 		for (int i = 0; i < shape.position.size(); i++){ // iterate over all vertices
 			vec3 vertex = shape.position(i);
 			vec3 v_s = {0., 0., 0.};
-			for (int j = 0; j < shape.connectivity(i).size(); j++){ // iterate over all neighbors
-				int neighborID = shape.connectivity(i)[j]; // get neighbor number
+			buffer<int> neighbors_i = one_ring(i);
+
+			for (int j = 0; j < neighbors_i.size(); j++){ // iterate over all neighbors of vertex i
+				int neighborID = neighbors_i[j]; // get neighbor number
 				vec3 neighbor = shape.position(neighborID);
 				v_s += neighbor;
 			}
-			v_s = v_s / shape.connectivity(i).size();
+			v_s = v_s / neighbors_i.size();
 			v_s = vertex + alpha * (v_s - vertex);
 			newShape.position(i) = v_s;
 		}
