@@ -2,6 +2,7 @@
 #include "scene.hpp"
 
 using namespace cgp;
+#include <typeinfo>
 
 void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformation, vec2 const& translate_screen, vec3 const& picked_position, vec3 const& picked_normal, rotation_transform const& camera_orientation, deformer_parameters_structure const& deformer_parameters)
 {
@@ -274,3 +275,47 @@ vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &
 }
 
 // lissage Laplacian
+cgp::mesh laplacian_smoothing(cgp::mesh &shape, cgp::grid_3D<cgp::vec3> const &grid)
+{
+	// complex implementation (might not work) : http://rodolphe-vaillant.fr/entry/70/laplacian-smoothing-c-code-to-smooth-a-mesh
+	// using the Explicit scheme (unstable for t > 1)
+	// simple implementation based on: https://www.sciencedirect.com/topics/computer-science/laplacian-smoothing, tested here below:
+
+	// input: shape (mesh) of size 10 000 (10 000 points)
+	// cgp::mesh newShape = shape;
+	
+	cgp::mesh newShape = shape;
+
+	vec3 buffer_vertices; float alpha = 0.05;
+	std::cout << "shape.position(1) : " << std::endl << shape.position(1) << std::endl;
+	std::cout << "shape.position.size() : " << std::endl << shape.position.size() << std::endl;
+	vec3 test = shape.position(1);
+	std::cout << "test : " << test << std::endl;
+	std::cout << "shape.connectivity(0) : " << std::endl << shape.connectivity(0) << std::endl;
+	std::cout << "shape.connectivity(1) : " << std::endl << shape.connectivity(1) << std::endl;
+	std::cout << "shape.connectivity(2) : " << std::endl << shape.connectivity(2) << std::endl;
+	std::cout << "shape.connectivity(3) : " << std::endl << shape.connectivity(3) << std::endl;
+	std::cout << "shape.connectivity(4) : " << std::endl << shape.connectivity(4) << std::endl;
+	std::cout << "shape.connectivity(5) : " << std::endl << shape.connectivity(5) << std::endl;
+	std::cout << "shape.connectivity(6) : " << std::endl << shape.connectivity(6) << std::endl;
+	std::cout << "shape.connectivity(6)[0] : " << std::endl << shape.connectivity(6)[0] << std::endl;
+	std::cout << "shape.connectivity(6)[1] : " << std::endl << shape.connectivity(6)[1] << std::endl;
+	std::cout << "shape.connectivity(6)[2] : " << std::endl << shape.connectivity(6)[2] << std::endl;
+	std::cout << "length : " << shape.connectivity(0).size() << std::endl; // all 3 as triangular mesh
+	int num_iter = 10;
+	for (int iter = 0; iter < num_iter; iter++){
+		for (int i = 0; i < shape.position.size(); i++){ // iterate over all vertices
+			vec3 vertex = shape.position(i);
+			vec3 v_s = {0., 0., 0.};
+			for (int j = 0; j < shape.connectivity(i).size(); j++){ // iterate over all neighbors
+				int neighborID = shape.connectivity(i)[j]; // get neighbor number
+				vec3 neighbor = shape.position(neighborID);
+				v_s += neighbor;
+			}
+			v_s = v_s / shape.connectivity(i).size();
+			v_s = vertex + alpha * (v_s - vertex);
+			newShape.position(i) = v_s;
+		}
+	}
+	return newShape;
+}

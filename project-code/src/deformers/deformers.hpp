@@ -46,4 +46,5 @@ cgp::vec3 get_cell(const cgp::vec3& p, int N);
 cgp::vec3 get_interpolated_velocity(cgp::vec3 const& p, cgp::grid_3D<cgp::vec3> const& v, int N);
 cgp::vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &grid, cgp::grid_3D<cgp::vec3> const &v, int N);
 float distance_3D(const cgp::vec3& p1, const cgp::vec3& p2);
+cgp::mesh laplacian_smoothing(cgp::mesh &shape, cgp::grid_3D<cgp::vec3> const &grid);
 //###########################

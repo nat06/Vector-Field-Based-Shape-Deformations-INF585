@@ -1,12 +1,11 @@
 # Vector-Field-Based-Shape-Deformations-INF585-
 Reimplementation of the paper Vector Field Based Shape Deformations for Ecole Polytechnique INF585 - Computer Animation's final project
 
-TO DO LIST: 
+TO DO LIST:
 
 - when moving without clicking: move the tool along the shape
 - when moving + shift + click: move the tool with a projection along the screen space
 - more intuitive approach with the tool
-- display velocity at each point (not at the center of each cell), and adapt the computations accordingly
 - remove argument previous_tool_pos from the functions ?
 - remove require_normal_update (not sure)
 - display bounding box of the grid
@@ -30,3 +29,4 @@ DONE:
 - **put an arrow vor the velocity direction**
 - **remove tiny circle of the tool**
 - replace Nx, Ny, Nz, by only N
+- display velocity at each point (not at the center of each cell), and adapt computations accordingly

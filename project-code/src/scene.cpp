@@ -126,12 +126,8 @@ void scene_structure::initialize()
 	vec3 pointTest = {-2, 0.5, 0.5};
 	vec3 temp = get_cell(pointTest, N);
 	std::cout << "get_cell({" << pointTest << "} = " << temp << std::endl;
-	vec3 ref = {-100, -110, -100};
-	std::cout << temp.size() << std::endl;
-	if (!areVec3vectorsSame(temp, ref)){
-		std::cout << "samesies!" << std::endl;
-	} // works.
-	std::cout << "grid(0, 17, 0).y : " << grid(0, 17, 0).y << std::endl;
+	std::cout << "--------" << std::endl;
+    laplacian_smoothing(deforming_shape.shape, grid);
 	////////
 
 	update_grid_segments(grid_segments, grid);
