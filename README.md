@@ -3,21 +3,28 @@ Reimplementation of the paper Vector Field Based Shape Deformations for Ecole Po
 
 TO DO LIST:
 
-- when moving without clicking: move the tool along the shape
-- when moving + shift + click: move the tool with a projection along the screen space
-- more intuitive approach with the tool
-- remove argument previous_tool_pos from the functions ?
-- remove require_normal_update (not sure)
-- display bounding box of the grid
-- more choices of meshes on the gui
+_PRIORITY_
+- plus de choix de mesh (+ peut etre la possibilite de les scale, + custom mesh ?)
+- display la bounding grid (voir un td qui le fait)
+- plus de choix de vitesse constante au milieu de la inner ball 
 - bending ?
+</br>
+
+
+_ CODE CLEANUP_
+- remove useless arguments of fonctions
+- remove useless variables
+- rename unclear variables
+- bending ?
+</br>
+
+_..._
+- more intuitive approach with the tool ?
 - check it is necessary to change velocity at each integration step
-- keep deformer direction (view space, normal) + add mouse movement (add it on the gui too)
-- add a visual bounding box for the grid (add it on the gui too)
-- change the name of the timer => timer_update_velocity
 - add arrow for the velocity (en cours)
 - be able to make a bigger grid and generalize code for this
 
+</br>
 //-----------------------------------
 DONE:
 //-----------------------------------
@@ -31,3 +38,5 @@ DONE:
 - **display velocity at each point (not at the center of each cell), and adapt computations accordingly**
 - **laplacian smoothing**
 - **gui for laplacian smoothing + slider for number of steps**
+- **when moving without clicking: move the tool along the shape**
+- **when moving + shift + click: move the tool with a projection along the screen space**
