@@ -27,6 +27,7 @@ DONE:
 - **use normal as vector field**
 - **put an arrow vor the velocity direction**
 - **remove tiny circle of the tool**
-- replace Nx, Ny, Nz, by only N
-- display velocity at each point (not at the center of each cell), and adapt computations accordingly
-- laplacian smoothing
+- **replace Nx, Ny, Nz, by only N**
+- **display velocity at each point (not at the center of each cell), and adapt computations accordingly**
+- **laplacian smoothing**
+- **gui for laplacian smoothing + slider for number of steps**
