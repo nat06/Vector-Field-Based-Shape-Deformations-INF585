@@ -25,9 +25,7 @@ _..._
 - be able to make a bigger grid and generalize code for this
 
 </br>
-//-----------------------------------
-DONE:
-//-----------------------------------
+**DONE:**
 
 - **enforce the fact that the mesh cannot go out of the grid**
 - **trilinear interpolation**
