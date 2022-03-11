@@ -31,7 +31,7 @@ mesh initialize_mesh()
 {    
     std::string const filename = "assets/face.obj";
     mesh shape = mesh_load_file_obj(filename);
-	for(auto& p : shape.position) 
+    for(auto& p : shape.position) 
         p *= 0.5f;
     return shape;
 }
@@ -52,7 +52,7 @@ grid_3D<vec3> initialize_grid(int N)
 		for (int ky = 0; ky < N; ++ky) {
 			for (int kz = 0; kz < N; ++kz) {
 
-				float const x = (2*kx / (N- 1.0f))-1.0f;
+				float const x = (2*kx / (N - 1.0f))-1.0f;
 				float const y = (2 * ky / (N - 1.0f)) - 1.0f;
 				float const z = (2 * kz / (N - 1.0f)) - 1.0f;
 				//TO DO (idea) : grid adapted to mesh or mesh normalized to fit and have space in the grid
@@ -69,8 +69,6 @@ grid_3D<vec3> initialize_grid(int N)
 void update_grid_segments(buffer<vec3>& segments_grid, grid_3D<vec3> const& grid)
 {
 	int const N = int(grid.dimension.x);
-	// int const Ny = int(grid.dimension.y);
-	// int const Nz = int(grid.dimension.z);
 
 	int N_edge = 2 * (N - 1) * N * N + 2 * N * (N - 1) * N + 2 * N * N * (N - 1);
 	if (segments_grid.size() < N_edge)
@@ -117,14 +115,8 @@ void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& ve
 {
 	//TO DO: put it at the center of each cube
 
+
 	int const N = int(velocity.dimension.x);
-	// int const Ny = int(velocity.dimension.y);
-	// int const Nz = int(velocity.dimension.z);
-	//float const dL = 2.0f / (N - 1.0f);
-	//float const lambda = 0.01f * scale;
-
-
-//	int const N = int(velocity.dimension.x);
 	float const dL = 2.0f / (N - 1.0f);
 	float const lambda = 0.01f * scale;
 
@@ -134,7 +126,7 @@ void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& ve
 			for (int kz = 0; kz < N; ++kz) {
 				//vec3 const p0 = { -1 + kx * dL, -1 + ky * dL, 1e-4f };
 				float c = 1.0 / (2.0 * N);
-				vec3 const p0 = grid(kx, ky, kz); //+ vec3(c, c, c);
+				vec3 const p0 = grid(kx, ky, kz) + vec3(c, c, c);
 				//size_t const offset = velocity.index_to_offset(kx, ky);
 				//size_t const offset = velocity.index_to_offset(kx, ky, kz);
 				velocity_grid_data[2*offset + 0] = p0;
@@ -148,12 +140,12 @@ void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& ve
 }
 
 
-void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool)
+//TO DO: MOVE THIS SOMEWERE ELSE (EITHER SCENE OR DEFORMERS)
+void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, vec3 const& previous_tool_pos, vec3 const& tr, vec3& constant_vel, vec3 const& picked_normal, enum constant_velocity_direction velocity_direction_type)
+//void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, vec3 const& previous_tool_pos, vec3 const& tr)
 {
 
 	int const N = int(velocity.dimension.x);
-	// int const Ny = int(velocity.dimension.y);
-	// int const Nz = int(velocity.dimension.z);
 
 	vec3 nabla_p;
 	vec3 nabla_q;
@@ -164,9 +156,12 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 		for (int ky = 0; ky < N; ++ky) {
 			for (int kz = 0; kz < N; ++kz) {
 
-                float c = 1.0 / (2.0 * N);//to do: put ny and nz
-                vec3 const p0 = grid(kx, ky, kz); //+ vec3(c, c, c);
-				float r_x = norm(sphere_tool.c - p0 );
+				//float c = 1.0 / (2.0 * N);//to do: put ny and nz
+				//vec3 const p0 = grid(kx, ky, kz) + vec3(c, c, c);
+				//float r_x = norm(sphere_tool.c - p0 );
+
+				vec3 const p0 = grid(kx, ky, kz); //+ vec3(c, c, c);
+				float r_x = norm(sphere_tool.c - p0);
 				
 				//TO DO: update this
 
@@ -193,8 +188,71 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 					velocity(kx, ky, kz) = vec3(0, 0, 0);
 				}
 				else {
-					vec3 u(1, 0, 0);
-					vec3 w(0, 1, 0);
+
+					//TO DO: CHANGE PLACE OF THIS (THEY DONT HAVE TO BE HERE)
+					//now we have to change this !!!
+					/*vec3 u(1, 0, 0);
+					vec3 w(0, 1, 0);*/
+
+					//use the tool movement as a direction for the contant velocity field
+					/*vec3 u = cgp::normalize(previous_tool_pos - sphere_tool.c);
+					vec3 w = cgp::orthogonal_vector(u);*/
+
+					//NORMAL
+					vec3 u, w;
+
+					if (velocity_direction_type == 0) {//along z axis
+
+						u = vec3(1, 0, 0);
+						w = vec3(0, 1, 0);
+						constant_vel = cross(u, w);//changge this ! -> not always the picked normal
+						//std::cout << "constant vel const" << constant_vel << std::endl;
+
+					}
+					else if (velocity_direction_type == 1) {//direction_normal
+
+						u = vec3(1, 0, 0);
+						if (norm(picked_normal) > 0) {
+							//std::cout << "oyea" << std::endl;
+							u = orthogonal_vector(normalize(picked_normal));
+						}
+						w = cross(picked_normal, u);
+						constant_vel = picked_normal;//changge this ! -> not always the picked normal
+						//std::cout << "constant vel normal" << constant_vel << std::endl;
+
+					}
+					else if (velocity_direction_type == 2) {//along mouse movement
+
+						u = vec3(0, 0, 0);
+						if (norm(previous_tool_pos - sphere_tool.c) > 0) {
+							//std::cout << "oyea" << std::endl;
+							u = orthogonal_vector(normalize(previous_tool_pos - sphere_tool.c));
+						}
+						w = cross(picked_normal, u);
+						constant_vel = normalize(cross(u, w));
+
+					}
+
+					//maybe this should be enough
+					constant_vel - cross(u, w);
+
+					
+					
+
+					/*std::cout << "picked_normal = " << picked_normal<<std::endl;
+					std::cout << "u = " << u << std::endl;
+					std::cout << "w = " << w << std::endl;
+					std::cout << "constant velo direction" << constant_velocity_direction << std::endl;*/
+
+					//vec3 w = { 0, 0, 0 };
+					/*vec3 w = orthogonal_vector(normalize(previous_tool_pos - sphere_tool.c));
+					vec3 u = cgp::orthogonal_vector(w);*/
+					
+					
+					//std::cout << "constant velo direction" << constant_velocity_direction << std::endl;
+					/////////////////////////////////////////////////////////
+					
+					//std::cout << "u = " << u << std::endl;
 
 					//case 1: constant vector field (translation in the region)
 					float e = dot(u, (p0 - sphere_tool.c));//not sure
@@ -256,5 +314,7 @@ int C(int n, int k)
 	return nCr;
 }
 
-	//############################################################################
-	//############################################################################
+
+//############################################################################
+//############################################################################
+

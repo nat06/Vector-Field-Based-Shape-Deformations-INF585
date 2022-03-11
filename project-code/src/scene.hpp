@@ -8,16 +8,24 @@
 
 #include "deformers/deformers.hpp"
 
-bool areVec3vectorsSame(const cgp::vec3 &v1, const cgp::vec3 &v2);
+bool areVec3vectorsSame(const cgp::vec3& v1, const cgp::vec3& v2);//might want to change the place of this
+
 
 // Helping structure that contains the deforming shape elements
-struct deforming_shape_structure{
+struct deforming_shape_structure
+{
 	cgp::mesh shape;                       // Mesh structure of the deformed shape
 	cgp::buffer<cgp::vec3> position_saved; // Extra storage of the shape position before the current deformation
 	cgp::mesh_drawable visual;             // Visual representation of the deformed shape
-	cgp::buffer<buffer<int>> one_ring; 	   // represents one_ring neighborhoods
 
 	bool require_normal_update;            // indicator if the normals need to be updated
+
+	//***************
+	bool require_deformation;
+	bool require_smoothing;            
+	// indicator if the normals need to be updated
+	cgp::buffer<cgp::buffer<int>> one_ring; 	   // represents one_ring neighborhoods
+	//***************
 
 	void update_normal();
 	void new_shape(surface_type_enum type_of_surface= surface_plane);
@@ -53,6 +61,8 @@ struct scene_structure {
 	void display_gui(); // The display of the GUI, also called within the animation loop
 
 
+
+
 	//#####################################################
 	//#####################################################
 	//PROJECT
@@ -60,13 +70,17 @@ struct scene_structure {
 
 	// The 3D grid - accessed using grid(kx,ky,kz)
 	cgp::grid_3D<cgp::vec3> grid; //might want to change this structure ? -> see stable fluids
-	cgp::grid_3D<cgp::vec3> velocity, velocity_previous;
+	cgp::grid_3D<cgp::vec3> velocity, velocity_previous;//velocity_previous is probably not useful here...
 	cgp::buffer<cgp::vec3> velocity_grid_data;
 
-    void initialize_velocity(int N);
+	cgp::vec3 prev_direction;
+	cgp::vec3 constant_vel; //(at the center of the tool)
+
+	void initialize_velocity(int N);
 
 	void display_grid(); // Display the 3D grid
 	void display_velocity(); // Display the velocity field
+	void display_arrow();
 	void display_tool(); // display the sphere tool
 
 	cgp::buffer<cgp::vec3> grid_segments; //edges representing the 3D grid //USEFUL ?
@@ -76,6 +90,16 @@ struct scene_structure {
 	sphere_tool_structure sphere_tool;
 	cgp::mesh_drawable inner_sphere_visual;
 	cgp::mesh_drawable outer_sphere_visual;
+	cgp::mesh_drawable arrow_visual ;
+	
+
+	cgp::vec3 previous_tool_pos;
+	cgp::timer_event_periodic timer;
+
+	enum constant_velocity_direction velocity_dir_type;
+
+	//int smoothing_steps = 10;
+
 
 
 
