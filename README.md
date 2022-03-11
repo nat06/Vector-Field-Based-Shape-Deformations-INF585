@@ -16,7 +16,6 @@ TO DO LIST:
 - add a visual bounding box for the grid (add it on the gui too)
 - change the name of the timer => timer_update_velocity
 - add arrow for the velocity (en cours)
-- laplacian smoothing?
 - be able to make a bigger grid and generalize code for this
 
 //-----------------------------------
@@ -30,3 +29,4 @@ DONE:
 - **remove tiny circle of the tool**
 - replace Nx, Ny, Nz, by only N
 - display velocity at each point (not at the center of each cell), and adapt computations accordingly
+- laplacian smoothing

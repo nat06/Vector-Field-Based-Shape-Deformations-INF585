@@ -9,11 +9,11 @@ bool gui_parameters::display()
 	//#PROJECT
 	ImGui::Checkbox("Grid", &display_grid_edge);
 	ImGui::Checkbox("Velocity", &display_velocity);
+	ImGui::Checkbox("Laplacian smoothing", &laplacian_smoothing);
 	// Select falloff distance using slider
 	ImGui::SliderFloat("ri", &gui_ri, 0.07f, 0.2f);
 	ImGui::SliderFloat("r0", &gui_r0, 0.01f, 0.5f);
 	//#
-
 	
 
 	// Create interface

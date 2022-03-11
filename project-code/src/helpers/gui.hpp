@@ -15,7 +15,7 @@ enum surface_type_enum {
 struct gui_parameters {
 	bool display_frame = false;
 	bool display_wireframe = false;
-
+	bool laplacian_smoothing = false;
 	//#
 	//PROJECT
 	bool display_grid_edge = false;

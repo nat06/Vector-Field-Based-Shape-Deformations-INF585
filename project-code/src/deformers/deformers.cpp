@@ -1,6 +1,6 @@
 #include "deformers.hpp"
 #include "scene.hpp"
-
+// #include "../helpers/gui.hpp"
 using namespace cgp;
 #include <typeinfo>
 
@@ -75,6 +75,7 @@ void integrate(mesh &shape, buffer<vec3> const &position_before_deformation, vec
 	//TO DO: find out where ad how this is called ???
 
 	//fins some inspiration from 08_cloth main.cpp -> understand the code and adapt it !
+	
 	size_t const N = shape.position.size();
 	vec3 ref = {-100, -100, -100}; // to check if point is in [-1, 1] grid 
 	//intergation steps
@@ -129,8 +130,10 @@ void integrate(mesh &shape, buffer<vec3> const &position_before_deformation, vec
 		}
 		//now update the velocity
 		update_velocity_field(velocity, grid, sphere_tool);// -> do it somewere else !!!
-		std::cout << "update velocity field" << std::endl;
-        shape = laplacian_smoothing(shape, one_ring);
+		// std::cout << "update velocity field" << std::endl;
+		if (gui.laplacian_smoothing){
+			shape = laplacian_smoothing(shape, one_ring);
+		}
 		//get some inspiration from td 08_cloth -> numerial_integration()
 	}
 }
@@ -274,14 +277,14 @@ vec3 trilinear_interpolation(cgp::vec3 const &p, cgp::grid_3D<cgp::vec3> const &
 
 // lissage Laplacian
 cgp::mesh laplacian_smoothing(cgp::mesh &shape, buffer<buffer<int>> one_ring){
-	// complex implementation: http://rodolphe-vaillant.fr/entry/70/laplacian-smoothing-c-code-to-smooth-a-mesh, gave unstable results using the Explicit scheme
+	// complex implementation: http://rodolphe-vaillant.fr/entry/70/laplacian-smoothing-c-code-to-smooth-a-mesh, gave unstable results using the Explicit scheme.
 	// simpler implementation based on: https://www.sciencedirect.com/topics/computer-science/laplacian-smoothing, implemented here
 	// input: shape (mesh) of size 10 000 (10 000 vertices)
 
 	cgp::mesh newShape = shape; float alpha = 0.05;
     // buffer<buffer<int>> one_ring = connectivity_one_ring(shape.connectivity); // to do: extract & store so it doesn't get recomputed each time
 
-	int num_iter = 20;
+	int num_iter = 30;
 	for (int iter = 0; iter < num_iter; iter++){
 		for (int i = 0; i < shape.position.size(); i++){ // iterate over all vertices
 			vec3 vertex = shape.position(i);

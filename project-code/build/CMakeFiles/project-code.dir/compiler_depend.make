@@ -20472,7 +20472,8 @@ CMakeFiles/project-code.dir/src/deformers/deformers.cpp.o: ../src/deformers/defo
   ../src/helpers/gui.hpp \
   ../src/deformers/deformers.hpp \
   ../src/helpers/initialization.hpp \
-  ../src/helpers/picking_visual.hpp
+  ../src/helpers/picking_visual.hpp \
+  ../src/helpers/gui.hpp
 
 CMakeFiles/project-code.dir/src/helpers/gui.cpp.o: ../src/helpers/gui.cpp \
   ../src/helpers/gui.hpp \

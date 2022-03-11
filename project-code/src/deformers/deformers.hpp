@@ -37,9 +37,6 @@ void apply_deformation(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_
 //PROJECT
 
 
-
-
-
 // void integrate(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_before_deformation, cgp::vec3 const& picked_position, deformer_parameters_structure const& deformer_parameters, cgp::grid_3D<cgp::vec3>& velocity, cgp::grid_3D<cgp::vec3> const& grid, sphere_tool_structure const& sphere_tool);
 void integrate(mesh &shape, buffer<vec3> const &position_before_deformation, vec3 const &picked_position, deformer_parameters_structure const &deformer_parameters, grid_3D<vec3> &velocity, grid_3D<vec3> const &grid, sphere_tool_structure const &sphere_tool, buffer<buffer<int> > one_ring);
 	// cgp::vec3 get_cell(cgp::vec3 point);
