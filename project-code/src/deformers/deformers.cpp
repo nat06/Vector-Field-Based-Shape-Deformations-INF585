@@ -70,7 +70,7 @@ void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformat
 //
 //}
 
-void integrate(mesh &shape, buffer<vec3> const &position_before_deformation, vec3 const &picked_position, deformer_parameters_structure const &deformer_parameters, grid_3D<vec3> &velocity, grid_3D<vec3> const &grid, sphere_tool_structure const &sphere_tool, buffer<buffer<int>> one_ring)
+void integrate(mesh &shape, buffer<vec3> const &position_before_deformation, vec3 const &picked_position, deformer_parameters_structure const &deformer_parameters, grid_3D<vec3> &velocity, grid_3D<vec3> const &grid, sphere_tool_structure const &sphere_tool, buffer<buffer<int> > one_ring)
 {
 	//TO DO: find out where ad how this is called ???
 
@@ -131,9 +131,9 @@ void integrate(mesh &shape, buffer<vec3> const &position_before_deformation, vec
 		//now update the velocity
 		update_velocity_field(velocity, grid, sphere_tool);// -> do it somewere else !!!
 		// std::cout << "update velocity field" << std::endl;
-		if (gui.laplacian_smoothing){
-			shape = laplacian_smoothing(shape, one_ring);
-		}
+		// if (gui.laplacian_smoothing){
+		// 	shape = laplacian_smoothing(shape, one_ring);
+		// }
 		//get some inspiration from td 08_cloth -> numerial_integration()
 	}
 }
@@ -284,7 +284,7 @@ cgp::mesh laplacian_smoothing(cgp::mesh &shape, buffer<buffer<int>> one_ring){
 	cgp::mesh newShape = shape; float alpha = 0.05;
     // buffer<buffer<int>> one_ring = connectivity_one_ring(shape.connectivity); // to do: extract & store so it doesn't get recomputed each time
 
-	int num_iter = 30;
+	int num_iter = 20;
 	for (int iter = 0; iter < num_iter; iter++){
 		for (int i = 0; i < shape.position.size(); i++){ // iterate over all vertices
 			vec3 vertex = shape.position(i);

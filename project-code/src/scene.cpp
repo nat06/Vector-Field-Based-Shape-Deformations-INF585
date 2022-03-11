@@ -170,10 +170,17 @@ void scene_structure::display()
 	if (gui.display_frame)
 		draw(global_frame, environment);
 
+
 	// Display the deformed shape
 	draw(deforming_shape.visual, environment);
 	if (gui.display_wireframe)
 		draw_wireframe(deforming_shape.visual, environment, { 0,0,0 });
+
+	////
+	if (gui.laplacian_smoothing){
+		deforming_shape.shape = laplacian_smoothing(deforming_shape.shape, deforming_shape.one_ring);
+	}
+	////
 
 	// Periodically update the normal
 	//  Doesn't do it all the time as the computation is costly
