@@ -169,6 +169,7 @@ void scene_structure::initialize()
 
 	gui.gui_ri = sphere_tool.ri;
 	gui.gui_r0 = sphere_tool.r0;
+	gui.smoothing_steps = 10;
 	
 	inner_sphere_visual.initialize(mesh_primitive_sphere(), "Sphere");
 	outer_sphere_visual.initialize(mesh_primitive_sphere(), "Sphere");
@@ -277,13 +278,20 @@ void scene_structure::display()
 
 	}
 	
-	////
+	if (!previous_laplacian_smoothing && gui.laplacian_smoothing) //the button laplacian smoothing was just clicked, so we update
+	{
+		deforming_shape.require_smoothing = true;
+		//std::cout << "oyeaaaa !" << std::endl;
+
+	}	
+																		
 	if (gui.laplacian_smoothing && deforming_shape.require_smoothing) {
 		for (int i = 0; i < gui.smoothing_steps; i++) {
 			deforming_shape.shape = laplacian_smoothing(deforming_shape.shape, deforming_shape.one_ring);
 			deforming_shape.visual.update_position(deforming_shape.shape.position);
 		}
 		deforming_shape.require_smoothing = false;
+		previous_laplacian_smoothing = false;
 	}
 	////
 	
@@ -304,6 +312,8 @@ void scene_structure::display()
 	//prev_direction = picking.normal;
 	// 
 	// previous_tool_pos = sphere_tool.c
+	// 
+	previous_laplacian_smoothing = gui.laplacian_smoothing;
 	//###############################################
 	
 }
@@ -358,6 +368,13 @@ void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 	case surface_mesh:
 		shape = initialize_mesh();
 		break;
+	case surface_mesh_2:
+		shape = initialize_mesh_2();
+		break;
+	case surface_mesh_3:
+		shape = initialize_mesh_3();
+		break;
+	//TO DO: only use one function initialize_mesh with a filename argument
 	}
 
 	// Clear previous surface before seting the values of the new one

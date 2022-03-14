@@ -8,7 +8,9 @@ enum surface_type_enum {
 	surface_cylinder,
 	surface_sphere,
 	surface_cube,
-	surface_mesh
+	surface_mesh,
+	surface_mesh_2,
+	surface_mesh_3 //TO DO: CHANGE THESE NAMES TO FACE, CAMEL...
 };
 
 

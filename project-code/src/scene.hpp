@@ -99,6 +99,7 @@ struct scene_structure {
 	enum constant_velocity_direction velocity_dir_type;
 
 	//int smoothing_steps = 10;
+	bool previous_laplacian_smoothing;//gui button boolean at the previous display call
 
 
 

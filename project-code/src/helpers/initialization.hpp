@@ -7,7 +7,11 @@ cgp::mesh initialize_plane();
 cgp::mesh initialize_cylinder();
 cgp::mesh initialize_sphere();
 cgp::mesh initialize_cube();
+
+//  TO DO : use a filename as argument of one function only
 cgp::mesh initialize_mesh();
+cgp::mesh initialize_mesh_2();
+cgp::mesh initialize_mesh_3();
 
 //############################################################
 //PROJECT

@@ -36,6 +36,28 @@ mesh initialize_mesh()
     return shape;
 }
 
+mesh initialize_mesh_2()
+{
+	std::string const filename = "assets/camel.obj";
+	mesh shape = mesh_load_file_obj(filename);
+	for (auto& p : shape.position)
+		p *= 0.5f;
+	return shape;
+}
+
+mesh initialize_mesh_3() // this one does not work so well
+{
+	std::string const filename = "assets/spoon.obj";
+	mesh shape = mesh_load_file_obj(filename);
+	for (auto& p : shape.position) {
+	p *= 0.5f;
+	p += vec3(0.5, -0.7, 0);
+	//TO DO : might want to rotate it too
+	}
+
+	return shape;
+}
+
 
 
 //############################################################################
