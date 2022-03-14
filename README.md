@@ -8,6 +8,8 @@ _PRIORITY_
 - display la bounding grid (voir un td qui le fait)
 - plus de choix de vitesse constante au milieu de la inner ball 
 - bending ?
+- compilation instructions
+- nice github readme presentation
 </br>
 
 
