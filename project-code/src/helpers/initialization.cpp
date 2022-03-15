@@ -39,7 +39,7 @@ mesh initialize_mesh()
 mesh initialize_mesh_2()
 {
 	//std::string const filename = "assets/camel.obj";
-	std::string const filename = "assets/face.obj";
+	std::string const filename = "assets/camel.obj";
 	mesh shape = mesh_load_file_obj(filename);
 	for (auto& p : shape.position)
 		p *= 0.5f;
@@ -49,7 +49,7 @@ mesh initialize_mesh_2()
 mesh initialize_mesh_3() // this one does not work so well
 {
 	//std::string const filename = "assets/spoon.obj";
-	std::string const filename = "assets/face.obj";
+	std::string const filename = "assets/spoon.obj";
 	mesh shape = mesh_load_file_obj(filename);
 	for (auto& p : shape.position) {
 	p *= 0.5f;
@@ -90,7 +90,7 @@ grid_3D<vec3> initialize_grid(int N)
 }
 
 
-void update_grid_segments(buffer<vec3>& segments_grid, grid_3D<vec3> const& grid)
+void initialize_grid_segments(buffer<vec3>& segments_grid, grid_3D<vec3> const& grid)
 {
 	int const N = int(grid.dimension.x);
 
@@ -135,40 +135,4 @@ void update_grid_segments(buffer<vec3>& segments_grid, grid_3D<vec3> const& grid
 }
 
 
-void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& velocity_grid_data, grid_3D<vec3> const& velocity, grid_3D<vec3>& grid, float scale)
-{
-	//TO DO: put it at the center of each cube
-
-
-	int const N = int(velocity.dimension.x);
-	float const dL = 2.0f / (N - 1.0f);
-	float const lambda = 0.01f * scale;
-
-	float offset = 0;
-	for (int kx = 0; kx < N; ++kx) {
-		for (int ky = 0; ky < N; ++ky) {
-			for (int kz = 0; kz < N; ++kz) {
-				//vec3 const p0 = { -1 + kx * dL, -1 + ky * dL, 1e-4f };
-				float c = 1.0 / (2.0 * N);
-				vec3 const p0 = grid(kx, ky, kz) + vec3(c, c, c);
-				//size_t const offset = velocity.index_to_offset(kx, ky);
-				//size_t const offset = velocity.index_to_offset(kx, ky, kz);
-				velocity_grid_data[2*offset + 0] = p0;
-				velocity_grid_data[2*offset + 1] = p0 + lambda * velocity(kx, ky, kz);
-				offset++;
-			}
-		}
-	}
-
-	velocity_visual.update(velocity_grid_data);
-}
-
-
-
-
-
-
-
-//############################################################################
-//############################################################################
 

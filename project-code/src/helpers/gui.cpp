@@ -33,7 +33,7 @@ bool gui_parameters::display()
 	
 	ImGui::Text("\n Laplacian smoothing:"); // Select surface to be deformed
 	ImGui::Checkbox("activate", &laplacian_smoothing);
-	ImGui::SliderInt("steps", &smoothing_steps, 10, 100);
+	ImGui::SliderInt("steps", &smoothing_steps, 5, 30);
 
 	return new_surface;
 }
