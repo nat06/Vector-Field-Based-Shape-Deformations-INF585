@@ -10,6 +10,7 @@ _PRIORITY_
 - bending ?
 - compilation instructions
 - nice github readme presentation
+- fancy shaders ?
 </br>
 
 
