@@ -3,6 +3,7 @@ Reimplementation of the paper Vector Field Based Shape Deformations for Ecole Po
 
 TO DO LIST:
 
+<<<<<<< Updated upstream
 _PRIORITY_
 -regler probleme avec _enum_
 - plus de choix de mesh (+ peut etre la possibilite de les scale, + custom mesh ?)
@@ -25,6 +26,20 @@ _CODE CLEANUP_
 _..._
 - more intuitive approach with the tool ?
 - check it is necessary to change velocity at each integration step
+=======
+- when moving without clicking: move the tool along the shape
+- when moving + shift + click: move the tool with a projection along the screen space
+- more intuitive approach with the tool
+- remove argument previous_tool_pos from the functions ?
+- remove require_normal_update (not sure)
+- display bounding box of the grid
+- more choices of meshes on the gui
+- bending ?
+- check it is necessary to change velocity at each integration step
+- keep deformer direction (view space, normal) + add mouse movement (add it on the gui too)
+- add a visual bounding box for the grid (add it on the gui too)
+- change the name of the timer => timer_update_velocity
+>>>>>>> Stashed changes
 - add arrow for the velocity (en cours)
 - be able to make a bigger grid and generalize code for this
 
@@ -36,9 +51,15 @@ _..._
 - **use normal as vector field**
 - **put an arrow vor the velocity direction**
 - **remove tiny circle of the tool**
+<<<<<<< Updated upstream
 - **replace Nx, Ny, Nz, by only N**
 - **display velocity at each point (not at the center of each cell), and adapt computations accordingly**
 - **laplacian smoothing**
 - **gui for laplacian smoothing + slider for number of steps**
 - **when moving without clicking: move the tool along the shape**
 - **when moving + shift + click: move the tool with a projection along the screen space**
+=======
+- replace Nx, Ny, Nz, by only N
+- display velocity at each point (not at the center of each cell), and adapt computations accordingly
+- laplacian smoothing
+>>>>>>> Stashed changes
