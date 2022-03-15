@@ -3,9 +3,6 @@ Reimplementation of the paper Vector Field Based Shape Deformations for Ecole Po
 
 TO DO LIST:
 
-<<<<<<< Updated upstream
-_PRIORITY_
--regler probleme avec _enum_
 - plus de choix de mesh (+ peut etre la possibilite de les scale, + custom mesh ?)
 - display la bounding grid (voir un td qui le fait)
 - plus de choix de vitesse constante au milieu de la inner ball -> rotations avec les fleches
@@ -51,15 +48,10 @@ _..._
 - **use normal as vector field**
 - **put an arrow vor the velocity direction**
 - **remove tiny circle of the tool**
-<<<<<<< Updated upstream
 - **replace Nx, Ny, Nz, by only N**
 - **display velocity at each point (not at the center of each cell), and adapt computations accordingly**
 - **laplacian smoothing**
 - **gui for laplacian smoothing + slider for number of steps**
 - **when moving without clicking: move the tool along the shape**
 - **when moving + shift + click: move the tool with a projection along the screen space**
-=======
-- replace Nx, Ny, Nz, by only N
-- display velocity at each point (not at the center of each cell), and adapt computations accordingly
-- laplacian smoothing
->>>>>>> Stashed changes
+- **regler probleme avec _enum_**
