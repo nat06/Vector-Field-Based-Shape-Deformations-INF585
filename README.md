@@ -12,6 +12,7 @@ TO DO LIST:
 - compilation instructions
 - nice github readme presentation
 - fancy shaders ?
+- camera zoom with molette de souris ?
 </br>
 
 
