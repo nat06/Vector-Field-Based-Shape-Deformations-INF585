@@ -4,6 +4,7 @@ Reimplementation of the paper Vector Field Based Shape Deformations for Ecole Po
 TO DO LIST:
 
 _PRIORITY_
+-regler probleme avec _enum_
 - plus de choix de mesh (+ peut etre la possibilite de les scale, + custom mesh ?)
 - display la bounding grid (voir un td qui le fait)
 - plus de choix de vitesse constante au milieu de la inner ball -> rotations avec les fleches
