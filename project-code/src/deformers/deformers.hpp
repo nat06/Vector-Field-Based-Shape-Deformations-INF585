@@ -30,14 +30,8 @@ void integrate(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_before_d
 void update_velocity_field(cgp::grid_3D<cgp::vec3>& velocity, cgp::grid_3D<cgp::vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity);
 void update_velocity_visual(cgp::segments_drawable& velocity_visual, cgp::buffer<cgp::vec3>& velocity_grid_data, cgp::grid_3D<cgp::vec3> const& velocity, cgp::grid_3D<cgp::vec3>& grid, float scale);
 
-//move these to utilities.hpp
-cgp::vec3 get_cell(const cgp::vec3& p, int N);
-cgp::vec3 trilinear_interpolation(cgp::vec3 const& p, cgp::vec3 const& cell, cgp::grid_3D<cgp::vec3> const& grid, cgp::grid_3D<cgp::vec3> const& v, int N);
-cgp::mesh laplacian_smoothing(cgp::mesh& shape, cgp::buffer<cgp::buffer<int>> one_ring);
 
-float bernstein(int n, int k, float x);
-int C(int n, int k);
-bool are_equal(const cgp::vec3& v1, const cgp::vec3& v2);//might want to change the place of this
+
 
 
 // TO REMOVE

@@ -7,6 +7,7 @@
 #include "helpers/picking_visual.hpp"
 
 #include "deformers/deformers.hpp"
+#include "utils.hpp"
 
 
 // Helping structure that contains the deforming shape elements
