@@ -4,10 +4,10 @@ Reimplementation of the paper Vector Field Based Shape Deformations for Ecole Po
 TO DO LIST:
 
 - make a function for the tool to stay in the grid
-- fix problem with the normal
 - plus de choix de mesh (+ peut etre la possibilite de les scale, + custom mesh ?)
 - display la bounding grid (voir un td qui le fait)
-- plus de choix de vitesse constante au milieu de la inner ball -> rotations avec les fleches
+- plus de choix de vitesse constante au milieu de la inner ball -> rotations avec les fleches 
+- > invert normal
 - bending ?
 - compilation instructions
 - nice github readme presentation
@@ -59,3 +59,4 @@ _..._
 - **when moving + shift + click: move the tool with a projection along the screen space**
 - **regler probleme avec _enum_**
 - easy: more range choice for ri, ro
+- fix problem with the normal
