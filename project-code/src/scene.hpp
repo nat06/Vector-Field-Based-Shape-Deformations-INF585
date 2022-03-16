@@ -92,6 +92,7 @@ struct scene_structure {
 	bool previous_laplacian_smoothing;//gui button boolean at the previous display call
 	bool previous_interactive_deformation;//deformatiyon with movement of the mouse
 	cgp::vec2 previous_mouse_position;
+	cgp::vec3 previous_tool_position;
 	bool require_update_velocity;
 };
 

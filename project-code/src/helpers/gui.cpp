@@ -12,15 +12,17 @@ bool gui_parameters::display()
 	
 	ImGui::Text("\n Tool parameters:"); 
 	ImGui::Checkbox("display tool", &bool_display_tool);
-	ImGui::SliderFloat("ri", &gui_ri, 0.03f, 0.2f);
+	ImGui::SliderFloat("ri", &gui_ri, 0.00f, 0.2f);
 	ImGui::SliderFloat("r0", &gui_r0, 0.005f, 0.5f);
 	
-	ImGui::Text("Direction of constant velocity (inner sphere):"); 
+	ImGui::Text("Deformation type:"); 
 	int* ptr_velocity_type = (int*)&constant_velocity_parameters.type;
 	ImGui::RadioButton("view_space", ptr_velocity_type, direction_view); ImGui::SameLine();
 	ImGui::RadioButton("normal", ptr_velocity_type, direction_normal); ImGui::SameLine();
 	ImGui::RadioButton("inverse normal", ptr_velocity_type, direction_inverse_normal); ImGui::SameLine();
-	ImGui::RadioButton("mouse movement", ptr_velocity_type, direction_mouse_movement);
+	ImGui::RadioButton("mouse movement (view space)", ptr_velocity_type, direction_mouse_movement);
+	ImGui::RadioButton("deformation painting (normal)", ptr_velocity_type, deformation_painting_normal);
+	ImGui::RadioButton("deformation painting (inverse normal)", ptr_velocity_type, deformation_painting_inverse);
 
 	ImGui::Text("\n Surface type:"); // Select surface to be deformed
 	int* ptr_surface_type  = reinterpret_cast<int*>(&surface_type); // trick - use pointer to select enum

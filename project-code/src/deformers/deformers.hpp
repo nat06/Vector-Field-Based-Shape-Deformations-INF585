@@ -7,7 +7,9 @@ enum constant_velocity_direction {//TO DO: CHANGE THE NAMES OF THESE
 	direction_view,
 	direction_normal,
 	direction_inverse_normal,
-	direction_mouse_movement
+	direction_mouse_movement,
+	deformation_painting_normal,
+	deformation_painting_inverse
 };
 
 struct constant_velocity_structure {//might want to change the name
