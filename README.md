@@ -10,8 +10,8 @@ TO DO LIST:
 - compilation instructions in a readme N
 - (revoir instructions sur moodle) N
 - pas de build ni d'executable
-- 
-- implement sculpting metaphor A?
+
+- **~~implement sculpting metaphor A?~~**
 
 - **~~make a function for the tool to stay in the grid -> scene.cpp l.33 A~~**
 - scale and rotate the the meshes when initialized N
