@@ -4,7 +4,7 @@
 
 using namespace cgp;
 
-void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, grid_3D<vec3>&velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity) {
+void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, grid_3D<vec3>&velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity, bool const& bool_trilinear_interpolation) {
 	
 	size_t const N = shape.position.size();
 	vec3 ref = { -100, -100, -100 }; // to check if point is in [-1, 1] grid
@@ -23,7 +23,16 @@ void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, gr
 				float a = 1;
 				if (constant_velocity.type == direction_mouse_movement) a = 1;//probably useless
 
-				p_shape = p_shape + a* dt * trilinear_interpolation(p_shape, cell, grid, velocity, velocity.dimension[0]);
+				vec3 v;
+				if (bool_trilinear_interpolation) { 
+					v = trilinear_interpolation(p_shape, cell, grid, velocity, velocity.dimension[0]);
+				}
+				else {
+					v = velocity(cell.x, cell.y, cell.z);
+				}
+
+				p_shape = p_shape + a * dt * v;
+				//p_shape = p_shape + a* dt * trilinear_interpolation(p_shape, cell, grid, velocity, velocity.dimension[0]);
 
 				/*bool simulation_diverged = detect_simulation_divergence(cloth.forces, cloth.position);
 				if (simulation_diverged == true)
@@ -35,7 +44,7 @@ void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, gr
 				}*/
 			}
 		}
-		update_velocity_field(velocity, grid, sphere_tool, constant_velocity); //now update the velocity
+		//update_velocity_field(velocity, grid, sphere_tool, constant_velocity); //now update the velocity
 	}
 }
 

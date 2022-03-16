@@ -121,6 +121,7 @@ void scene_structure::initialize()//TO DO: CLEAN THIS ONE
 
 	deforming_shape.update_normal();
 	gui.constant_velocity_parameters.type = direction_normal;
+	gui.bool_trilinear_interpolation = true;
 }
 	
 
@@ -152,7 +153,7 @@ void scene_structure::display()
 	// Deform the mesh 
 	if (deforming_shape.require_deformation) {
 		//update_velocity_field(velocity, grid, sphere_tool, previous_tool_pos, previous_tool_pos);
-		integrate(deforming_shape.shape, deforming_shape.position_saved, velocity, grid, sphere_tool, gui.constant_velocity_parameters);
+		integrate(deforming_shape.shape, deforming_shape.position_saved, velocity, grid, sphere_tool, gui.constant_velocity_parameters, gui.bool_trilinear_interpolation);
 		deforming_shape.visual.update_position(deforming_shape.shape.position);
 		float scale = 5; //TO DO: SET SCALE AS A SCENE VARIABLE
 		update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, scale); //HERE ???
@@ -178,7 +179,6 @@ void scene_structure::display()
 
 
 	//draw different elements
-
 	draw(deforming_shape.visual, environment);
 
 	if (gui.display_wireframe)
@@ -192,8 +192,8 @@ void scene_structure::display()
 
 
 void scene_structure::display_gui()
-{
-	// Display the gui and update the new shape if requested
+{// Display the gui and update the new shape if requested
+
 	bool const is_new_surface = gui.display();
 	if (is_new_surface)
 		deforming_shape.new_shape(gui.surface_type);
@@ -325,7 +325,7 @@ void scene_structure::display_arrow(){ //TO DO: JUST PUT THIS IN THE TOOL FUNCTI
 		
 		//arrow_visual.initialize(mesh_primitive_arrow(sphere_tool.c, sphere_tool.c + constant_vel / 3, 0.01), "Arrow");
 		arrow_visual.initialize(mesh_primitive_arrow(sphere_tool.c, sphere_tool.c + gui.constant_velocity_parameters.dir / 3, 0.01), "Arrow");
-		std::cout << gui.constant_velocity_parameters.type << std::endl;
+		//std::cout << gui.constant_velocity_parameters.type << std::endl;
 
 		//TO DO: use rotations instead of always creating a new object
 

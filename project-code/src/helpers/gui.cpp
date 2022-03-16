@@ -1,6 +1,5 @@
 #include "gui.hpp"
 
-
 bool gui_parameters::display()
 {	
 	
@@ -21,7 +20,7 @@ bool gui_parameters::display()
 	ImGui::RadioButton("normal", ptr_velocity_type, direction_normal); ImGui::SameLine();
 	ImGui::RadioButton("inverse normal", ptr_velocity_type, direction_inverse_normal); ImGui::SameLine();
 	ImGui::RadioButton("mouse movement", ptr_velocity_type, direction_mouse_movement);
-	
+
 	ImGui::Text("\n Surface type:"); // Select surface to be deformed
 	int* ptr_surface_type  = reinterpret_cast<int*>(&surface_type); // trick - use pointer to select enum
 	bool new_surface = false;
@@ -32,10 +31,15 @@ bool gui_parameters::display()
     new_surface |= ImGui::RadioButton("Mesh",ptr_surface_type, surface_mesh);
 	new_surface |= ImGui::RadioButton("Camel", ptr_surface_type, surface_mesh_2);
 	new_surface |= ImGui::RadioButton("Spoon", ptr_surface_type, surface_mesh_3);
+
+	ImGui::Text("\n Trilinear interpolation:"); // Select surface to be deformed
+	ImGui::Checkbox("activate", &bool_trilinear_interpolation);
 	
 	ImGui::Text("\n Laplacian smoothing:"); // Select surface to be deformed
 	ImGui::Checkbox("activate", &laplacian_smoothing);
 	ImGui::SliderInt("steps", &smoothing_steps, 5, 30);
+
+	
 
 	return new_surface;
 }
