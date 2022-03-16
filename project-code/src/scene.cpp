@@ -8,10 +8,15 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 	// Current position of the mouse
 	vec2 const& p = inputs.mouse.position.current;
 
-	require_update_velocity = true;
+	
+
+	if (gui.constant_velocity_parameters.type == direction_view && inputs.mouse.click.left) {
+		require_update_velocity = true; 
+	}
 
 	if (inputs.keyboard.shift)
 	{
+		require_update_velocity = true; //TO DO: MAKE SURE ABOUT THIS !
 		
 		// If the mouse is not clicked, compute a picking on the vertices of the mesh
 		if (!inputs.mouse.click.left)
@@ -123,6 +128,11 @@ void scene_structure::display()
 	// Update velocity field
 	if (require_update_velocity) {
 		//TO DO: CHANGE
+		if (gui.constant_velocity_parameters.type == direction_view) {
+			vec2 const tr_2D = {0,1}; // translation in the screen plane
+			vec3 const tr = environment.camera.orientation() * vec3(tr_2D, 0.0f);
+			gui.constant_velocity_parameters.dir = tr;
+		}
 		if (gui.constant_velocity_parameters.type == direction_normal) gui.constant_velocity_parameters.dir = picking.normal;
 		if (gui.constant_velocity_parameters.type == direction_inverse_normal) gui.constant_velocity_parameters.dir = -picking.normal;
 		update_velocity_field(velocity, grid, sphere_tool, gui.constant_velocity_parameters);

@@ -16,7 +16,6 @@ struct constant_velocity_structure {//might want to change the name
 	//might want to add some stuff
 };
 
-//TO DO: MOVE THIS TO ANOTHER FILE
 struct sphere_tool_structure{
 	cgp::vec3 c; // Position
 	cgp::vec3 c0; //colors
@@ -29,8 +28,6 @@ struct sphere_tool_structure{
 void integrate(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_before_deformation, cgp::grid_3D<cgp::vec3>& velocity, cgp::grid_3D<cgp::vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity, bool const& bool_trilinear_interpolation);
 void update_velocity_field(cgp::grid_3D<cgp::vec3>& velocity, cgp::grid_3D<cgp::vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity);
 void update_velocity_visual(cgp::segments_drawable& velocity_visual, cgp::buffer<cgp::vec3>& velocity_grid_data, cgp::grid_3D<cgp::vec3> const& velocity, cgp::grid_3D<cgp::vec3>& grid, float scale);
-
-
 
 
 
