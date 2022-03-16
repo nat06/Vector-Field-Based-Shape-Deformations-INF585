@@ -23,7 +23,7 @@ struct gui_parameters {
 	bool display_constant_velocity = true;
 	float gui_ri;
 	float gui_r0;
-	bool laplacian_smoothing = false;
+	bool laplacian_smoothing;
 	int smoothing_steps;
 
 	bool bool_trilinear_interpolation;

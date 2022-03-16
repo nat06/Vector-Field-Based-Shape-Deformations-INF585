@@ -63,6 +63,7 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 					if (gui.laplacian_smoothing) deforming_shape.require_smoothing = true;
 					previous_tool_position = sphere_tool.c;
 				}
+
 			}
 			
 		}
@@ -98,7 +99,7 @@ void scene_structure::initialize()//TO DO: CLEAN THIS ONE
 	picking_visual.initialize();
 
 	// GRID
-	int const N = 20;
+	int const N = 30;
 	grid = initialize_grid(N);
 	initialize_grid_segments(grid_segments, grid);
 	grid_segments_visual.initialize(grid_segments, "grid");
@@ -165,6 +166,7 @@ void scene_structure::display()
 		if (gui.constant_velocity_parameters.type == direction_normal ) gui.constant_velocity_parameters.dir = picking.normal;
 		if (gui.constant_velocity_parameters.type == direction_inverse_normal ) gui.constant_velocity_parameters.dir = -picking.normal;
 
+		//TO DO: ACTUALLY, THIS MIGHT BE NOT GOOD
 		if (gui.constant_velocity_parameters.type == deformation_painting_normal) gui.constant_velocity_parameters.dir = picking.normal;
 		if (gui.constant_velocity_parameters.type == deformation_painting_inverse) gui.constant_velocity_parameters.dir = -picking.normal;
 
@@ -181,11 +183,16 @@ void scene_structure::display()
 		float scale = 5; //TO DO: SET SCALE AS A SCENE VARIABLE
 		update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, scale); //HERE ???
 		deforming_shape.position_saved = deforming_shape.shape.position;
+
+
 		deforming_shape.update_normal();
 		previous_tool_pos = sphere_tool.c;//update previous tool position //make sure this is useful
 		deforming_shape.require_deformation = false;
 
-		if (gui.laplacian_smoothing) deforming_shape.require_smoothing = true;
+		if (gui.laplacian_smoothing) {
+			std::cout << "yolooo" << std::endl;
+			deforming_shape.require_smoothing = true;
+		}
 	}
 	
 	// Laplacian smoothing: TO DO: FIX THIS
@@ -211,6 +218,8 @@ void scene_structure::display()
 	display_grid(); //3D grid
 	display_tool(); 
 	display_velocity(); //vector field
+
+	previous_laplacian_smoothing = gui.laplacian_smoothing;
 
 }
 
@@ -301,9 +310,10 @@ void scene_structure::display_grid()
 	if (gui.display_grid_edge)
 		draw(grid_segments_visual, environment);
 
-	if (gui.display_grid_box)
-		grid_box_visual.color = vec3( 1, 0, 0 );
+	if (gui.display_grid_box) {
+		grid_box_visual.color = vec3(1, 0, 0);
 		draw(grid_box_visual, environment);
+	}
 }
 
 
@@ -317,12 +327,12 @@ void scene_structure::display_tool()
 {
 	if (gui.bool_display_tool) {
 		inner_sphere_visual.shading.color = sphere_tool.ci;
-		inner_sphere_visual.shading.alpha = 0.9;
+		inner_sphere_visual.shading.alpha = 0.8;
 		inner_sphere_visual.transform.translation = sphere_tool.c;
 		inner_sphere_visual.transform.scaling = sphere_tool.ri;
 
 		outer_sphere_visual.shading.color = sphere_tool.c0;
-		outer_sphere_visual.shading.alpha = 0.2;
+		outer_sphere_visual.shading.alpha = 0.1;
 		outer_sphere_visual.transform.translation = sphere_tool.c;
 		outer_sphere_visual.transform.scaling = sphere_tool.r0;
 
@@ -331,14 +341,24 @@ void scene_structure::display_tool()
 		glDepthMask(false); // do not write on depth buffer
 
 			//Draw all transparent objects from furthest to closest
+
+		if (norm(gui.constant_velocity_parameters.dir) >= 0.1) {
+			arrow_visual.clear();
+			arrow_visual.initialize(mesh_primitive_arrow(sphere_tool.c, sphere_tool.c + gui.constant_velocity_parameters.dir / 2.5, 0.01), "Arrow");
+			arrow_visual.shading.color = sphere_tool.ci;
+			//inner_sphere_visual.shading.alpha = 0.9;
+			draw(arrow_visual, environment);
+		}
 		draw(inner_sphere_visual, environment);
 		draw(outer_sphere_visual, environment);
+
+		
 
 		glDisable(GL_BLEND);
 		// do not forget to re-activate depth buffer write
 		glDepthMask(true);
 
-		display_arrow();
+		//display_arrow();
 	}
 	
 }

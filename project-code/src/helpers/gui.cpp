@@ -19,7 +19,7 @@ bool gui_parameters::display()
 	int* ptr_velocity_type = (int*)&constant_velocity_parameters.type;
 	ImGui::RadioButton("view_space", ptr_velocity_type, direction_view); ImGui::SameLine();
 	ImGui::RadioButton("normal", ptr_velocity_type, direction_normal); ImGui::SameLine();
-	ImGui::RadioButton("inverse normal", ptr_velocity_type, direction_inverse_normal); ImGui::SameLine();
+	ImGui::RadioButton("inverse normal", ptr_velocity_type, direction_inverse_normal); 
 	ImGui::RadioButton("mouse movement (view space)", ptr_velocity_type, direction_mouse_movement);
 	ImGui::RadioButton("deformation painting (normal)", ptr_velocity_type, deformation_painting_normal);
 	ImGui::RadioButton("deformation painting (inverse normal)", ptr_velocity_type, deformation_painting_inverse);
@@ -30,16 +30,16 @@ bool gui_parameters::display()
     new_surface |= ImGui::RadioButton("Plane",ptr_surface_type, surface_plane); ImGui::SameLine();
     new_surface |= ImGui::RadioButton("Cylinder",ptr_surface_type, surface_cylinder); ImGui::SameLine();
     new_surface |= ImGui::RadioButton("Sphere",ptr_surface_type, surface_sphere); ImGui::SameLine();
-    new_surface |= ImGui::RadioButton("Cube",ptr_surface_type, surface_cube);  ImGui::SameLine();
-    new_surface |= ImGui::RadioButton("Mesh",ptr_surface_type, surface_mesh);
+    new_surface |= ImGui::RadioButton("Cube",ptr_surface_type, surface_cube); 
+    new_surface |= ImGui::RadioButton("Head",ptr_surface_type, surface_mesh);
 	new_surface |= ImGui::RadioButton("Camel", ptr_surface_type, surface_mesh_2);
-	new_surface |= ImGui::RadioButton("Spoon", ptr_surface_type, surface_mesh_3);
+	new_surface |= ImGui::RadioButton("Armadillo", ptr_surface_type, surface_mesh_3);
 
 	ImGui::Text("\n Trilinear interpolation:"); // Select surface to be deformed
 	ImGui::Checkbox("activate", &bool_trilinear_interpolation);
 	
 	ImGui::Text("\n Laplacian smoothing:"); // Select surface to be deformed
-	ImGui::Checkbox("activate", &laplacian_smoothing);
+	ImGui::Checkbox("activat", &laplacian_smoothing);
 	ImGui::SliderInt("steps", &smoothing_steps, 5, 30);
 
 	
