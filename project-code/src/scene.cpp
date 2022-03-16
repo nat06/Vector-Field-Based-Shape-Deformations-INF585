@@ -97,6 +97,9 @@ void scene_structure::initialize()//TO DO: CLEAN THIS ONE
 	initialize_grid_segments(grid_segments, grid);
 	grid_segments_visual.initialize(grid_segments, "grid");
 
+	initialize_grid_box(grid_box, grid);
+	grid_box_visual.initialize(grid_box, "grid_box");
+
 	//VELOCITY //TO DO: -> to clean
 	initialize_velocity(N); // useless ?
 	velocity_grid_data.resize(3 * N * N * N);
@@ -129,9 +132,6 @@ void scene_structure::display()
 
 	environment.light = environment.camera.position();
 	
-	if (gui.display_frame)
-		draw(global_frame, environment);
-
 	//update tool postion and force ri < ro
 	if (gui.gui_r0 < gui.gui_ri) gui.gui_r0 = gui.gui_ri;
 	sphere_tool.ri = gui.gui_ri;
@@ -143,7 +143,7 @@ void scene_structure::display()
 	if (require_update_velocity) {
 		//TO DO: CHANGE
 		if (gui.constant_velocity_parameters.type == direction_normal) gui.constant_velocity_parameters.dir = picking.normal;
-		if (gui.constant_velocity_parameters.type == direction_normal) gui.constant_velocity_parameters.dir = picking.normal;
+		if (gui.constant_velocity_parameters.type == direction_inverse_normal) gui.constant_velocity_parameters.dir = -picking.normal;
 		update_velocity_field(velocity, grid, sphere_tool, gui.constant_velocity_parameters);
 		update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, 5);
 		require_update_velocity = false;
@@ -176,12 +176,14 @@ void scene_structure::display()
 		deforming_shape.require_smoothing = false;
 	}
 
-	// Draw shape
+
+	//draw different elements
+
 	draw(deforming_shape.visual, environment);
+
 	if (gui.display_wireframe)
 		draw_wireframe(deforming_shape.visual, environment, { 0,0,0 });
 
-	// Draw other elements
 	display_grid(); //3D grid
 	display_tool(); 
 	display_velocity(); //vector field
@@ -274,6 +276,10 @@ void scene_structure::display_grid()
 {
 	if (gui.display_grid_edge)
 		draw(grid_segments_visual, environment);
+
+	if (gui.display_grid_box)
+		grid_box_visual.color = vec3( 1, 0, 0 );
+		draw(grid_box_visual, environment);
 }
 
 

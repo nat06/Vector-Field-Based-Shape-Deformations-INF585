@@ -70,6 +70,9 @@ struct scene_structure {
 	cgp::buffer<cgp::vec3> velocity_grid_data;
 	cgp::buffer<cgp::vec3> grid_segments; //edges representing the 3D grid //USEFUL ?
 	cgp::segments_drawable grid_segments_visual; //visual representation of the edges of the grid
+	cgp::buffer<cgp::vec3> grid_box;
+	cgp::segments_drawable grid_box_visual;
+
 	cgp::segments_drawable velocity_visual; //visual representation of the velocity vector field
 
 	cgp::vec3 prev_direction; //USELESS ?

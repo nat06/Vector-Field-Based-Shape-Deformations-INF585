@@ -62,10 +62,6 @@ mesh initialize_mesh_3() // this one does not work so well
 
 
 
-//############################################################################
-//PROJECT
-
-
 grid_3D<vec3> initialize_grid(int N)
 {
 	//to do: do not initialize it as unit square
@@ -132,6 +128,13 @@ void initialize_grid_segments(buffer<vec3>& segments_grid, grid_3D<vec3> const& 
 		}
 	}
 
+}
+
+void initialize_grid_box(buffer<vec3>& segments_grid, grid_3D<vec3> const& grid)
+{	//to do: generalize to grid length
+	segments_grid = { {-1,-1,-1},{1,-1,-1}, {1,-1,-1},{1,1,-1}, {1,1,-1},{-1,1,-1}, {-1,1,-1},{-1,-1,-1},
+		{-1,-1,1} ,{1,-1,1},  {1,-1,1}, {1,1,1},  {1,1,1}, {-1,1,1},  {-1,1,1}, {-1,-1,1},
+		{-1,-1,-1},{-1,-1,1}, {1,-1,-1},{1,-1,1}, {1,1,-1},{1,1,1},   {-1,1,-1},{-1,1,1} };
 }
 
 

@@ -21,6 +21,9 @@ struct gui_parameters {
 	//#
 	//PROJECT
 	bool display_grid_edge = false;
+	bool display_grid_box = true;
+
+
 	//bool display_velocity = true;
 	bool display_constant_velocity = true;
 	float gui_ri;

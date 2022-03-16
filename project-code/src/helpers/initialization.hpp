@@ -15,4 +15,5 @@ cgp::mesh initialize_mesh_3();
 
 cgp::grid_3D<cgp::vec3> initialize_grid(int N);
 void initialize_grid_segments(cgp::buffer<cgp::vec3>& segments_grid, cgp::grid_3D<cgp::vec3> const& grid);
+void initialize_grid_box(cgp::buffer<cgp::vec3>& segments_grid, cgp::grid_3D<cgp::vec3> const& grid);
 

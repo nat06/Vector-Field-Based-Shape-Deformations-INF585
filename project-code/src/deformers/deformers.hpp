@@ -3,9 +3,10 @@
 
 #include "cgp/cgp.hpp"
 
-enum constant_velocity_direction {
+enum constant_velocity_direction {//TO DO: CHANGE THE NAMES OF THESE
 	direction_view,
 	direction_normal,
+	direction_inverse_normal,
 	direction_mouse_movement
 };
 

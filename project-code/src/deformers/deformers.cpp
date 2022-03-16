@@ -67,7 +67,7 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 						u = vec3(1, 0, 0);
 						w = vec3(0, 1, 0);
 					}
-					else if (constant_velocity.type == direction_normal) {
+					else if (constant_velocity.type == direction_normal || constant_velocity.type == direction_inverse_normal) {
 						u = vec3(1, 0, 0);
 						if (norm(constant_velocity.dir) > 0) u = orthogonal_vector(normalize(constant_velocity.dir));
 						w = cross(constant_velocity.dir, u);

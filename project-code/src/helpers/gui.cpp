@@ -8,6 +8,7 @@ bool gui_parameters::display()
 	ImGui::Checkbox("Frame", &display_frame);
 	ImGui::Checkbox("Mesh wireframe", &display_wireframe);
 	ImGui::Checkbox("Grid", &display_grid_edge);
+	ImGui::Checkbox("Grid box", &display_grid_box);
 	ImGui::Checkbox("Velocity field", &display_constant_velocity);
 	
 	ImGui::Text("\n Tool parameters:"); 
@@ -18,6 +19,7 @@ bool gui_parameters::display()
 	int* ptr_velocity_type = (int*)&constant_velocity_parameters.type;
 	ImGui::RadioButton("view_space", ptr_velocity_type, direction_view); ImGui::SameLine();
 	ImGui::RadioButton("normal", ptr_velocity_type, direction_normal); ImGui::SameLine();
+	ImGui::RadioButton("inverse normal", ptr_velocity_type, direction_inverse_normal); ImGui::SameLine();
 	ImGui::RadioButton("mouse movement", ptr_velocity_type, direction_mouse_movement);
 	
 	ImGui::Text("\n Surface type:"); // Select surface to be deformed
