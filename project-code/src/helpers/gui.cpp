@@ -11,6 +11,7 @@ bool gui_parameters::display()
 	ImGui::Checkbox("Velocity field", &display_constant_velocity);
 	
 	ImGui::Text("\n Tool parameters:"); 
+	ImGui::Checkbox("display tool", &bool_display_tool);
 	ImGui::SliderFloat("ri", &gui_ri, 0.03f, 0.2f);
 	ImGui::SliderFloat("r0", &gui_r0, 0.005f, 0.5f);
 	

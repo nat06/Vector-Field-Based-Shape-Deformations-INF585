@@ -27,6 +27,7 @@ struct gui_parameters {
 	int smoothing_steps;
 
 	bool bool_trilinear_interpolation;
+	bool bool_display_tool;
 
 	constant_velocity_structure constant_velocity_parameters;
 	surface_type_enum surface_type = surface_plane;    // Type of surface to be created

@@ -122,6 +122,7 @@ void scene_structure::initialize()//TO DO: CLEAN THIS ONE
 	deforming_shape.update_normal();
 	gui.constant_velocity_parameters.type = direction_normal;
 	gui.bool_trilinear_interpolation = true;
+	gui.bool_display_tool = true;
 }
 	
 
@@ -291,29 +292,32 @@ void scene_structure::display_velocity()
 
 void scene_structure::display_tool() 
 {
-	inner_sphere_visual.shading.color = sphere_tool.ci;
-	inner_sphere_visual.shading.alpha = 0.9;
-	inner_sphere_visual.transform.translation = sphere_tool.c;
-	inner_sphere_visual.transform.scaling = sphere_tool.ri;
+	if (gui.bool_display_tool) {
+		inner_sphere_visual.shading.color = sphere_tool.ci;
+		inner_sphere_visual.shading.alpha = 0.9;
+		inner_sphere_visual.transform.translation = sphere_tool.c;
+		inner_sphere_visual.transform.scaling = sphere_tool.ri;
 
-	outer_sphere_visual.shading.color = sphere_tool.c0;
-	outer_sphere_visual.shading.alpha = 0.2;
-	outer_sphere_visual.transform.translation = sphere_tool.c;
-	outer_sphere_visual.transform.scaling = sphere_tool.r0;
+		outer_sphere_visual.shading.color = sphere_tool.c0;
+		outer_sphere_visual.shading.alpha = 0.2;
+		outer_sphere_visual.transform.translation = sphere_tool.c;
+		outer_sphere_visual.transform.scaling = sphere_tool.r0;
 
-	glEnable(GL_BLEND); // Color Blending
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDepthMask(false); // do not write on depth buffer
+		glEnable(GL_BLEND); // Color Blending
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDepthMask(false); // do not write on depth buffer
 
-		//Draw all transparent objects from furthest to closest
+			//Draw all transparent objects from furthest to closest
 		draw(inner_sphere_visual, environment);
 		draw(outer_sphere_visual, environment);
 
 		glDisable(GL_BLEND);
-	// do not forget to re-activate depth buffer write
-	glDepthMask(true);
+		// do not forget to re-activate depth buffer write
+		glDepthMask(true);
 
-	display_arrow();
+		display_arrow();
+	}
+	
 }
 
 void scene_structure::display_arrow(){ //TO DO: JUST PUT THIS IN THE TOOL FUNCTION
