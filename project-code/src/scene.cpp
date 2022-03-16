@@ -27,17 +27,7 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 			vec2 const tr_2D = inputs.mouse.position.current - inputs.mouse.position.previous; // translation in the screen plane
 			vec3 const tr = environment.camera.orientation() * vec3(tr_2D, 0.0f); 
 			vec3 new_pos = sphere_tool.c + tr; 
-
-			//TO DO: WRTIE THIS BETTER !
-			//make a function force_tool_in_grid
-			if (new_pos.x + sphere_tool.r0 >= 1.0f) new_pos.x = 1.0 - sphere_tool.r0;
-			if (new_pos.x - sphere_tool.r0 <= -1.0f) new_pos.x = -1.0 + sphere_tool.r0;
-			if (new_pos.y + sphere_tool.r0 >= 1.0f) new_pos.y = 1.0 - sphere_tool.r0;
-			if (new_pos.y - sphere_tool.r0 <= -1.0f) new_pos.y = -1.0 + sphere_tool.r0;
-			if (new_pos.z + sphere_tool.r0 >= 1.0f) new_pos.z = 1.0 - sphere_tool.r0;
-			if (new_pos.z - sphere_tool.r0 <= -1.0f) new_pos.z = -1.0 + sphere_tool.r0;
-
-			sphere_tool.c = new_pos; //the tool is moved in the screen space
+			set_tool_in_grid(new_pos, sphere_tool);
 
 			//we compute the velocity field and deform only when the mouse has moved a certain amount
 			vec2 const tr_2D_2 = inputs.mouse.position.current - inputs.mouse.position.previous; 
@@ -52,18 +42,7 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 		else {
 			
 			picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
-
-			//TO DO: -> adapt 2.0 to grid size
-			// write this better !!!! +  make a function
-			//stay in its place when outside the grid
-			if (picking.position.x + sphere_tool.r0 >= 1.0f) picking.position.x = 1.0 - sphere_tool.r0;
-			if (picking.position.x - sphere_tool.r0 <= -1.0f) picking.position.x = -1.0 + sphere_tool.r0;
-			if (picking.position.y + sphere_tool.r0 >= 1.0f) picking.position.y = 1.0 - sphere_tool.r0;
-			if (picking.position.y - sphere_tool.r0 <= -1.0f) picking.position.y = -1.0 + sphere_tool.r0;
-			if (picking.position.z + sphere_tool.r0 >= 1.0f) picking.position.z = 1.0 - sphere_tool.r0;
-			if (picking.position.z - sphere_tool.r0 <= -1.0f) picking.position.z = -1.0 + sphere_tool.r0;
-
-			sphere_tool.c = picking.position; //the tool is moved on the shape surface
+			set_tool_in_grid(picking.position, sphere_tool);
 		}
 	}
 

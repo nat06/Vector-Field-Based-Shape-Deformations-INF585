@@ -4,7 +4,6 @@
 using namespace cgp;
 
 //TO DO: COMMENT THE FONCTIONS
-//REMOVE THE cgp:: when useless
 
 
 bool are_equal(const cgp::vec3& v1, const cgp::vec3& v2) {
@@ -25,6 +24,17 @@ int C(int n, int k)
 	if (k == 0 || k == n) return 1;
 	int nCr = C(n - 1, k - 1) + C(n - 1, k);
 	return nCr;
+}
+
+void set_tool_in_grid(vec3& new_pos, sphere_tool_structure& sphere_tool) {
+	//set the tool position to new_pos and enforce it to be inside the grid boundaries
+	if (new_pos.x + sphere_tool.r0 >= 1.0f) new_pos.x = 1.0 - sphere_tool.r0;
+	if (new_pos.x - sphere_tool.r0 <= -1.0f) new_pos.x = -1.0 + sphere_tool.r0;
+	if (new_pos.y + sphere_tool.r0 >= 1.0f) new_pos.y = 1.0 - sphere_tool.r0;
+	if (new_pos.y - sphere_tool.r0 <= -1.0f) new_pos.y = -1.0 + sphere_tool.r0;
+	if (new_pos.z + sphere_tool.r0 >= 1.0f) new_pos.z = 1.0 - sphere_tool.r0;
+	if (new_pos.z - sphere_tool.r0 <= -1.0f) new_pos.z = -1.0 + sphere_tool.r0;
+	sphere_tool.c = new_pos;
 }
 
 
@@ -94,7 +104,7 @@ vec3 get_cell(const vec3& p, int N) {
 }
 
 
-vec3 trilinear_interpolation(cgp::vec3 const& p, cgp::vec3 const& cell, cgp::grid_3D<cgp::vec3> const& grid, cgp::grid_3D<cgp::vec3> const& v, int N)
+vec3 trilinear_interpolation(vec3 const& p, vec3 const& cell, grid_3D<vec3> const& grid, grid_3D<vec3> const& v, int N)
 {
 	// https://spie.org/samples/PM159.pdf, https://www.wikiwand.com/en/Trilinear_interpolation 
 	//vec3 cell = get_cell(p, N); // get lower left index of cell the point belongs to 
@@ -126,7 +136,6 @@ vec3 trilinear_interpolation(cgp::vec3 const& p, cgp::vec3 const& cell, cgp::gri
 }
 
 
-//TO DO: -> CHANGE THE PLACE OF THIS ?
 cgp::mesh laplacian_smoothing(cgp::mesh& shape, buffer<buffer<int>> one_ring) {
 	// complex implementation: http://rodolphe-vaillant.fr/entry/70/laplacian-smoothing-c-code-to-smooth-a-mesh, gave unstable results using the Explicit scheme
 	// simpler implementation based on: https://www.sciencedirect.com/topics/computer-science/laplacian-smoothing, implemented here
