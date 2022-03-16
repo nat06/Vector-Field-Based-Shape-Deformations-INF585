@@ -3,17 +3,22 @@ Reimplementation of the paper Vector Field Based Shape Deformations for Ecole Po
 
 TO DO LIST:
 
-- make a function for the tool to stay in the grid
-- plus de choix de mesh (+ peut etre la possibilite de les scale, + custom mesh ?)
-- display la bounding grid (voir un td qui le fait)
-- plus de choix de vitesse constante au milieu de la inner ball -> rotations avec les fleches 
-- bending ?
-- compilation instructions
-- nice github readme presentation
-- fancy shaders ?
-- camera zoom with molette de souris ?
-</br>
+- compilation instructions in a readme
+- (revoir instructions sur moodle)
+- pas de build ni d'executable
+- implement sculpting metaphor
 
+- make a function for the tool to stay in the grid -> scene.cpp l.33
+- scale and rotate the the meshes when initialized
+- if time: mettre outils pour scale les mesh (dans gui)
+- if time: cange color ? fancy shaders ?
+
+- FIX problem with arrow when using view_space
+- plus de choix de vitesse constante au milieu de la inner ball 
+- -> rotations avec les fleches ?
+- bending ?
+
+</br>
 
 _CODE CLEANUP_
 - remove useless arguments of fonctions
@@ -24,22 +29,8 @@ _CODE CLEANUP_
 
 _..._
 - more intuitive approach with the tool ?
-- check it is necessary to change velocity at each integration step
-=======
 - when moving without clicking: move the tool along the shape
-- when moving + shift + click: move the tool with a projection along the screen space
 - more intuitive approach with the tool
-- remove argument previous_tool_pos from the functions ?
-- remove require_normal_update (not sure)
-- display bounding box of the grid
-- more choices of meshes on the gui
-- bending ?
-- check it is necessary to change velocity at each integration step
-- keep deformer direction (view space, normal) + add mouse movement (add it on the gui too)
-- add a visual bounding box for the grid (add it on the gui too)
-- change the name of the timer => timer_update_velocity
->>>>>>> Stashed changes
-- add arrow for the velocity (en cours)
 - be able to make a bigger grid and generalize code for this
 
 </br>
@@ -61,3 +52,4 @@ _..._
 - fix problem with the normal
 - inverse normal
 - bounding box for the grid
+- camera zoom with molette de souris ?
