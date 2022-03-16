@@ -3,6 +3,7 @@ Reimplementation of the paper Vector Field Based Shape Deformations for Ecole Po
 
 TO DO LIST:
 
+- boutton gui pour trilinear interpolation
 - compilation instructions in a readme
 - (revoir instructions sur moodle)
 - pas de build ni d'executable
