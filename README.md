@@ -5,7 +5,7 @@ TO DO LIST:
 
 - compute the volume to make a table N
 - compute time of each deformation (ex: 10 steps) -> make a table 
-- boutton gui pour trilinear interpolation A
+- **~~boutton gui pour trilinear interpolation A~~**
 - compilation instructions in a readme N
 - (revoir instructions sur moodle) N
 - pas de build ni d'executable
