@@ -1,33 +1,30 @@
 TO DO LIST:
 
 -if the interactive
-	motion changes the position of the tool by ∆r, then the integration
-	inside the inner region moves the points by ∆r as well
+motion changes the position of the tool by ∆r, then the integration
+inside the inner region moves the points by ∆r as well
   -> FIX THIS
-  
-- fix the 'double' deformation problem
 
+- fix the 'double' deformation problem
 - fix problem with deformation painting
+- compute time of each deformation (ex: 10 steps) -> make a table 
+- add deformation GIF to README
+- fix the issue of 2 deformations per mouse left click
+- scale and rotate the the meshes when initialized N
+- (if time: mettre outils pour scale les mesh (dans gui)) 
+- if time: cange color ? fancy shaders ? N
+- plus de choix de vitesse constante au milieu de la inner ball  A
+- -> rotations avec les fleches ?
 - **~~update velocity visual along with changes in gui tool~~**
 - **~~compute the volume to make a table N~~**
-- compute time of each deformation (ex: 10 steps) -> make a table 
+- **~~FIX problem with arrow when using view_space A~~**
+- **~~implement sculpting metaphor A?~~**
+- **~~make a function for the tool to stay in the grid -> scene.cpp l.33 A~~**
 - **~~boutton gui pour trilinear interpolation A~~**
 - **~~boutton gui pour tool display~~**
 - **~~compilation instructions in a readme N~~**
 - **~~(revoir instructions sur moodle) N~~**
 - **~~pas de build ni d'executable~~**
-- add deformation GIF to README
-- fix the issue of 2 deformations per mouse left click
-
-- **~~implement sculpting metaphor A?~~**
-- **~~make a function for the tool to stay in the grid -> scene.cpp l.33 A~~**
-- scale and rotate the the meshes when initialized N
-- (if time: mettre outils pour scale les mesh (dans gui)) 
-- if time: cange color ? fancy shaders ? N
-
-- **~~FIX problem with arrow when using view_space A~~**
-- plus de choix de vitesse constante au milieu de la inner ball  A
-- -> rotations avec les fleches ?
 
 </br>
 
