@@ -263,7 +263,7 @@ void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 		shape = initialize_sphere();
 		// testing purposes
 		// float vol = volume_estimate(shape);
-		std::out << "original sphere volume: " << volume_estimate(shape) << std::endl;
+		std::cout << "original sphere volume: " << volume_estimate(shape) << std::endl;
 		//
 		break;
 	case surface_cube:
