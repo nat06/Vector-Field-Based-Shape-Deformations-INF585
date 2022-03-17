@@ -15,6 +15,7 @@ enum constant_velocity_direction {//TO DO: CHANGE THE NAMES OF THESE
 struct constant_velocity_structure {//might want to change the name
 	constant_velocity_direction type = direction_normal;   
 	cgp::vec3 dir = cgp::vec3(0, 0, 0);
+	float magnitude = 1;
 	//might want to add some stuff
 };
 

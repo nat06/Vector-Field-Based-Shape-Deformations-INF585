@@ -34,7 +34,6 @@ bool gui_parameters::display()
     new_surface |= ImGui::RadioButton("Head",ptr_surface_type, surface_mesh);
 	new_surface |= ImGui::RadioButton("Camel", ptr_surface_type, surface_mesh_2);
 	new_surface |= ImGui::RadioButton("Armadillo", ptr_surface_type, surface_mesh_3);
-	new_surface |= ImGui::RadioButton("Tyrannosaur", ptr_surface_type, surface_mesh_4);
 
 	ImGui::Text("\n Trilinear interpolation:"); // Select surface to be deformed
 	ImGui::Checkbox("activate", &bool_trilinear_interpolation);
@@ -42,6 +41,8 @@ bool gui_parameters::display()
 	ImGui::Text("\n Laplacian smoothing:"); // Select surface to be deformed
 	ImGui::Checkbox("activate", &laplacian_smoothing);
 	ImGui::SliderInt("steps", &smoothing_steps, 5, 30);
+
+	
 
 	return new_surface;
 }

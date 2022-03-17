@@ -18,8 +18,8 @@ mesh initialize_cylinder()
 }
 mesh initialize_sphere()
 {
-    int const N = 100;
-    float const radius = 0.75f;
+    int const N = 150;
+    float const radius = 0.5f;
     return mesh_primitive_sphere(radius, {0,0,0}, N, 2*N);
 }
 mesh initialize_cube()
@@ -59,20 +59,6 @@ mesh initialize_mesh_3() // this one does not work so well
 {
 	//std::string const filename = "assets/spoon.obj";
 	std::string const filename = "assets/armadillo.obj";
-	mesh shape = mesh_load_file_obj(filename);
-	for (auto& p : shape.position) {
-	p *= 0.5f;
-	p += vec3(0.5, -0.7, 0);
-	//TO DO : might want to rotate it too
-	}
-
-	return shape;
-}
-
-mesh initialize_mesh_4() // this one does not work so well
-{
-	//std::string const filename = "assets/spoon.obj";
-	std::string const filename = "assets/tyra.obj";
 	mesh shape = mesh_load_file_obj(filename);
 	for (auto& p : shape.position) {
 	p *= 0.5f;
