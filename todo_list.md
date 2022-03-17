@@ -6,14 +6,13 @@ TO DO LIST:
 - compute time of each deformation (ex: 10 steps) -> make a table 
 - **~~boutton gui pour trilinear interpolation A~~**
 - **~~boutton gui pour tool display~~**
-- compilation instructions in a readme N
-- (revoir instructions sur moodle) N
-- pas de build ni d'executable
-
+- **~~compilation instructions in a readme N~~**
+- **~~(revoir instructions sur moodle) N~~**
+- **~~pas de build ni d'executable~~**
+- add deformation GIF to README
 - fix the issue of 2 deformations per mouse left click
 
 - **~~implement sculpting metaphor A?~~**
-
 - **~~make a function for the tool to stay in the grid -> scene.cpp l.33 A~~**
 - scale and rotate the the meshes when initialized N
 - (if time: mettre outils pour scale les mesh (dans gui)) 

@@ -5,7 +5,7 @@ An Ecole Polytechnique INF585 - Computer Animation's final project.
 Implementation of the paper [Vector Field Based Shape Deformations](http://graphics.stanford.edu/courses/cs468-07-winter/Papers/fts-vfbsd-06.pdf) by Wolfram von Funck, Holger Theisel and Hans-Peter Seidel from MPI Informatik, with experiments.
 
 ## Credits
-Credits to the original authors of the paper for their approach as well as to Ecole Polytechnique Professor [Damien Rohmer](https://imagecomputing.net/damien.rohmer/) for C++ environment code provided in the context of the INF585 course.
+Credits go to the original authors of the paper for their approach and methodology as well as to Ecole Polytechnique Professor [Damien Rohmer](https://imagecomputing.net/damien.rohmer/) for C++ environment code provided in the context of the INF585 course.
 
 ## Running the project
 #### Compatible system
