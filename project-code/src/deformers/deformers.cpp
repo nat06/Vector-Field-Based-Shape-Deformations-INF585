@@ -1,28 +1,25 @@
 #include "deformers.hpp"
 #include "../utils.hpp"
 
-
 using namespace cgp;
 
 void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, grid_3D<vec3>&velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity, bool const& bool_trilinear_interpolation) {
+	// function performing the path line integration of mesh vertices to apply the vector field based deformation of the mesh
 	
 	size_t const N = shape.position.size();
-	vec3 ref = { -100, -100, -100 }; // to check if point is in [-1, 1] grid
-	size_t const N_substeps = 10; // integration substeps
+	vec3 ref = { -100, -100, -100 }; // flag to check if point is in [-1, 1] grid
+	size_t const N_substeps = 10;    // integration substeps
 	
 	for (size_t k_substep = 0; k_substep < N_substeps; ++k_substep) {
-		for (size_t k = 0; k < N; ++k)
-		{
+		for (size_t k = 0; k < N; ++k){
 			vec3& p_shape = shape.position[k];                             // position to deform
 			vec3 const& p_shape_original = position_before_deformation[k]; // reference position before deformation
 
 			vec3 cell = get_cell(p_shape, velocity.dimension[0]);
-			if (!are_equal(cell, ref)) { // if point is in grid
-
+			if (!are_equal(cell, ref)) { 	// if point is in grid
 				float const dt = 0.005f;
 				float a = 1;
-				if (constant_velocity.type == direction_mouse_movement) a = 1;//probably useless
-
+				if (constant_velocity.type == direction_mouse_movement) a = 1;
 				vec3 v;
 				if (bool_trilinear_interpolation) { 
 					v = trilinear_interpolation(p_shape, cell, grid, velocity, velocity.dimension[0]);
@@ -32,11 +29,9 @@ void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, gr
 				}
 
 				p_shape = p_shape + a * dt * v;
-				//p_shape = p_shape + a* dt * trilinear_interpolation(p_shape, cell, grid, velocity, velocity.dimension[0]);
 
 				/*bool simulation_diverged = detect_simulation_divergence(cloth.forces, cloth.position);
-				if (simulation_diverged == true)
-				{
+				if (simulation_diverged == true){
 					std::cerr << " **** Simulation has diverged **** " << std::endl;
 					std::cerr << " > Stop simulation iterations" << std::endl;
 					user.gui.run = false;
@@ -45,8 +40,7 @@ void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, gr
 			}
 		}
 		//update_velocity_field(velocity, grid, sphere_tool, constant_velocity); //now update the velocity
-		float vol = volume_estimate(shape);
-		std::cout << "volume after deformation: " << vol << std::endl;
+		std::cout << "volume after deformation: " << volume_estimate(shape) << std::endl;
 	}
 }
 
@@ -112,7 +106,6 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 					vec3 nabla_b = db_dr * nabla_r;
 					vec3 nabla_1 = (1 - b) * nabla_e - e * nabla_b;
 					vec3 nabla_2 = (1 - b) * nabla_f - f * nabla_b;
-
 					velocity(kx, ky, kz) = cross(nabla_1, nabla_2);
 				}
 			}
@@ -120,16 +113,10 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 	}
 }
 
-
-
-
-void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& velocity_grid_data, grid_3D<vec3> const& velocity, grid_3D<vec3>& grid, float scale)
-{
-	//TO DO: put it at the center of each cube
+void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& velocity_grid_data, grid_3D<vec3> const& velocity, grid_3D<vec3>& grid, float scale){
 	int const N = int(velocity.dimension.x);
 	float const dL = 2.0f / (N - 1.0f);
 	float const lambda = 0.01f * scale;
-
 	float offset = 0;
 	for (int kx = 0; kx < N; ++kx) {
 		for (int ky = 0; ky < N; ++ky) {
@@ -148,13 +135,6 @@ void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& ve
 
 	velocity_visual.update(velocity_grid_data);
 }
-
-
-
-
-
-
-
 
 //TO DO (AT THE END): REMOVE THIS FUNCTION
 //void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformation, vec2 const& translate_screen, vec3 const& picked_position, vec3 const& picked_normal, rotation_transform const& camera_orientation, deformer_parameters_structure const& deformer_parameters)
