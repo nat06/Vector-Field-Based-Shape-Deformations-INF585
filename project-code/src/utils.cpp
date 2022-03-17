@@ -162,3 +162,17 @@ cgp::mesh laplacian_smoothing(cgp::mesh& shape, buffer<buffer<int>> one_ring) {
 	}
 	return newShape;
 }
+
+float volume_estimate(cgp::mesh &shape){
+	// function returning the volume of a mesh
+	float sum = 0.0;
+	for (int i = 0; i < shape.connectivity.size(); i++)
+	{ // iterate over the mesh triangles
+		vec3 p1 = shape.position(shape.connectivity(i)[0]);
+		vec3 p2 = shape.position(shape.connectivity(i)[1]);
+		vec3 p3 = shape.position(shape.connectivity(i)[2]);
+		sum += (dot(cross(p1, p2), p3));
+	}
+	sum = (1.0 / 6.0) * std::abs(sum);
+	return sum;
+}

@@ -12,4 +12,5 @@ cgp::mesh laplacian_smoothing(cgp::mesh& shape, cgp::buffer<cgp::buffer<int>> on
 void set_tool_in_grid(cgp::vec3& new_pos, sphere_tool_structure& sphere_tool);
 float bernstein(int n, int k, float x);
 int C(int n, int k);
-bool are_equal(const cgp::vec3& v1, const cgp::vec3& v2);//might want to change the place of this
+bool are_equal(const cgp::vec3& v1, const cgp::vec3& v2); //might want to change the place of this
+float volume_estimate(cgp::mesh &shape);

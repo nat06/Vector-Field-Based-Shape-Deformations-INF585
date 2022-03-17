@@ -39,7 +39,7 @@ bool gui_parameters::display()
 	ImGui::Checkbox("activate", &bool_trilinear_interpolation);
 	
 	ImGui::Text("\n Laplacian smoothing:"); // Select surface to be deformed
-	ImGui::Checkbox("activat", &laplacian_smoothing);
+	ImGui::Checkbox("activate", &laplacian_smoothing);
 	ImGui::SliderInt("steps", &smoothing_steps, 5, 30);
 
 	

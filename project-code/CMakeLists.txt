@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.8)
 
 # Relative path to the library
 # => Adapt this directory to your relative path if needed
-set(PATH_TO_LIBRARY "../../../library/CMakeLists.txt") 
+set(PATH_TO_LIBRARY "../library/CMakeLists.txt") 
 
 # Check that the path to the library is correct
 get_filename_component(ABS_PATH_TO_LIBRARY ${PATH_TO_LIBRARY} ABSOLUTE)

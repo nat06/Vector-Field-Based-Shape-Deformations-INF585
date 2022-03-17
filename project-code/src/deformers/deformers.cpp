@@ -45,6 +45,8 @@ void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, gr
 			}
 		}
 		//update_velocity_field(velocity, grid, sphere_tool, constant_velocity); //now update the velocity
+		float vol = volume_estimate(shape);
+		std::out << "volume after deformation: " << vol << std::endl;
 	}
 }
 

@@ -1,5 +1,5 @@
 #include "scene.hpp"
-
+#include "utils.hpp" // for testing purposes only
 
 using namespace cgp;
 
@@ -261,6 +261,10 @@ void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 		break;
 	case surface_sphere:
 		shape = initialize_sphere();
+		// testing purposes
+		// float vol = volume_estimate(shape);
+		std::out << "original sphere volume: " << volume_estimate(shape) << std::endl;
+		//
 		break;
 	case surface_cube:
 		shape = initialize_cube();
