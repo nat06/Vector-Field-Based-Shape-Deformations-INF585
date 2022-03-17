@@ -101,8 +101,8 @@ void mouse_click_callback(GLFWwindow* /*window*/, int button, int action, int /*
 
 	if(button==GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 		scene.mouse_left_released();
-
-	scene.mouse_click(inputs);
+	else
+		scene.mouse_click(inputs);
 }
 
 void mouse_scroll_callback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset)

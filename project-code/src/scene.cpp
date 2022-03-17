@@ -47,7 +47,7 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 					vec3 const tr_2 = environment.camera.orientation() * vec3(tr_2D_2, 0.0f);
 					gui.constant_velocity_parameters.dir = normalize(tr_2);
 					deforming_shape.require_deformation = true;
-					if (gui.laplacian_smoothing) deforming_shape.require_smoothing = true;
+					if (gui.bool_laplacian_smoothing) deforming_shape.require_smoothing = true;
 					gui.constant_velocity_parameters.magnitude = norm(tr_2);
 					previous_mouse_position = inputs.mouse.position.current;
 				}
@@ -64,7 +64,7 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 				if (norm(previous_tool_position - sphere_tool.c) > sphere_tool.r0/10) { // we only update  evrytime it makes a cerain distance
 					std::cout << "ayoo" << std::endl;
 					deforming_shape.require_deformation = true;
-					if (gui.laplacian_smoothing) deforming_shape.require_smoothing = true;
+					if (gui.bool_laplacian_smoothing) deforming_shape.require_smoothing = true;
 					previous_tool_position = sphere_tool.c;
 					gui.constant_velocity_parameters.magnitude = 0.001;
 				}
@@ -204,15 +204,15 @@ void scene_structure::display()
 		previous_tool_pos = sphere_tool.c;//update previous tool position //make sure this is useful
 		deforming_shape.require_deformation = false;
 
-		if (gui.laplacian_smoothing) {
+		if (gui.bool_laplacian_smoothing) {
 			std::cout << "yolooo" << std::endl;
 			deforming_shape.require_smoothing = true;
 		}
 	}
 	
 	// Laplacian smoothing: TO DO: FIX THIS
-	if (!previous_laplacian_smoothing && gui.laplacian_smoothing) deforming_shape.require_smoothing = true; //the button laplacian smoothing was just clicked, so we update
-	previous_laplacian_smoothing = gui.laplacian_smoothing;
+	if (!previous_laplacian_smoothing && gui.bool_laplacian_smoothing) deforming_shape.require_smoothing = true; //the button laplacian smoothing was just clicked, so we update
+	previous_laplacian_smoothing = gui.bool_laplacian_smoothing;
 													
 	if (deforming_shape.require_smoothing) {
 		std::cout << "laplaciaaan" << std::endl;
@@ -234,7 +234,7 @@ void scene_structure::display()
 	display_tool(); 
 	display_velocity(); //vector field
 
-	previous_laplacian_smoothing = gui.laplacian_smoothing;
+	previous_laplacian_smoothing = gui.bool_laplacian_smoothing;
 
 }
 
