@@ -3,7 +3,8 @@ Reimplementation of the paper Vector Field Based Shape Deformations for Ecole Po
 
 TO DO LIST:
 
-- update velocity visual along with changes in gui tool
+- fix problem with deformation painting
+- **~~update velocity visual along with changes in gui tool~~**
 - compute the volume to make a table N
 - compute time of each deformation (ex: 10 steps) -> make a table 
 - **~~boutton gui pour trilinear interpolation A~~**
