@@ -1,5 +1,12 @@
 TO DO LIST:
 
+-if the interactive
+	motion changes the position of the tool by ∆r, then the integration
+	inside the inner region moves the points by ∆r as well
+  -> FIX THIS
+  
+- fix the 'double' deformation problem
+
 - fix problem with deformation painting
 - **~~update velocity visual along with changes in gui tool~~**
 - **~~compute the volume to make a table N~~**
