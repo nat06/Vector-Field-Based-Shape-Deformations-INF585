@@ -10,6 +10,8 @@ TO DO LIST:
 - (revoir instructions sur moodle) N
 - pas de build ni d'executable
 
+- fix the issue of 2 deformations per mouse left click
+
 - **~~implement sculpting metaphor A?~~**
 
 - **~~make a function for the tool to stay in the grid -> scene.cpp l.33 A~~**
@@ -20,7 +22,6 @@ TO DO LIST:
 - **~~FIX problem with arrow when using view_space A~~**
 - plus de choix de vitesse constante au milieu de la inner ball  A
 - -> rotations avec les fleches ?
-- bending ?
 
 </br>
 
