@@ -1,5 +1,5 @@
 #include "scene.hpp"
-#include "utils.hpp" // for testing purposes only
+#include "utils.hpp"
 
 using namespace cgp;
 
@@ -240,7 +240,6 @@ void scene_structure::mouse_scroll(float scroll_offset)
 	//should be useless now -> already used for camera zoom
 }
 
-
 void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 {
 	// Create a new shape based on the gui indication type_of_surface
@@ -255,10 +254,6 @@ void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 		break;
 	case surface_sphere:
 		shape = initialize_sphere();
-		// testing purposes
-		// float vol = volume_estimate(shape);
-		std::cout << "original sphere volume: " << volume_estimate(shape) << std::endl;
-		//
 		break;
 	case surface_cube:
 		shape = initialize_cube();
@@ -272,13 +267,16 @@ void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 	case surface_mesh_3:
 		shape = initialize_mesh_3();
 		break;
-	//TO DO: only use one function initialize_mesh with a filename argument
+	case surface_mesh_4:
+		shape = initialize_mesh_4();
+		break;
+		// TO DO: only use one function initialize_mesh with a filename argument
 	}
 
 	// Clear previous surface before seting the values of the new one
 	visual.clear();
 	visual.initialize(shape, "Shape");
-
+	std::cout << "Original shape volume: " << mesh_volume(shape) << std::endl;
 	one_ring = connectivity_one_ring(shape.connectivity); // to do: extract & store so it doesn't get recomputed each time
 
 	position_saved = shape.position;

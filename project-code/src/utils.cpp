@@ -163,7 +163,7 @@ cgp::mesh laplacian_smoothing(cgp::mesh& shape, buffer<buffer<int>> one_ring) {
 	return newShape;
 }
 
-float volume_estimate(cgp::mesh &shape){
+float mesh_volume(cgp::mesh &shape){
 	// function returning the volume of a mesh
 	float sum = 0.0;
 	for (int i = 0; i < shape.connectivity.size(); i++)

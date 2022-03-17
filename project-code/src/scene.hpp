@@ -75,8 +75,8 @@ struct scene_structure {
 
 	cgp::segments_drawable velocity_visual; //visual representation of the velocity vector field
 
-	cgp::vec3 prev_direction; //USELESS ?
-	cgp::vec3 constant_vel; //USELESS ?
+	cgp::vec3 prev_direction;
+	cgp::vec3 constant_vel;
 
 	//sphere_tool elements -> might want to make a structure for this !
 	sphere_tool_structure sphere_tool;
@@ -86,8 +86,8 @@ struct scene_structure {
 	cgp::vec3 previous_tool_pos;
 
 
-	//cgp::timer_event_periodic timer;//USELESS
-	enum constant_velocity_direction velocity_dir_type;//USELESS
+	//cgp::timer_event_periodic timer;
+	enum constant_velocity_direction velocity_dir_type;
 
 	bool previous_laplacian_smoothing;//gui button boolean at the previous display call
 	bool previous_interactive_deformation;//deformatiyon with movement of the mouse
@@ -95,8 +95,4 @@ struct scene_structure {
 	cgp::vec3 previous_tool_position;
 	bool require_update_velocity;
 };
-
-
-
-
 
