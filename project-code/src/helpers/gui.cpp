@@ -34,6 +34,8 @@ bool gui_parameters::display()
     new_surface |= ImGui::RadioButton("Head",ptr_surface_type, surface_mesh);
 	new_surface |= ImGui::RadioButton("Camel", ptr_surface_type, surface_mesh_2);
 	new_surface |= ImGui::RadioButton("Armadillo", ptr_surface_type, surface_mesh_3);
+	new_surface |= ImGui::RadioButton("Tyrannosaur", ptr_surface_type, surface_mesh_4);
+	new_surface |= ImGui::RadioButton("Spoon", ptr_surface_type, surface_mesh_5);
 
 	ImGui::Text("\n Trilinear interpolation:"); // Select surface to be deformed
 	ImGui::Checkbox("activate", &bool_trilinear_interpolation);

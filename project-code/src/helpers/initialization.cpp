@@ -24,52 +24,85 @@ mesh initialize_sphere()
 }
 mesh initialize_cube()
 {
-    int const N=40;
+    int const N = 40;
     return mesh_primitive_cubic_grid({0,0,0},{1,0,0},{1,1,0},{0,1,0}, {0,0,1},{1,0,1},{1,1,1},{0,1,1}, N, N, N);
 }
 mesh initialize_mesh()
 {    
     std::string const filename = "assets/face.obj";
-    mesh shape = mesh_load_file_obj(filename);
-    for(auto& p : shape.position) 
-        p *= 0.5f;
-    return shape;
+	rotation_transform R1 = rotation_transform::from_axis_angle({1, 0, 0}, Pi / 2);
+	rotation_transform R2 = rotation_transform::from_axis_angle({0, 1, 0}, Pi / 2);
+	rotation_transform R = R1 * R2;
+	mesh shape = mesh_load_file_obj(filename);
+    for(auto& p : shape.position){
+		// p += vec3(0, 0, 0);
+		p *= 0.4f;
+		p = R * p;
+	}
+	return shape;
 }
-
-//mesh initialize_mesh(std::string const filename)
-//{
-//	std::string const filename = "assets/face.obj";
-//	mesh shape = mesh_load_file_obj(filename);
-//	for (auto& p : shape.position)
-//		p *= 0.5f;
-//	return shape;
-//}
 
 mesh initialize_mesh_2()
 {
-	//std::string const filename = "assets/camel.obj";
 	std::string const filename = "assets/camel.obj";
 	mesh shape = mesh_load_file_obj(filename);
-	for (auto& p : shape.position)
-		p *= 0.5f;
+	for (auto& p : shape.position){
+		p *= 0.4f;
+		p += vec3(0, -0.1, 0);
+	}
 	return shape;
 }
 
-mesh initialize_mesh_3() // this one does not work so well
+mesh initialize_mesh_3()
 {
-	//std::string const filename = "assets/spoon.obj";
 	std::string const filename = "assets/armadillo.obj";
+	rotation_transform R1 = rotation_transform::from_axis_angle({1, 0, 0}, Pi / 2);
+	rotation_transform R2 = rotation_transform::from_axis_angle({0, -1, 0}, Pi / 2);
+	rotation_transform R = R1 * R2;
 	mesh shape = mesh_load_file_obj(filename);
 	for (auto& p : shape.position) {
-	p *= 0.5f;
-	p += vec3(0.5, -0.7, 0);
-	//TO DO : might want to rotate it too
+		p *= 0.5f;
+		p += vec3(0, -0.2, 0);
+		p = R * p;
 	}
-
 	return shape;
 }
 
+mesh initialize_mesh_4(){
+	std::string const filename = "assets/tyra.obj";
+	mesh shape = mesh_load_file_obj(filename);
+	rotation_transform R = rotation_transform::from_axis_angle({1, 0, 0}, Pi / 2);
+	for (auto& p : shape.position) {
+	p *= 0.45f;
+	// p += vec3(0, 0, 0);
+	p = R * p;
+	}
+	return shape;
+}
 
+mesh initialize_mesh_5(){
+	std::string const filename = "assets/spoon.obj";
+	mesh shape = mesh_load_file_obj(filename);
+	rotation_transform R = rotation_transform::from_axis_angle({1, 0, 0}, Pi / 2);
+	for (auto& p : shape.position) {
+	p *= 0.40f;
+	p += vec3(0.5, -0.4, 0);
+	p = R * p;
+	}
+	return shape;
+}
+
+// mesh initialize_mesh_6(){
+// 	std::string const filename = "assets/spoon.obj";
+// 	mesh shape = mesh_load_file_obj(filename);
+// 	rotation_transform R = rotation_transform::from_axis_angle({1, 0, 0}, Pi / 2);
+// 	for (auto& p : shape.position) {
+// 	p *= 0.40f;
+// 	p += vec3(0.5, -0.4, 0);
+// 	p = R * p;
+// 	}
+// 	return shape;
+// }
 
 grid_3D<vec3> initialize_grid(int N)
 {

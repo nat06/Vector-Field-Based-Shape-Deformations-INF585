@@ -9,10 +9,9 @@ inside the inner region moves the points by ∆r as well
 - fix problem with deformation painting
 - compute time of each deformation (ex: 10 steps) -> make a table 
 - add deformation GIF to README
-- fix the issue of 2 deformations per mouse left click
-- scale and rotate the the meshes when initialized N
+- scale and rotate the meshes when initialized N
 - (if time: mettre outils pour scale les mesh (dans gui)) 
-- if time: cange color ? fancy shaders ? N
+- if time: change color ? fancy shaders ? N
 - plus de choix de vitesse constante au milieu de la inner ball  A
 - -> rotations avec les fleches ?
 - **~~update velocity visual along with changes in gui tool~~**
