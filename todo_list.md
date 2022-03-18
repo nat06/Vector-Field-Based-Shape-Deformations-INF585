@@ -1,4 +1,4 @@
-TO DO LIST:
+## TO DO LIST:
 
 -if the interactive
 motion changes the position of the tool by ∆r, then the integration
@@ -7,7 +7,7 @@ inside the inner region moves the points by ∆r as well
 
 - **~~fix the 'double' deformation problem~~**
 - fix problem with deformation painting
-- compute time of each deformation (ex: 10 steps) -> make a table 
+- compute time of each deformation (ex: 10 steps) -> make a table
 - add deformation GIF to README
 - **~~scale and rotate the meshes when initialized N~~**
 - if time: change color ? fancy shaders ? N
@@ -30,14 +30,6 @@ _CODE CLEANUP_
 - remove useless arguments of fonctions
 - remove useless variables
 - rename unclear variables
-- bending ?
-</br>
-
-_..._
-- more intuitive approach with the tool ?
-- when moving without clicking: move the tool along the shape
-- more intuitive approach with the tool
-- be able to make a bigger grid and generalize code for this
 
 </br>
 **DONE:**

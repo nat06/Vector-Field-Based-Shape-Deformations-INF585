@@ -51,7 +51,7 @@ void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, gr
 			}
 		}
 	//}
-	std::cout << "volume after deformation: " << mesh_volume(shape) << std::endl;
+	std::cout << "Volume after deformation: " << mesh_volume(shape) << std::endl;
 }
 
 void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity){

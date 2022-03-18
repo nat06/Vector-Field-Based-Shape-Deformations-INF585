@@ -162,8 +162,7 @@ cgp::mesh laplacian_smoothing(cgp::mesh& shape, buffer<buffer<int>> one_ring) {
 float mesh_volume(cgp::mesh& shape) {
 	// function returning the volume of a mesh
 	float sum = 0.0;
-	for (int i = 0; i < shape.connectivity.size(); i++)
-	{ // iterate over the mesh triangles
+	for (int i = 0; i < shape.connectivity.size(); i++) { // iterate over the mesh triangles
 		vec3 p1 = shape.position(shape.connectivity(i)[0]);
 		vec3 p2 = shape.position(shape.connectivity(i)[1]);
 		vec3 p3 = shape.position(shape.connectivity(i)[2]);
