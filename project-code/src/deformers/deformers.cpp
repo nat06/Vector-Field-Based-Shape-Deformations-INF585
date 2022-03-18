@@ -1,7 +1,6 @@
 ﻿#include "deformers.hpp"
 #include "../utils.hpp"
 
-
 using namespace cgp;
 
 void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, grid_3D<vec3>&velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity, bool const& bool_trilinear_interpolation) {
@@ -10,7 +9,6 @@ void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, gr
 	vec3 ref = { -100, -100, -100 }; // to check if point is in [-1, 1] grid
 	size_t const N_substeps = 1; // integration substeps
 	
-
 	//TO DO: FIX THIS !!!!!!!!!!
 	/*if the interactive
 	motion changes the position of the tool by ∆r, then the integration
@@ -56,8 +54,7 @@ void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, gr
 	std::cout << "volume after deformation: " << mesh_volume(shape) << std::endl;
 }
 
-void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity)
-{
+void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity){
 	//see appendix of the paper for the formulas derivation
 	int const N = int(velocity.dimension.x);
 	vec3 nabla_p;
@@ -73,13 +70,10 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 				vec3 const p0 = grid(kx, ky, kz); 
 				float r_x = norm(sphere_tool.c - p0);
 
-				if (r_x > sphere_tool.r0) //enforce 0 velocity outside the sphere tool
-				{
+				if (r_x > sphere_tool.r0){ //enforce 0 velocity outside the sphere tool
 					velocity(kx, ky, kz) = vec3(0, 0, 0);
 				}
-				else 
-				{
-
+				else{
 					u = vec3(1, 0, 0);
 					if (norm(constant_velocity.dir) > 0) u = orthogonal_vector(normalize(constant_velocity.dir));
 					w = cross(constant_velocity.dir, u);
@@ -126,20 +120,16 @@ void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, s
 	}
 }
 
-
-
-
-void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& velocity_grid_data, grid_3D<vec3> const& velocity, grid_3D<vec3>& grid, float scale)
-{
-	//TO DO: put it at the center of each cube
+void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& velocity_grid_data, grid_3D<vec3> const& velocity, grid_3D<vec3>& grid, float scale){
+	// TO DO: put it at the center of each cube
 	int const N = int(velocity.dimension.x);
 	float const dL = 2.0f / (N - 1.0f);
 	float const lambda = 0.01f * scale;
-
 	float offset = 0;
+
 	for (int kx = 0; kx < N; ++kx) {
 		for (int ky = 0; ky < N; ++ky) {
-			for (int kz = 0; kz < N; ++kz) {
+			for (int kz = 0; kz < N; ++kz){
 				//vec3 const p0 = { -1 + kx * dL, -1 + ky * dL, 1e-4f };
 				float c = 1.0 / (2.0 * N);
 				vec3 const p0 = grid(kx, ky, kz) + vec3(c, c, c);
@@ -151,16 +141,8 @@ void update_velocity_visual(segments_drawable& velocity_visual, buffer<vec3>& ve
 			}
 		}
 	}
-
 	velocity_visual.update(velocity_grid_data);
 }
-
-
-
-
-
-
-
 
 //TO DO (AT THE END): REMOVE THIS FUNCTION
 //void apply_deformation(mesh& shape, buffer<vec3> const& position_before_deformation, vec2 const& translate_screen, vec3 const& picked_position, vec3 const& picked_normal, rotation_transform const& camera_orientation, deformer_parameters_structure const& deformer_parameters)

@@ -5,7 +5,6 @@
 // Custom scene of this code
 #include "scene.hpp"
 
-
 // *************************** //
 // Global Variables
 // *************************** //
@@ -19,19 +18,14 @@ cgp::inputs_interaction_parameters inputs;
 // The custom structure of the current scene defined in "scene.hpp"
 scene_structure scene;
 
-
-
-
 // *************************** //
 // Start of the program
 // *************************** //
 
 GLFWwindow* standard_window_initialization(int width, int height);
 
-int main(int, char* argv[])
-{
+int main(int, char* argv[]){
 	std::cout << "Run " << argv[0] << std::endl;
-
 
 	// ************************ //
 	//     INITIALISATION
@@ -44,7 +38,6 @@ int main(int, char* argv[])
 	std::cout << "Initialize data of the scene ..." << std::endl;
 	scene.initialize();                                              
 	std::cout << "Initialization success" << std::endl;
-
 
 	// ************************ //
 	//     Animation Loop
@@ -74,29 +67,21 @@ int main(int, char* argv[])
 	return 0;
 }
 
-
-
 // This function is called everytime the window is resized
-void window_size_callback(GLFWwindow* , int width, int height)
-{
+void window_size_callback(GLFWwindow* , int width, int height){
 	inputs.window = { width, height };
 }
 
 // This function is called everytime the mouse is moved
-void mouse_move_callback(GLFWwindow* /*window*/, double xpos, double ypos)
-{
+void mouse_move_callback(GLFWwindow* /*window*/, double xpos, double ypos){
 	inputs.mouse_position_update( { xpos, ypos } );
-
 	scene.mouse_move(inputs);
 	if(!inputs.keyboard.shift)
-		camera_standard_behavior_rotation_trackball(scene.environment.camera, inputs);
-
-	
+		camera_standard_behavior_rotation_trackball(scene.environment.camera, inputs);	
 }
 
 // This function is called everytime a mouse button is clicked/released
-void mouse_click_callback(GLFWwindow* /*window*/, int button, int action, int /*mods*/)
-{
+void mouse_click_callback(GLFWwindow* /*window*/, int button, int action, int /*mods*/){
 	inputs.mouse.click.update_from_glfw_click(button, action);
 
 	if(button==GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
@@ -105,22 +90,19 @@ void mouse_click_callback(GLFWwindow* /*window*/, int button, int action, int /*
 		scene.mouse_click(inputs);
 }
 
-void mouse_scroll_callback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset)
-{
+void mouse_scroll_callback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset){
 	scene.mouse_scroll(yoffset);
 	scene.environment.camera.manipulator_scale_distance_to_center(-yoffset/10);
 	//TO DO: CAMERA ZOOM
 }
 
 // This function is called everytime a keyboard touch is pressed/released
-void keyboard_callback(GLFWwindow* /*window*/, int key, int , int action, int /*mods*/)
-{
+void keyboard_callback(GLFWwindow* /*window*/, int key, int , int action, int /*mods*/){
 	inputs.keyboard.update_from_glfw_key(key, action);
 }
 
 // Standard initialization procedure
-GLFWwindow* standard_window_initialization(int width, int height)
-{
+GLFWwindow* standard_window_initialization(int width, int height){
 	// Update storage for window size for the scene
 	inputs.window = { width, height };
 
@@ -145,5 +127,3 @@ GLFWwindow* standard_window_initialization(int width, int height)
 
 	return window;
 }
-
-

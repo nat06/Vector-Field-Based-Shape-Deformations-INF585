@@ -1,9 +1,7 @@
 #pragma once
-
-
 #include "cgp/cgp.hpp"
 
-enum constant_velocity_direction {//TO DO: CHANGE THE NAMES OF THESE
+enum constant_velocity_direction { //TO DO: CHANGE THE NAMES OF THESE
 	direction_view,
 	direction_normal,
 	direction_inverse_normal,
@@ -12,7 +10,7 @@ enum constant_velocity_direction {//TO DO: CHANGE THE NAMES OF THESE
 	deformation_painting_inverse
 };
 
-struct constant_velocity_structure {//might want to change the name
+struct constant_velocity_structure { //might want to change the name
 	constant_velocity_direction type = direction_normal;   
 	cgp::vec3 dir = cgp::vec3(0, 0, 0);
 	float magnitude = 1;
@@ -27,12 +25,9 @@ struct sphere_tool_structure{
 	float ri;
 };
 
-
 void integrate(cgp::mesh& shape, cgp::buffer<cgp::vec3> const& position_before_deformation, cgp::grid_3D<cgp::vec3>& velocity, cgp::grid_3D<cgp::vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity, bool const& bool_trilinear_interpolation);
 void update_velocity_field(cgp::grid_3D<cgp::vec3>& velocity, cgp::grid_3D<cgp::vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity);
 void update_velocity_visual(cgp::segments_drawable& velocity_visual, cgp::buffer<cgp::vec3>& velocity_grid_data, cgp::grid_3D<cgp::vec3> const& velocity, cgp::grid_3D<cgp::vec3>& grid, float scale);
-
-
 
 // TO REMOVE
 //enum deformer_type_enum {

@@ -5,7 +5,6 @@ using namespace cgp;
 
 //TO DO: COMMENT THE FONCTIONS
 
-
 bool are_equal(const cgp::vec3& v1, const cgp::vec3& v2) {
 	if (v1.size() != v2.size()) { return false; }
 	for (int i = 0; i < v1.size(); i++) {
@@ -36,7 +35,6 @@ void set_tool_in_grid(vec3& new_pos, sphere_tool_structure& sphere_tool) {
 	if (new_pos.z - sphere_tool.r0 <= -1.0f) new_pos.z = -1.0 + sphere_tool.r0;
 	sphere_tool.c = new_pos;
 }
-
 
 vec3 get_cell(const vec3& p, int N) {
 	// returns lower left corner indices of the cell point p belongs to
@@ -103,7 +101,6 @@ vec3 get_cell(const vec3& p, int N) {
 	return { int(index_x), int(index_y), int(index_z) };
 }
 
-
 vec3 trilinear_interpolation(vec3 const& p, vec3 const& cell, grid_3D<vec3> const& grid, grid_3D<vec3> const& v, int N)
 {
 	// https://spie.org/samples/PM159.pdf, https://www.wikiwand.com/en/Trilinear_interpolation 
@@ -135,7 +132,6 @@ vec3 trilinear_interpolation(vec3 const& p, vec3 const& cell, grid_3D<vec3> cons
 	// ! watch out for rightmost corner.
 }
 
-
 cgp::mesh laplacian_smoothing(cgp::mesh& shape, buffer<buffer<int>> one_ring) {
 	// complex implementation: http://rodolphe-vaillant.fr/entry/70/laplacian-smoothing-c-code-to-smooth-a-mesh, gave unstable results using the Explicit scheme
 	// simpler implementation based on: https://www.sciencedirect.com/topics/computer-science/laplacian-smoothing, implemented here
@@ -162,7 +158,6 @@ cgp::mesh laplacian_smoothing(cgp::mesh& shape, buffer<buffer<int>> one_ring) {
 	}
 	return newShape;
 }
-
 
 float mesh_volume(cgp::mesh& shape) {
 	// function returning the volume of a mesh

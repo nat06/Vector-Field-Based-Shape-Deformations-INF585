@@ -5,12 +5,11 @@ motion changes the position of the tool by ∆r, then the integration
 inside the inner region moves the points by ∆r as well
   -> FIX THIS
 
-- fix the 'double' deformation problem
+- **~~fix the 'double' deformation problem~~**
 - fix problem with deformation painting
 - compute time of each deformation (ex: 10 steps) -> make a table 
 - add deformation GIF to README
-- scale and rotate the meshes when initialized N
-- (if time: mettre outils pour scale les mesh (dans gui)) 
+- **~~scale and rotate the meshes when initialized N~~**
 - if time: change color ? fancy shaders ? N
 - plus de choix de vitesse constante au milieu de la inner ball  A
 - -> rotations avec les fleches ?

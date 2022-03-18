@@ -1,6 +1,5 @@
 #include "scene.hpp"
 
-
 using namespace cgp;
 
 void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& inputs)//TO DO: function description
@@ -8,17 +7,12 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 	// Current position of the mouse
 	vec2 const& p = inputs.mouse.position.current;
 
-	
-
 	if (gui.constant_velocity_parameters.type == direction_view && inputs.mouse.click.left) {
 		require_update_velocity = true; 
 	}
 
-	if (inputs.keyboard.shift)
-	{
+	if (inputs.keyboard.shift){
 		require_update_velocity = true; //TO DO: MAKE SURE ABOUT THIS !
-		
-
 		
 		// If the mouse is not clicked, compute a picking on the vertices of the mesh
 		if (!inputs.mouse.click.left)
@@ -26,24 +20,22 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 
 		// Apply Deformation: press on shift key + left click on the mouse when a vertex is already selected
 		if (inputs.mouse.click.left && picking.active){
-
-
-			if (!previous_interactive_deformation) { //FIX THIS
-				previous_mouse_position = inputs.mouse.position.current;// this just started!
+			if (!previous_interactive_deformation){ //FIX THIS
+				previous_mouse_position = inputs.mouse.position.current;
 				previous_tool_position = sphere_tool.c;
 				previous_interactive_deformation = true;
 				std::cout << "preevious"<<std::endl;
 			}
 
-			if (gui.constant_velocity_parameters.type == direction_mouse_movement) {
+			if (gui.constant_velocity_parameters.type == direction_mouse_movement){
 				vec2 const tr_2D = inputs.mouse.position.current - inputs.mouse.position.previous; // translation in the screen plane
 				vec3 const tr = environment.camera.orientation() * vec3(tr_2D, 0.0f);
 				vec3 new_pos = sphere_tool.c + tr;
 				set_tool_in_grid(new_pos, sphere_tool);
 
-				//we compute the velocity field and deform only when the mouse has moved a certain amount
+				// we compute the velocity field and deform only when the mouse has moved a certain amount
 				vec2 const tr_2D_2 = inputs.mouse.position.current - inputs.mouse.position.previous;
-				if (norm(tr_2D_2) > 0.001) { // we only update  evrytime it makes a cerain distance
+				if (norm(tr_2D_2) > 0.001) { // update only everytime it travels a certain distance
 					vec3 const tr_2 = environment.camera.orientation() * vec3(tr_2D_2, 0.0f);
 					gui.constant_velocity_parameters.dir = normalize(tr_2);
 					deforming_shape.require_deformation = true;
@@ -68,12 +60,9 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 					previous_tool_position = sphere_tool.c;
 					gui.constant_velocity_parameters.magnitude = 0.001;
 				}
-
 			}
-			
 		}
 		else {
-			
 			picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
 			set_tool_in_grid(picking.position, sphere_tool);
 		}
@@ -93,17 +82,14 @@ void scene_structure::mouse_click(cgp::inputs_interaction_parameters const& inpu
 	}
 }
 
-
-void scene_structure::initialize()//TO DO: CLEAN THIS ONE
-{
+void scene_structure::initialize(){
 	global_frame.initialize(mesh_primitive_frame(), "Frame");
 	environment.camera.look_at({ 3.0f,2.0f,2.0f }, { 0,0,0 }, { 0,0,1 });
 	
-	//timer_update_normal.event_period = 0.15f;
 	deforming_shape.new_shape();
 	picking_visual.initialize();
 
-	// GRID
+	// initialize the grid
 	int const N = 30;
 	grid = initialize_grid(N);
 	initialize_grid_segments(grid_segments, grid);
@@ -112,14 +98,13 @@ void scene_structure::initialize()//TO DO: CLEAN THIS ONE
 	initialize_grid_box(grid_box, grid);
 	grid_box_visual.initialize(grid_box, "grid_box");
 
-	//VELOCITY //TO DO: -> to clean
-	initialize_velocity(N); // useless ?
+	// initialize the velocity field
+	initialize_velocity(N); 
 	velocity_grid_data.resize(3 * N * N * N);
 	velocity_visual.initialize(velocity_grid_data, "Velocity");
 	velocity_visual.color = vec3(1, 0, 0);
 
-	// TOOL
-	//-> TO DO: might want to create a functio  for this
+	// initialize the tool
 	sphere_tool.ri = 0.1f;
 	sphere_tool.ci = {1,0.5,0};//?
 	sphere_tool.r0 = 0.5f;
@@ -136,11 +121,8 @@ void scene_structure::initialize()//TO DO: CLEAN THIS ONE
 	gui.bool_trilinear_interpolation = true;
 	gui.bool_display_tool = true;
 }
-	
 
-
-void scene_structure::display()
-{
+void scene_structure::display(){
 	// Basics common elements
 	// ***************************************** //
 
@@ -149,7 +131,7 @@ void scene_structure::display()
 	if ((gui.constant_velocity_parameters.type == deformation_painting_normal) || (gui.constant_velocity_parameters.type == deformation_painting_inverse))
 		gui.gui_ri = 0;
 	
-	//update tool postion and force ri < ro
+	// update tool position and force ri < ro
 	if (gui.gui_r0 < gui.gui_ri) gui.gui_r0 = gui.gui_ri;
 	if ((sphere_tool.ri != gui.gui_ri) || (sphere_tool.r0 != gui.gui_r0)) {
 		//update the field if the tool paramters change
@@ -159,31 +141,27 @@ void scene_structure::display()
 	sphere_tool.ri = gui.gui_ri;
 	sphere_tool.r0 = gui.gui_r0;
 	
-
-	//comment
+	// comment
 	previous_interactive_deformation = (gui.constant_velocity_parameters.type == deformation_painting_normal) || (gui.constant_velocity_parameters.type == deformation_painting_inverse) || (gui.constant_velocity_parameters.type == direction_mouse_movement);
 
-
 	// Update velocity field
-	if (require_update_velocity) {
-		//TO DO: CHANGE
-
+	if (require_update_velocity){
+		// TO DO: CHANGE
 		if (gui.constant_velocity_parameters.type != direction_mouse_movement) gui.constant_velocity_parameters.magnitude = 0.01;
 
-		if (gui.constant_velocity_parameters.type == direction_view) {
+		if (gui.constant_velocity_parameters.type == direction_view){
 			vec2 const tr_2D = {0,1}; // translation in the screen plane
 			vec3 const tr = environment.camera.orientation() * vec3(tr_2D, 0.0f);
 			gui.constant_velocity_parameters.dir = tr;
 		}
-		//if (gui.constant_velocity_parameters.type == direction_normal || gui.constant_velocity_parameters.type == deformation_painting_normal ) gui.constant_velocity_parameters.dir = picking.normal;
-		//if (gui.constant_velocity_parameters.type == direction_inverse_normal || gui.constant_velocity_parameters.type == deformation_painting_inverse) gui.constant_velocity_parameters.dir = -picking.normal;
+		// if (gui.constant_velocity_parameters.type == direction_normal || gui.constant_velocity_parameters.type == deformation_painting_normal ) gui.constant_velocity_parameters.dir = picking.normal;
+		// if (gui.constant_velocity_parameters.type == direction_inverse_normal || gui.constant_velocity_parameters.type == deformation_painting_inverse) gui.constant_velocity_parameters.dir = -picking.normal;
 		if (gui.constant_velocity_parameters.type == direction_normal ) gui.constant_velocity_parameters.dir = picking.normal;
 		if (gui.constant_velocity_parameters.type == direction_inverse_normal ) gui.constant_velocity_parameters.dir = -picking.normal;
 
-		//TO DO: ACTUALLY, THIS MIGHT BE NOT GOOD
+		// TO DO: ACTUALLY, THIS MIGHT BE NOT GOOD
 		if (gui.constant_velocity_parameters.type == deformation_painting_normal) gui.constant_velocity_parameters.dir = picking.normal;
 		if (gui.constant_velocity_parameters.type == deformation_painting_inverse) gui.constant_velocity_parameters.dir = -picking.normal;
-			
 
 		update_velocity_field(velocity, grid, sphere_tool, gui.constant_velocity_parameters);
 		update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, 5);
@@ -191,17 +169,16 @@ void scene_structure::display()
 	}
 
 	// Deform the mesh 
-	if (deforming_shape.require_deformation) {
-		//update_velocity_field(velocity, grid, sphere_tool, previous_tool_pos, previous_tool_pos);
+	if (deforming_shape.require_deformation){
+		// update_velocity_field(velocity, grid, sphere_tool, previous_tool_pos, previous_tool_pos);
 		integrate(deforming_shape.shape, deforming_shape.position_saved, velocity, grid, sphere_tool, gui.constant_velocity_parameters, gui.bool_trilinear_interpolation);
 		deforming_shape.visual.update_position(deforming_shape.shape.position);
-		float scale = 5; //TO DO: SET SCALE AS A SCENE VARIABLE
-		update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, scale); //HERE ???
+		float scale = 5; // TO DO: SET SCALE AS A SCENE VARIABLE
+		update_velocity_visual(velocity_visual, velocity_grid_data, velocity, grid, scale); 
 		deforming_shape.position_saved = deforming_shape.shape.position;
 
-
 		deforming_shape.update_normal();
-		previous_tool_pos = sphere_tool.c;//update previous tool position //make sure this is useful
+		previous_tool_pos = sphere_tool.c; // update previous tool position // make sure this is useful
 		deforming_shape.require_deformation = false;
 
 		if (gui.bool_laplacian_smoothing) {
@@ -223,32 +200,28 @@ void scene_structure::display()
 		deforming_shape.require_smoothing = false;
 	}
 
-
 	//draw different elements
 	draw(deforming_shape.visual, environment);
 
 	if (gui.display_wireframe)
 		draw_wireframe(deforming_shape.visual, environment, { 0,0,0 });
 
-	display_grid(); //3D grid
+	display_grid(); // 3D grid
 	display_tool(); 
-	display_velocity(); //vector field
+	display_velocity(); // vector field
 
 	previous_laplacian_smoothing = gui.bool_laplacian_smoothing;
 
 }
 
-
-void scene_structure::display_gui()
-{// Display the gui and update the new shape if requested
+void scene_structure::display_gui(){ // Display the gui and update the new shape if requested
 
 	bool const is_new_surface = gui.display();
 	if (is_new_surface)
 		deforming_shape.new_shape(gui.surface_type);
 }
 
-void scene_structure::mouse_left_released()
-{
+void scene_structure::mouse_left_released(){
 	// Releasing the left click indicates the end of the deformation: disable the picking, save the new position and update the normals
 	picking.active = false;
 	/*deforming_shape.position_saved = deforming_shape.shape.position;
@@ -256,14 +229,11 @@ void scene_structure::mouse_left_released()
 	deforming_shape.require_deformation = false;
 }
 
-void scene_structure::mouse_scroll(float scroll_offset)
-{
+void scene_structure::mouse_scroll(float scroll_offset){
 	//should be useless now -> already used for camera zoom
 }
 
-
-void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
-{
+void deforming_shape_structure::new_shape(surface_type_enum type_of_surface){
 	// Create a new shape based on the gui indication type_of_surface
 	// The detail of the initialization functions are in the file initialization.cpp
 	switch (type_of_surface)
@@ -280,25 +250,25 @@ void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 	case surface_cube:
 		shape = initialize_cube();
 		break;
-	case surface_mesh:
+	case surface_head:
 		shape = initialize_mesh();
 		break;
-	case surface_mesh_2:
+	case surface_camel:
 		shape = initialize_mesh_2();
 		break;
-	case surface_mesh_3:
+	case surface_armadillo:
 		shape = initialize_mesh_3();
 		break;
-	case surface_mesh_4:
+	case surface_tyrannosaur:
 		shape = initialize_mesh_4();
 		break;
-	case surface_mesh_5:
+	case surface_spoon:
 		shape = initialize_mesh_5();
 		break;
-	case surface_mesh_6:
+	case surface_bunny:
 		shape = initialize_mesh_6();
 		break;
-	case surface_mesh_7:
+	case surface_body:
 		shape = initialize_mesh_7();
 		break;
 		// TO DO: only use one function initialize_mesh with a filename argument
@@ -316,14 +286,11 @@ void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 	base_normal = shape.normal;
 }
 
-void deforming_shape_structure::update_normal()
-{
+void deforming_shape_structure::update_normal(){
 	shape.compute_normal();
 	visual.update_normal(shape.normal);
 	require_normal_update = false;
 }
-
-
 
 void scene_structure::initialize_velocity(int N){//not sure about this
 	//TO DO: MOVE THIS FUNCTION TO INITIALIZE ?
@@ -331,11 +298,8 @@ void scene_structure::initialize_velocity(int N){//not sure about this
 	velocity.fill({ 0, 0, 0 }); 
 }
 
-
-
 //TO DO: MOVE THESE TO A FILE DISPLAY.CPP
-void scene_structure::display_grid()
-{
+void scene_structure::display_grid(){
 	if (gui.display_grid_edge)
 		draw(grid_segments_visual, environment);
 
@@ -345,15 +309,12 @@ void scene_structure::display_grid()
 	}
 }
 
-
-void scene_structure::display_velocity()
-{
+void scene_structure::display_velocity(){
 	if (gui.display_constant_velocity)
 		draw(velocity_visual, environment);
 }
 
-void scene_structure::display_tool() 
-{
+void scene_structure::display_tool(){
 	if (gui.bool_display_tool) {
 		inner_sphere_visual.shading.color = sphere_tool.ci;
 		inner_sphere_visual.shading.alpha = 0.8;
@@ -380,8 +341,6 @@ void scene_structure::display_tool()
 		}
 		draw(inner_sphere_visual, environment);
 		draw(outer_sphere_visual, environment);
-
-		
 
 		glDisable(GL_BLEND);
 		// do not forget to re-activate depth buffer write
@@ -418,12 +377,6 @@ void scene_structure::display_arrow(){ //TO DO: JUST PUT THIS IN THE TOOL FUNCTI
 		glDisable(GL_BLEND);
 		// do not forget to re-activate depth buffer write
 		glDepthMask(true);
-
 	}
-
 }
-
-//probably possible to use a function from cgp instead !
-
-
 

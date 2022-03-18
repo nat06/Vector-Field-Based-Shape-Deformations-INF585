@@ -1,5 +1,4 @@
 #pragma once
-
 #include "cgp/cgp.hpp"
 #include "../deformers/deformers.hpp"
 
@@ -8,15 +7,14 @@ enum surface_type_enum {
 	surface_cylinder,
 	surface_sphere,
 	surface_cube,
-	surface_mesh,
-	surface_mesh_2,
-	surface_mesh_3, //TO DO: CHANGE THESE NAMES TO FACE, CAMEL...
-	surface_mesh_4,
-	surface_mesh_5,
-	surface_mesh_6,
-	surface_mesh_7
+	surface_head,
+	surface_camel,
+	surface_armadillo, 
+	surface_tyrannosaur,
+	surface_spoon,
+	surface_bunny,
+	surface_body
 };
-
 
 struct gui_parameters {
 
@@ -29,12 +27,11 @@ struct gui_parameters {
 	float gui_r0;
 	bool bool_laplacian_smoothing;
 	int smoothing_steps;
-
 	bool bool_trilinear_interpolation;
 	bool bool_display_tool;
 
 	constant_velocity_structure constant_velocity_parameters;
-	surface_type_enum surface_type = surface_plane;    // Type of surface to be created
+	surface_type_enum surface_type = surface_plane; // Type of surface to be created
 
 	bool display();
 };
