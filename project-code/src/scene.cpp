@@ -295,7 +295,13 @@ void deforming_shape_structure::new_shape(surface_type_enum type_of_surface)
 	case surface_mesh_5:
 		shape = initialize_mesh_5();
 		break;
-	// TO DO: only use one function initialize_mesh with a filename argument
+	case surface_mesh_6:
+		shape = initialize_mesh_6();
+		break;
+	case surface_mesh_7:
+		shape = initialize_mesh_7();
+		break;
+		// TO DO: only use one function initialize_mesh with a filename argument
 	}
 
 	// Clear previous surface before seting the values of the new one

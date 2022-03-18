@@ -92,6 +92,37 @@ mesh initialize_mesh_5(){
 	return shape;
 }
 
+mesh initialize_mesh_6()
+{
+	std::string const filename = "assets/bunny.obj";
+	mesh shape = mesh_load_file_obj(filename);
+	rotation_transform R1 = rotation_transform::from_axis_angle({1, 0, 0}, Pi / 2);
+	rotation_transform R2 = rotation_transform::from_axis_angle({0, 1, 0}, Pi / 2);
+	rotation_transform R = R1 * R2;
+	for (auto &p : shape.position){
+		p *= 0.40f;
+		p += vec3(0.2, -0.35, 0);
+		p = R * p;
+	}
+	return shape;
+}
+
+mesh initialize_mesh_7()
+{
+	std::string const filename = "assets/body.obj";
+	mesh shape = mesh_load_file_obj(filename);
+	// rotation_transform R1 = rotation_transform::from_axis_angle({1, 0, 0}, Pi / 2);
+	rotation_transform R1 = rotation_transform::from_axis_angle({1, 0, 0}, Pi / 2);
+	rotation_transform R2 = rotation_transform::from_axis_angle({0, 0, 1}, Pi / 2);
+	for (auto &p : shape.position){
+		p *= 0.25f;
+		p = R1 * p;
+		p += vec3(0, 0, -0.9);
+		p = R2 * p;
+	}
+	return shape;
+}
+
 // mesh initialize_mesh_6(){
 // 	std::string const filename = "assets/spoon.obj";
 // 	mesh shape = mesh_load_file_obj(filename);

@@ -31,11 +31,13 @@ bool gui_parameters::display()
     new_surface |= ImGui::RadioButton("Cylinder",ptr_surface_type, surface_cylinder); ImGui::SameLine();
     new_surface |= ImGui::RadioButton("Sphere",ptr_surface_type, surface_sphere); ImGui::SameLine();
     new_surface |= ImGui::RadioButton("Cube",ptr_surface_type, surface_cube); 
-    new_surface |= ImGui::RadioButton("Head",ptr_surface_type, surface_mesh);
-	new_surface |= ImGui::RadioButton("Camel", ptr_surface_type, surface_mesh_2);
-	new_surface |= ImGui::RadioButton("Armadillo", ptr_surface_type, surface_mesh_3);
+    new_surface |= ImGui::RadioButton("Head",ptr_surface_type, surface_mesh); ImGui::SameLine();
+	new_surface |= ImGui::RadioButton("Camel", ptr_surface_type, surface_mesh_2); ImGui::SameLine();
+	new_surface |= ImGui::RadioButton("Armadillo", ptr_surface_type, surface_mesh_3); ImGui::SameLine();
 	new_surface |= ImGui::RadioButton("Tyrannosaur", ptr_surface_type, surface_mesh_4);
-	new_surface |= ImGui::RadioButton("Spoon", ptr_surface_type, surface_mesh_5);
+	new_surface |= ImGui::RadioButton("Spoon", ptr_surface_type, surface_mesh_5); ImGui::SameLine();
+	new_surface |= ImGui::RadioButton("Bunny", ptr_surface_type, surface_mesh_6); ImGui::SameLine();
+	new_surface |= ImGui::RadioButton("Body", ptr_surface_type, surface_mesh_7);
 
 	ImGui::Text("\n Trilinear interpolation:"); // Select surface to be deformed
 	ImGui::Checkbox("activate", &bool_trilinear_interpolation);
