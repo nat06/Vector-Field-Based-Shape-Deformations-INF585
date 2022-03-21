@@ -3,7 +3,9 @@
 -if the interactive
 motion changes the position of the tool by ∆r, then the integration
 inside the inner region moves the points by ∆r as well
-  -> FIX THIS
+ -> FIX THIS
+ 
+ - change files and folders -> well organized
 
 - **~~fix the 'double' deformation problem~~**
 - fix problem with deformation painting
