@@ -49,7 +49,7 @@ This method relies on the provided `CMakeLists.txt` file.
 
 For the very first compilation, the procedure is as follows:
 ``` bash
-cd project-code
+cd code
 mkdir build && cd build
 
 # Run CMake, generate a Makefile
@@ -60,10 +60,10 @@ make
 cd ..
 
 # Run the executable from the root directory
-./build/project-code
+./build/code
 ```
 
-For any subsequent compilation, one can simply compile (`make`) and run the executable from the root directory (from `project-code`).
+For any subsequent compilation, one can simply compile (`make`) and run the executable from the root directory (from `code`).
 
 * `Windows`
 
