@@ -3,7 +3,6 @@
 
 using namespace cgp;
 
-//TO DO: COMMENT THE FONCTIONS
 
 bool are_equal(const cgp::vec3& v1, const cgp::vec3& v2) {
 	if (v1.size() != v2.size()) { return false; }

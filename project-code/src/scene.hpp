@@ -2,9 +2,9 @@
 #include "cgp/cgp.hpp"
 #include "helpers/gui.hpp"
 #include "helpers/initialization.hpp"
-#include "helpers/picking_visual.hpp"
+//#include "helpers/picking_visual.hpp"
 #include "deformers/deformers.hpp"
-#include "utils.hpp"
+#include "helpers/utils.hpp"
 
 // Helping structure that contains the deforming shape elements
 struct deforming_shape_structure{
@@ -32,7 +32,6 @@ struct scene_structure{
 	gui_parameters gui;                       // Standard GUI element storage
 	deforming_shape_structure deforming_shape;
 	cgp::picking_structure picking;
-	picking_visual_parameters picking_visual;
 	
 	//cgp::timer_event_periodic timer_update_normal; // timer with periodic events used to update the normals
 
@@ -46,10 +45,9 @@ struct scene_structure{
 	void initialize_velocity(int N); //TO DO: REMOVE INT N FROM HERE
 	void display_grid(); // Display the 3D grid
 	void display_velocity(); // Display the velocity field
-	void display_arrow();
 	void display_tool(); // display the sphere tool
 	void mouse_move(cgp::inputs_interaction_parameters const& inputs);
-	void mouse_scroll(float scroll_offset);
+	//void mouse_scroll(float scroll_offset);
 	void mouse_left_released();
 	void mouse_click(cgp::inputs_interaction_parameters const& inputs);
 	

@@ -91,9 +91,8 @@ void mouse_click_callback(GLFWwindow* /*window*/, int button, int action, int /*
 }
 
 void mouse_scroll_callback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset){
-	scene.mouse_scroll(yoffset);
-	scene.environment.camera.manipulator_scale_distance_to_center(-yoffset/10);
-	//TO DO: CAMERA ZOOM
+	//scene.mouse_scroll(yoffset);
+	scene.environment.camera.manipulator_scale_distance_to_center(-yoffset/10);//zoom in/out
 }
 
 // This function is called everytime a keyboard touch is pressed/released
