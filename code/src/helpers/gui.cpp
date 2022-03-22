@@ -19,7 +19,8 @@ bool gui_parameters::display(){
 	ImGui::RadioButton("normal", ptr_velocity_type, direction_normal); ImGui::SameLine();
 	ImGui::RadioButton("inverse normal", ptr_velocity_type, direction_inverse_normal); 
 	ImGui::RadioButton("mouse movement (view space)", ptr_velocity_type, direction_mouse_movement);
-	ImGui::RadioButton("deformation painting (normal)", ptr_velocity_type, deformation_painting_normal);
+	ImGui::RadioButton("deformation painting (normal) 1", ptr_velocity_type, deformation_painting_normal);
+	ImGui::RadioButton("deformation painting (normal) 2", ptr_velocity_type, deformation_painting_normal_bis);
 	ImGui::RadioButton("deformation painting (inverse normal)", ptr_velocity_type, deformation_painting_inverse);
 
 	ImGui::Text("\n Surface type:"); // Select surface to be deformed

@@ -24,7 +24,6 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 				previous_mouse_position = inputs.mouse.position.current;
 				previous_tool_position = sphere_tool.c;
 				previous_interactive_deformation = true;
-				std::cout << "preevious"<<std::endl;
 			}
 
 			if (gui.constant_velocity_parameters.type == direction_mouse_movement){
@@ -45,6 +44,7 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 				}
 			}
 
+			//TO DO : WRITE BETTER
 			else if (gui.constant_velocity_parameters.type == deformation_painting_normal || gui.constant_velocity_parameters.type == deformation_painting_inverse) //TO DO: FIX THIS !
 			{
 				
@@ -52,6 +52,20 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 				set_tool_in_grid(picking.position, sphere_tool);
 
 				if (norm(previous_tool_position - sphere_tool.c) > sphere_tool.r0/10) { // we only update every time it makes a cerain distance
+					deforming_shape.require_deformation = true;
+					if (gui.bool_laplacian_smoothing) deforming_shape.require_smoothing = true;
+					previous_tool_position = sphere_tool.c;
+					gui.constant_velocity_parameters.magnitude = 0.001;
+				}
+			}
+
+			else if (gui.constant_velocity_parameters.type == deformation_painting_normal_bis) //TO DO: FIX THIS !
+			{
+
+				picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
+				set_tool_in_grid(picking.position, sphere_tool);
+
+				if (norm(previous_tool_position - sphere_tool.c) > sphere_tool.r0 / 10) { // we only update every time it makes a cerain distance
 					std::cout << "ayoo" << std::endl;
 					deforming_shape.require_deformation = true;
 					if (gui.bool_laplacian_smoothing) deforming_shape.require_smoothing = true;
@@ -72,7 +86,9 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 
 void scene_structure::mouse_click(cgp::inputs_interaction_parameters const& inputs) {
 	//manage deformations that happen only when we click once
-	if (inputs.keyboard.shift && gui.constant_velocity_parameters.type != direction_mouse_movement && gui.constant_velocity_parameters.type != deformation_painting_normal && gui.constant_velocity_parameters.type != deformation_painting_inverse)
+
+	//TO DO: WRITE BETTER
+	if (inputs.keyboard.shift && gui.constant_velocity_parameters.type != direction_mouse_movement && gui.constant_velocity_parameters.type != deformation_painting_normal && gui.constant_velocity_parameters.type != deformation_painting_normal_bis && gui.constant_velocity_parameters.type != deformation_painting_inverse)
 	{
 		vec2 const& p = inputs.mouse.position.current;
 		picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
@@ -125,7 +141,8 @@ void scene_structure::display(){
 
 	environment.light = environment.camera.position();
 	
-	if ((gui.constant_velocity_parameters.type == deformation_painting_normal) || (gui.constant_velocity_parameters.type == deformation_painting_inverse))
+	//TO DO: WRITE BETTER
+	if ((gui.constant_velocity_parameters.type == deformation_painting_normal)|| (gui.constant_velocity_parameters.type == deformation_painting_normal_bis) || (gui.constant_velocity_parameters.type == deformation_painting_inverse))
 		gui.gui_ri = 0;
 	
 	// update tool position and force ri < ro
@@ -138,7 +155,7 @@ void scene_structure::display(){
 	sphere_tool.ri = gui.gui_ri;
 	sphere_tool.r0 = gui.gui_r0;
 	
-	previous_interactive_deformation = (gui.constant_velocity_parameters.type == deformation_painting_normal) || (gui.constant_velocity_parameters.type == deformation_painting_inverse) || (gui.constant_velocity_parameters.type == direction_mouse_movement);
+	previous_interactive_deformation = (gui.constant_velocity_parameters.type == deformation_painting_normal)|| (gui.constant_velocity_parameters.type == deformation_painting_normal_bis) || (gui.constant_velocity_parameters.type == deformation_painting_inverse) || (gui.constant_velocity_parameters.type == direction_mouse_movement);
 
 	// Update velocity field
 	if (require_update_velocity){
@@ -152,9 +169,11 @@ void scene_structure::display(){
 		}
 
 		//rewrite
+		//TO DO: WRITE BETTER
 		if (gui.constant_velocity_parameters.type == direction_normal ) gui.constant_velocity_parameters.dir = picking.normal;
 		if (gui.constant_velocity_parameters.type == direction_inverse_normal ) gui.constant_velocity_parameters.dir = -picking.normal;
 		if (gui.constant_velocity_parameters.type == deformation_painting_normal) gui.constant_velocity_parameters.dir = picking.normal;
+		if (gui.constant_velocity_parameters.type == deformation_painting_normal_bis) gui.constant_velocity_parameters.dir = picking.normal;
 		if (gui.constant_velocity_parameters.type == deformation_painting_inverse) gui.constant_velocity_parameters.dir = -picking.normal;
 
 		update_velocity_field(velocity, grid, sphere_tool, gui.constant_velocity_parameters);

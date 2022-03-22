@@ -7,6 +7,7 @@ enum constant_velocity_direction { //TO DO: CHANGE THE NAMES OF THESE
 	direction_inverse_normal,
 	direction_mouse_movement,
 	deformation_painting_normal,
+	deformation_painting_normal_bis,
 	deformation_painting_inverse
 };
 
