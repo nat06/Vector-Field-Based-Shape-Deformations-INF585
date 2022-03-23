@@ -19,6 +19,7 @@ struct constant_velocity_structure {
 
 struct sphere_tool_structure{
 	cgp::vec3 c; // Position
+	cgp::vec3 previous_c;
 	cgp::vec3 c0; //colors
 	cgp::vec3 ci;
 	float r0; //radiuses 

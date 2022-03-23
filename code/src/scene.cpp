@@ -23,6 +23,9 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 			if (!previous_interactive_deformation){ //FIX THIS
 				previous_mouse_position = inputs.mouse.position.current;
 				previous_tool_position = sphere_tool.c;
+				//
+				sphere_tool.previous_c = sphere_tool.c;
+				//
 				previous_interactive_deformation = true;
 			}
 
@@ -34,8 +37,8 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 
 				// we compute the velocity field and deform only when the mouse has moved a certain amount
 				vec2 const tr_2D_2 = inputs.mouse.position.current - inputs.mouse.position.previous;
-				if (norm(tr_2D_2) > 0.001) { // update only everytime it travels a given distance
-					vec3 const tr_2 = environment.camera.orientation() * vec3(tr_2D_2, 0.0f);
+				vec3 const tr_2 = environment.camera.orientation() * vec3(tr_2D_2, 0.0f);
+				if (norm(tr_2) > 0.001) { // update only everytime it travels a given distance
 					gui.constant_velocity_parameters.dir = normalize(tr_2);
 					deforming_shape.require_deformation = true;
 					if (gui.bool_laplacian_smoothing) deforming_shape.require_smoothing = true;
@@ -51,10 +54,10 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 				picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.base_normal, 0.03f, environment.camera, environment.projection);
 				set_tool_in_grid(picking.position, sphere_tool);
 
-				if (norm(previous_tool_position - sphere_tool.c) > sphere_tool.r0/10) { // we only update every time it makes a cerain distance
+				if (norm(sphere_tool.previous_c - sphere_tool.c) > sphere_tool.r0/10) { // we only update every time it makes a cerain distance
 					deforming_shape.require_deformation = true;
 					if (gui.bool_laplacian_smoothing) deforming_shape.require_smoothing = true;
-					previous_tool_position = sphere_tool.c;
+					sphere_tool.previous_c = sphere_tool.c;
 					gui.constant_velocity_parameters.magnitude = 0.001;
 				}
 			}
@@ -65,11 +68,11 @@ void scene_structure::mouse_move(cgp::inputs_interaction_parameters const& input
 				picking = picking_mesh_vertex_as_sphere(p, deforming_shape.shape.position, deforming_shape.shape.normal, 0.03f, environment.camera, environment.projection);
 				set_tool_in_grid(picking.position, sphere_tool);
 
-				if (norm(previous_tool_position - sphere_tool.c) > sphere_tool.r0 / 10) { // we only update every time it makes a cerain distance
+				if (norm(sphere_tool.previous_c - sphere_tool.c) > sphere_tool.r0 / 10) { // we only update every time it makes a cerain distance
 					std::cout << "ayoo" << std::endl;
 					deforming_shape.require_deformation = true;
 					if (gui.bool_laplacian_smoothing) deforming_shape.require_smoothing = true;
-					previous_tool_position = sphere_tool.c;
+					sphere_tool.previous_c = sphere_tool.c;
 					gui.constant_velocity_parameters.magnitude = 0.001;
 				}
 			}

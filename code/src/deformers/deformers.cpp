@@ -7,31 +7,35 @@ void integrate(mesh & shape, buffer<vec3> const& position_before_deformation, gr
 	
 	size_t const N = shape.position.size();
 	vec3 ref = { -100, -100, -100 }; // to check if point is in [-1, 1] grid
-	size_t const N_substeps = 1; // integration substeps
+	size_t const N_substeps = 2; // integration substeps
 	
-	for (size_t k_substep = 0; k_substep < N_substeps; ++k_substep) {
-		for (size_t k = 0; k < N; ++k)
-		{
-			vec3& p_shape = shape.position[k];                             // position to deform
-			vec3 const& p_shape_original = position_before_deformation[k]; // reference position before deformation
+	//while () {
+		for (size_t k_substep = 0; k_substep < N_substeps; ++k_substep) {
+			for (size_t k = 0; k < N; ++k)
+			{
+				vec3& p_shape = shape.position[k];                             // position to deform
+				vec3 const& p_shape_original = position_before_deformation[k]; // reference position before deformation
 
-			vec3 cell = get_cell(p_shape, velocity.dimension[0]);
-			if (!are_equal(cell, ref)) { // if point is in grid
+				vec3 cell = get_cell(p_shape, velocity.dimension[0]);
+				if (!are_equal(cell, ref)) { // if point is in grid
 
-				float const dt = 0.005f;
+					float const dt = 0.0005f;
 
-				vec3 v;
-				if (bool_trilinear_interpolation) { 
-					v = trilinear_interpolation(p_shape, cell, grid, velocity, velocity.dimension[0]);
+					vec3 v;
+					if (bool_trilinear_interpolation) {
+						v = trilinear_interpolation(p_shape, cell, grid, velocity, velocity.dimension[0]);
+					}
+					else {
+						v = velocity(cell.x, cell.y, cell.z);
+					}
+					p_shape = p_shape + constant_velocity.magnitude * v;
+					//p_shape = p_shape + dt *constant_velocity_magnitude * v;
 				}
-				else {
-					v = velocity(cell.x, cell.y, cell.z);
-				}
-				p_shape = p_shape +  constant_velocity.magnitude*2 * v;
 			}
 		}
-	}
-	std::cout << "Volume after deformation: " << mesh_volume(shape) << std::endl;
+		//std::cout << "Volume after deformation: " << mesh_volume(shape) << std::endl;
+	//}
+	
 }
 
 void update_velocity_field(grid_3D<vec3>& velocity, grid_3D<vec3> const& grid, sphere_tool_structure const& sphere_tool, constant_velocity_structure const& constant_velocity){
